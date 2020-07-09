@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include"Shader.h"
 #include"Camera.h"
+#include"Texture.h"
 #include"stb_image.h"
 #include <iostream>
 #include <glm/glm.hpp>
@@ -111,49 +112,17 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	unsigned int texture1, texture2;//texture ID
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	//纹理围绕方式：
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//纹理过滤方式，缩放：
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//读入纹理图：
-	int width, height, colorChannel;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load("box.jpg", &width, &height, &colorChannel, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-	glGenTextures(1, &texture2);
-	glBindTexture(GL_TEXTURE_2D, texture2);
-	//纹理围绕方式：
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//纹理过滤方式，缩放：
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//读入纹理图：
-	stbi_set_flip_vertically_on_load(true);
-	data = stbi_load("awesomeface.png", &width, &height, &colorChannel, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
+
+	Texture myTex1(GL_TEXTURE_2D, "box.jpg");
+	myTex1.wrap(GL_REPEAT, GL_REPEAT);
+	myTex1.filter(GL_LINEAR, GL_LINEAR);
+	Texture myTex2(GL_TEXTURE_2D, "awesomeface.png");
+	myTex2.wrap(GL_REPEAT, GL_REPEAT);
+	myTex2.filter(GL_LINEAR, GL_LINEAR);
+
 	myShader.use();
-	myShader.setInt("texture1", 0);
-	myShader.setInt("texture2", 1);
+	myShader.setInt("myTexture1", 0);
+	myShader.setInt("myTexture2", 1);
 	while (!glfwWindowShouldClose(window))
 	{
 		float curTime = glfwGetTime();
