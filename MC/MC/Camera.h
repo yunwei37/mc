@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+#include <iostream>
 enum Camera_Movement {
 	FORWARD,
 	BACKWARD,
@@ -15,8 +16,8 @@ enum Camera_Movement {
 // Default camera values
 const float YAW = 0.0f;//偏航角
 const float PITCH = 0.0f;//俯仰角
-const float SPEED = 2.5f;//鼠标速度
-const float SENSITIVITY = 0.05f;//鼠标位移敏感度
+const float SPEED = 0.3f;//鼠标速度
+const float SENSITIVITY = 0.23f;//鼠标位移敏感度
 const float ZOOM = 45.0f;//缩放
 class Camera {
 public:

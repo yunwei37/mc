@@ -22,7 +22,7 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, 1.0f, 0.0f),0.0f,90.0f);
+Camera myCamera(glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, 1.0f, 0.0f),90.0f,0.0f);
 int main()
 {	
 	glfwInit();
@@ -55,7 +55,7 @@ int main()
 	glEnable(GL_BLEND);		// 为了渲染出不同的透明度级别，我们需要开启混合(Blending)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
-//	glCullFace(GL_FRONT);
+	glCullFace(GL_BACK);
 	Shader myShader("test_vs.txt", "test_fs.txt");
 	float vertices[] = {
 		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
@@ -208,7 +208,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		lastY = ypos;
 		firstMouse = false;
 	}
-	float xoffset = lastX - xpos;
+	float xoffset = xpos - lastX;
 	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 	lastX = xpos;
 	lastY = ypos;
