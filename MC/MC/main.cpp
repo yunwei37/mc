@@ -3,9 +3,10 @@
 #include"Shader.h"
 #include"Camera.h"
 #include"Texture.h"
-//#include"Chunk.h"
-//#include"PerlinNoise.h"
+#include"Chunk.h"
+#include"PerlinNoise.h"
 #include"stb_image.h"
+#include<time.h>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -22,9 +23,9 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(0.0f, 0.0f, -1.0f),glm::vec3(0.0f, 1.0f, 0.0f),90.0f,0.0f);
+Camera myCamera(glm::vec3(-15.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 int main()
-{	
+{
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -51,54 +52,50 @@ int main()
 		return -1;
 	}
 	glEnable(GL_DEPTH_TEST);//开启深度测试
-//	glDepthFunc(GL_LESS);		// Set to always pass the depth test(same effect as glDisable(GL_DEPTH_TEST))
-	glEnable(GL_BLEND);		// 为了渲染出不同的透明度级别，我们需要开启混合(Blending)
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);//面剔除
 	Shader myShader("test_vs.txt", "test_fs.txt");
 	float vertices[] = {
-		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		 0.1f, -0.1f, -0.1f,  2.0f, 0.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
-		-0.1f,  0.1f, -0.1f,  0.0f, 2.0f,
-
-		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
-		 0.1f, -0.1f,  0.1f,  2.0f, 0.0f,
-		 0.1f,  0.1f,  0.1f,  2.0f, 2.0f,
-		 0.1f,  0.1f,  0.1f,  2.0f, 2.0f,
-		-0.1f,  0.1f,  0.1f,  0.0f, 2.0f,
-		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
-
-		-0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
-		-0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		-0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		-0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
-		-0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
-
-		 0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
-		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		 0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
-		 0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
-
-		-0.1f, -0.1f, -0.1f,  0.0f, 1.0f,
-		 0.1f, -0.1f, -0.1f,  1.0f, 1.0f,
-		 0.1f, -0.1f,  0.1f,  1.0f, 0.0f,
-		 0.1f, -0.1f,  0.1f,  1.0f, 0.0f,
-		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
-		-0.1f, -0.1f, -0.1f,  0.0f, 1.0f,
-
-		-0.1f,  0.1f, -0.1f,  0.0f, 0.5f,
-		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
-		 0.1f,  0.1f, -0.1f,  1.0f, 1.0f,
-		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
-		-0.1f,  0.1f, -0.1f,  0.0f, 1.0f,
-		-0.1f,  0.1f,  0.1f,  0.0f, 0.0f
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	// Front face
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+	// Left face
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+	// Right face
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+	// Bottom face
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+	// Top face
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
 	};
 
 	unsigned int VBO, VAO;
@@ -113,18 +110,19 @@ int main()
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0*sizeof(float)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0 * sizeof(float)));
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	Texture myTex1(GL_TEXTURE_2D, "awesomeface.png");
 	myTex1.wrap(GL_REPEAT, GL_REPEAT);
 	myTex1.filter(GL_LINEAR, GL_LINEAR);
-	
+
 
 	myShader.use();
 	myShader.setInt("myTexture1", 0);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float curTime = glfwGetTime();
@@ -137,7 +135,7 @@ int main()
 		//激活纹理单元： 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(myTex1.Type, myTex1.ID);
-		
+
 		myShader.use();//激活着色器程序
 		//变换：
 		glm::mat4 model = glm::mat4(1.0f);
@@ -148,21 +146,30 @@ int main()
 		projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		myShader.setMat4("view", glm::value_ptr(view));
 		myShader.setMat4("projection", glm::value_ptr(projection));
-		model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		myShader.setMat4("model", glm::value_ptr(model));
-		
-		for (int i = 0; i < 10; i++) {
-			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.2f));
-			myShader.setMat4("model", glm::value_ptr(model));	
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-			for (int j = 0; j < 10; j++) {
-				model = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.0f));
-				myShader.setMat4("model", glm::value_ptr(model));
-				glBindVertexArray(VAO);
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//myShader.setMat4("model", glm::value_ptr(model));
+		Chunk chunk;
+		int x = 0, y = 0, z = 0;//block position in chunk	
+
+		for (int i = 0; i < chunk.width; i++) {//z axis
+			for (int j = 0; j < chunk.width; j++) {//y axis
+				x = (int)(PerlinNoise(x, y + x, z + x)) % chunk.height;
+				for (int k = 0; k < x + chunk.baseHeight; k++) {//1-4,x axis,height
+					/*if (k == 0 || k == x+chunk.baseHeight || j == 0 || i == chunk.width) {
+						glCullFace(GL_BACK);
+					}
+					else glCullFace(GL_FRONT_AND_BACK);*/
+					glBindVertexArray(VAO);
+					glDrawArrays(GL_TRIANGLES, 0, 36);
+					model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));//height,x
+					myShader.setMat4("model", glm::value_ptr(model));
+				}
+				model = glm::translate(model, glm::vec3((x + chunk.baseHeight)*1.0f, 1.0f, 0.0f));//y axis
+				y++;
 			}
-			model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
+			model = glm::translate(model, glm::vec3(0.0f, -chunk.width*1.0f, 1.0f));//z axis
+			z++;
+			y -= chunk.width;
 		}
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
@@ -173,7 +180,7 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	//glDeleteBuffers(1, &EBO);
-	
+
 
 	glfwTerminate();
 	return 0;
@@ -193,10 +200,6 @@ void processInput(GLFWwindow *window)
 		myCamera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(UP, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(DOWN, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -212,7 +215,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 		lastY = ypos;
 		firstMouse = false;
 	}
-	float xoffset = xpos - lastX;
+	float xoffset = lastX - xpos;
 	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 	lastX = xpos;
 	lastY = ypos;
