@@ -51,14 +51,19 @@ int main()
 		return -1;
 	}
 	glEnable(GL_DEPTH_TEST);//开启深度测试
+//	glDepthFunc(GL_LESS);		// Set to always pass the depth test(same effect as glDisable(GL_DEPTH_TEST))
+	glEnable(GL_BLEND);		// 为了渲染出不同的透明度级别，我们需要开启混合(Blending)
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
+//	glCullFace(GL_FRONT);
 	Shader myShader("test_vs.txt", "test_fs.txt");
 	float vertices[] = {
 		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
+		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
 		 0.1f, -0.1f, -0.1f,  2.0f, 0.0f,
 		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		-0.1f,  0.1f, -0.1f,  0.0f, 2.0f,
 		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
+		-0.1f,  0.1f, -0.1f,  0.0f, 2.0f,
 
 		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
 		 0.1f, -0.1f,  0.1f,  2.0f, 0.0f,
@@ -75,11 +80,11 @@ int main()
 		-0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
 
 		 0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
+		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
 		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
 		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		 0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
 		 0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
+		 0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
 
 		-0.1f, -0.1f, -0.1f,  0.0f, 1.0f,
 		 0.1f, -0.1f, -0.1f,  1.0f, 1.0f,
@@ -89,11 +94,11 @@ int main()
 		-0.1f, -0.1f, -0.1f,  0.0f, 1.0f,
 
 		-0.1f,  0.1f, -0.1f,  0.0f, 0.5f,
+		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
 		 0.1f,  0.1f, -0.1f,  1.0f, 1.0f,
 		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
-		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
-		-0.1f,  0.1f,  0.1f,  0.0f, 0.0f,
-		-0.1f,  0.1f, -0.1f,  0.0f, 1.0f
+		-0.1f,  0.1f, -0.1f,  0.0f, 1.0f,
+		-0.1f,  0.1f,  0.1f,  0.0f, 0.0f
 	};
 
 	unsigned int VBO, VAO;
@@ -113,7 +118,7 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	Texture myTex1(GL_TEXTURE_2D, "stone.png");
+	Texture myTex1(GL_TEXTURE_2D, "awesomeface.png");
 	myTex1.wrap(GL_REPEAT, GL_REPEAT);
 	myTex1.filter(GL_LINEAR, GL_LINEAR);
 	
