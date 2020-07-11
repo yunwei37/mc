@@ -1,6 +1,6 @@
 #include"Texture.h"
 #include<iostream>
-Texture::Texture(GLenum type, const std::string &dataPath) :Type(type) {
+Texture::Texture(GLenum type,const std::string &dataPath):Type(type){
 	glGenTextures(1, &ID);
 	glBindTexture(type, ID);
 	stbi_set_flip_vertically_on_load(true);
@@ -9,8 +9,8 @@ Texture::Texture(GLenum type, const std::string &dataPath) :Type(type) {
 	unsigned char *data = stbi_load(dataPath.c_str(), &width, &height, &colorChal, 0);
 	format = (colorChal == 3) ? GL_RGB : GL_RGBA;
 	if (data) {
-		glTexImage2D(Type, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(Type);
+			glTexImage2D(Type, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(Type);
 	}
 	else {
 		std::cout << "Failed to load texture" << std::endl;

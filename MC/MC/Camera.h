@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef CAMERA_H
 #define CAMERA_H
 #include <glad/glad.h>
@@ -14,10 +13,10 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const float YAW = -90.0f;//偏航角
+const float YAW = 0.0f;//偏航角
 const float PITCH = 0.0f;//俯仰角
 const float SPEED = 2.5f;//鼠标速度
-const float SENSITIVITY = 0.1f;//鼠标位移敏感度
+const float SENSITIVITY = 0.05f;//鼠标位移敏感度
 const float ZOOM = 45.0f;//缩放
 class Camera {
 public:

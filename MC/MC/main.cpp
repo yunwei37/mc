@@ -22,9 +22,11 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 90.0f);
+Camera myCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 int main()
 {
+	// glfw: initialize and configure
+	// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -41,6 +43,8 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -50,14 +54,19 @@ int main()
 		return -1;
 	}
 	glEnable(GL_DEPTH_TEST);//开启深度测试
+//	glDepthFunc(GL_LESS);		// Set to always pass the depth test(same effect as glDisable(GL_DEPTH_TEST))
+	glEnable(GL_BLEND);		// 为了渲染出不同的透明度级别，我们需要开启混合(Blending)
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
+//	glCullFace(GL_FRONT);
 	Shader myShader("test_vs.txt", "test_fs.txt");
 	float vertices[] = {
-		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
-		 0.1f, -0.1f, -0.1f,  2.0f, 0.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		-0.1f,  0.1f, -0.1f,  0.0f, 2.0f,
-		-0.1f, -0.1f, -0.1f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
 		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
 		 0.1f, -0.1f,  0.1f,  2.0f, 0.0f,
@@ -73,12 +82,12 @@ int main()
 		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
 		-0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
 
-		 0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
-		 0.1f,  0.1f, -0.1f,  2.0f, 2.0f,
-		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		 0.1f, -0.1f, -0.1f,  0.0f, 2.0f,
-		 0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
-		 0.1f,  0.1f,  0.1f,  2.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
 		-0.1f, -0.1f, -0.1f,  0.0f, 1.0f,
 		 0.1f, -0.1f, -0.1f,  1.0f, 1.0f,
@@ -87,12 +96,12 @@ int main()
 		-0.1f, -0.1f,  0.1f,  0.0f, 0.0f,
 		-0.1f, -0.1f, -0.1f,  0.0f, 1.0f,
 
-		-0.1f,  0.1f, -0.1f,  0.0f, 0.5f,
-		 0.1f,  0.1f, -0.1f,  1.0f, 1.0f,
-		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
-		 0.1f,  0.1f,  0.1f,  1.0f, 0.0f,
-		-0.1f,  0.1f,  0.1f,  0.0f, 0.0f,
-		-0.1f,  0.1f, -0.1f,  0.0f, 1.0f
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
 	unsigned int VBO, VAO;
@@ -107,15 +116,18 @@ int main()
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0 * sizeof(float)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	Texture myTex1(GL_TEXTURE_2D, "stone.png");
+
+	Texture myTex1(GL_TEXTURE_2D, "box.jpg");
 	myTex1.wrap(GL_REPEAT, GL_REPEAT);
 	myTex1.filter(GL_LINEAR, GL_LINEAR);
-
+	Texture myTex2(GL_TEXTURE_2D, "awesomeface.png");
+	myTex2.wrap(GL_REPEAT, GL_REPEAT);
+	myTex2.filter(GL_LINEAR, GL_LINEAR);
 
 	myShader.use();
 	myShader.setInt("myTexture1", 0);
@@ -126,43 +138,29 @@ int main()
 		lastFrame = curTime;
 		processInput(window);
 
-		//render
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//激活纹理单元： 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1);
+		glBindTexture(GL_TEXTURE_2D, myTex1.ID);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
+		glBindTexture(GL_TEXTURE_2D, myTex2.ID);
 		myShader.use();//激活着色器程序
 		//变换：
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
-		//camera view transformation
-		view = myCamera.GetViewMatrix();
 
 		view = myCamera.GetViewMatrix();
+
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		myShader.setMat4("view", glm::value_ptr(view));
 		myShader.setMat4("projection", glm::value_ptr(projection));
-		model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		myShader.setMat4("model", glm::value_ptr(model));
 
-		for (int i = 0; i < 5; i++) {
-			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.2f));
-			myShader.setMat4("model", glm::value_ptr(model));
-			glBindVertexArray(VAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-			for (int j = 0; j < 5; j++) {
-				model = glm::translate(model, glm::vec3(0.0f, 0.2f, 0.0f));
-				myShader.setMat4("model", glm::value_ptr(model));
-				glBindVertexArray(VAO);
-				glDrawArrays(GL_TRIANGLES, 0, 36);
-			}
-			model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		}
+		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -172,7 +170,7 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	//glDeleteBuffers(1, &EBO);
-
+	
 
 	glfwTerminate();
 	return 0;
