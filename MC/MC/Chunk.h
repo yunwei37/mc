@@ -22,15 +22,15 @@ enum blockType { //Block的类型
 class Chunk {
 public:
 	//List<Chunk> chunks = new List<Chunk>(); 
-	int width = 10; //每个Chunk的长宽Size 
-	int height = 3; //每个Chunk的高度 
+	int width = 30; //每个Chunk的长宽Size 
+	int height = 30; //每个Chunk的高度 
 	int seed; //随机种子 
-	float baseHeight = 2; //最小生成高度 
+	float baseHeight = 10; //最小生成高度 
 	bool isLoad;//true,loaded; false,not loaded
 	//float frequency = 0.025;  //噪音频率（噪音采样时会用到） 
 	//float amplitude = 1; //噪音振幅（噪音采样时会用到）
 
-	int generateHeight(double x, double y, double z);
+	int generateHeight(double Pos[3]);
 	blockType generateBlockType(double Pos[3]);
 	//void buildChunk();
 //private:
