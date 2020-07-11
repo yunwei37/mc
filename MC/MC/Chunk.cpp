@@ -1,13 +1,13 @@
 #include"Chunk.h"
 #include"PerlinNoise.h"
-int Chunk::generateHeight(double Pos[3]) { //让随机种子，振幅，频率，应用于我们的噪音采样结果 
-	return PerlinNoise(Pos[0], Pos[1], Pos[2]) + baseHeight;
+int Chunk::generateHeight(double x, double y, double z) { //让随机种子，振幅，频率，应用于我们的噪音采样结果 
+	return PerlinNoise(x,y,z) + baseHeight;
 } 
 blockType Chunk::generateBlockType(double Pos[3]) { 
 	if (Pos[1] >= height) { //y坐标是否在Chunk内 
 		return Air; 
 	} 
-	float genHeight = generateHeight(Pos); //获取当前位置方块随机生成的高度值 
+	float genHeight = generateHeight(Pos[0],Pos[1],Pos[2]); //获取当前位置方块随机生成的高度值 
 	if (Pos[1] > genHeight) { //当前方块位置高于随机生成的高度值时，当前方块类型为空 
 		return Air; 
 	} 
