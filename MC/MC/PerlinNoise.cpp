@@ -16,7 +16,7 @@ int permutation[] = { 151,160,137,91,90,15,                 // Hash lookup table
 	138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
 };//×ª»»±í
 int p[512] = { 0 };
-double PerlinNoise(double x, double y, double z) 
+double PerlinNoise3D(double x, double y, double z) 
 {
 	int xi = (int)x & 255;                              // Calculate the "unit cube" that the point asked will be located in
 	int yi = (int)y & 255;                              // The left bound is ( |_x_|,|_y_|,|_z_| ) and the right bound is that

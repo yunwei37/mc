@@ -2,7 +2,7 @@
 #ifndef PERLIN_H
 #define PERLIN_H
 
-double PerlinNoise(double x, double y, double z);
+double PerlinNoise3D(double x, double y, double z);
 double PerlinNoise2D(double x, double y);
 double fade(double t);//∆Ωª¨
 double lerp(double t, double a, double b);//≤Â÷µ

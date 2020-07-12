@@ -1,7 +1,7 @@
 #include"Chunk.h"
 #include"PerlinNoise.h"
 int Chunk::generateHeight(double x, double y, double z) { //让随机种子，振幅，频率，应用于我们的噪音采样结果 
-	return PerlinNoise(x,y,z) + baseHeight;
+	return PerlinNoise3D(x,y,z) + baseHeight;
 } 
 blockType Chunk::generateBlockType(double Pos[3]) { 
 	if (Pos[1] >= height) { //y坐标是否在Chunk内 

@@ -14,7 +14,8 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
+void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void renderChunk(Chunk* chunk, unsigned int VAO, Shader* myShader, Texture* myTex2);
 // settings
@@ -43,8 +44,9 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetCursorPosCallback(window, mouse_move_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouse_click_callback);
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -184,18 +186,26 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (firstMouse) {
 		lastX = xpos;
 		lastY = ypos;
 		firstMouse = false;
 	}
-	float xoffset = lastX - xpos;
+	float xoffset = xpos - lastX;
 	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 	lastX = xpos;
 	lastY = ypos;
 	myCamera.ProcessMouseMovement(xoffset, yoffset, true);
+}
+void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
+	if (action == GLFW_PRESS) {//press mouse
+		if (button == GLFW_MOUSE_BUTTON_LEFT) {
+			cout << "!!" << endl;
+		}
+	}
+	return;
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
