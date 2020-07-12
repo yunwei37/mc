@@ -22,7 +22,7 @@ enum blockType { //Block的类型
 class Chunk {
 public:
 	//List<Chunk> chunks = new List<Chunk>(); 
-	int width = 10; //每个Chunk的长宽Size 
+	int width = 32; //每个Chunk的长宽Size 
 	int height = 3; //每个Chunk的高度 
 	int seed; //随机种子 
 	float baseHeight = 2; //最小生成高度 

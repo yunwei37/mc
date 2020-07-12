@@ -13,7 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // settings
@@ -115,7 +115,7 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	Texture myTex1(GL_TEXTURE_2D, "awesomeface.png");
+	Texture myTex1(GL_TEXTURE_2D, "blocks/grass_side.png");
 	myTex1.wrap(GL_REPEAT, GL_REPEAT);
 	myTex1.filter(GL_LINEAR, GL_LINEAR);
 
@@ -153,7 +153,8 @@ int main()
 
 		for (int i = 0; i < chunk.width; i++) {//z axis
 			for (int j = 0; j < chunk.width; j++) {//y axis
-				x = (int)(PerlinNoise(x, y + x, z + x)) % chunk.height;
+				//x = (int)(PerlinNoise(x, y + x, z + x)) % chunk.height;
+				x = (int)((PerlinNoise2D(y * 0.3, z * 0.3) + 1) * 10);
 				for (int k = 0; k < x + chunk.baseHeight; k++) {//1-4,x axis,height
 					/*if (k == 0 || k == x+chunk.baseHeight || j == 0 || i == chunk.width) {
 						glCullFace(GL_BACK);
@@ -164,10 +165,10 @@ int main()
 					model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));//height,x
 					myShader.setMat4("model", glm::value_ptr(model));
 				}
-				model = glm::translate(model, glm::vec3((x + chunk.baseHeight)*1.0f, 1.0f, 0.0f));//y axis
+				model = glm::translate(model, glm::vec3((x + chunk.baseHeight) * 1.0f, 1.0f, 0.0f));//y axis
 				y++;
 			}
-			model = glm::translate(model, glm::vec3(0.0f, -chunk.width*1.0f, 1.0f));//z axis
+			model = glm::translate(model, glm::vec3(0.0f, -chunk.width * 1.0f, 1.0f));//z axis
 			z++;
 			y -= chunk.width;
 		}
@@ -188,7 +189,7 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		myCamera.ProcessKeyboard(FORWARD, deltaTime);
