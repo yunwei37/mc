@@ -2,7 +2,12 @@
 out vec4 FragColor;
 in vec2 texCoord;
 uniform sampler2D myTexture1;
+
+in vec3 TexCoords; // 代表3D纹理坐标的方向向量
+uniform samplerCube myTexture2; // 立方体贴图的纹理采样器
+
 void main()
 {
-FragColor = texture(myTexture1, texCoord);
+    //FragColor = texture(myTexture1, texCoord);
+    FragColor = texture(myTexture2, TexCoords);
 }

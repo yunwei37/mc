@@ -119,6 +119,16 @@ int main()
 	myTex1.wrap(GL_REPEAT, GL_REPEAT);
 	myTex1.filter(GL_LINEAR, GL_LINEAR);
 
+	vector<std::string> faces
+	{
+		"blocks/grass_side.png",
+		"blocks/wool_colored_lime.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png",
+		"blocks/wool_colored_lime.png",
+		"blocks/grass_side.png"
+	};
+	Texture myTex2(faces);
 
 	myShader.use();
 	myShader.setInt("myTexture1", 0);
@@ -134,7 +144,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//激活纹理单元： 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(myTex1.Type, myTex1.ID);
+		glBindTexture(myTex2.Type, myTex2.ID);
 
 		myShader.use();//激活着色器程序
 		//变换：
