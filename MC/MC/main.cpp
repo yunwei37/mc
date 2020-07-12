@@ -25,6 +25,8 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
+clock_t lastPress = 0;
+int seqPress = 0;
 Camera myCamera(glm::vec3(-15.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 int main()
 {
@@ -200,11 +202,32 @@ void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 	myCamera.ProcessMouseMovement(xoffset, yoffset, true);
 }
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
-	if (action == GLFW_PRESS) {//press mouse
-		if (button == GLFW_MOUSE_BUTTON_LEFT) {
-			cout << "!!" << endl;
+	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
+		if ((double)((clock() - lastPress) / CLOCKS_PER_SEC) < 0.1) {//multi press
+			seqPress++;
+			cout << "multi press " << seqPress << endl;
+			if (seqPress == 6) {
+				//block break
+				seqPress = 0;
+			}
 		}
+		else {//short press
+			seqPress = 0;
+			cout << "short press " << endl;
+			//place block
+		}
+		lastPress = clock();
 	}
+	/*else if (action = GLFW_RELEASE) {
+		lastPress = clock();
+		if ((double)((clock() - lastPress) / CLOCKS_PER_SEC) > 5) {
+			cout << "long press " << endl;
+		}
+		else cout << "short press " << endl;
+	}*/
+	//else if (action == GLFW_REPEAT) {//long press
+	//	cout << "long press" << endl;
+	//}
 	return;
 }
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
