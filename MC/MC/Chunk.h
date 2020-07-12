@@ -10,18 +10,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Block.h"
 
-enum blockType { //Block的类型 
-	Air=0,//空气
-	Soil = 1,//泥土
-	Stone = 2,//碎石
-	Water = 3,//水
-	Grass = 4,//草皮
-	Sand = 5,//沙子
-	Leaf = 6,//树叶
-	Bark = 7,//树皮
-	Cactus = 8//仙人掌
-};//存储着世界中所有的Chunk 
-
 class Chunk {
 public:
 	//List<Chunk> chunks = new List<Chunk>(); 
@@ -39,7 +27,7 @@ public:
 
 private:
 	int generateHeight(double x, double y, double z);
-	blockType generateBlockType(double Pos[3]);
+	Block::blockType generateBlockType(double Pos[3]);
 //	BlockType[,,] map; //Chunk的网格
 	//Mesh chunkMesh; //存储着此Chunk内的所有Block信息 
 	//MeshRenderer meshRenderer; 

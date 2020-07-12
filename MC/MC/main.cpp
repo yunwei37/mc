@@ -77,16 +77,7 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	vector<std::string> faces
-	{
-		"blocks/grass_side.png",
-		"blocks/grass.png",
-		"blocks/grass_side.png",
-		"blocks/grass_side.png",
-		"blocks/grass_side.png",
-		"blocks/grass_side.png"
-	};
-	Texture myTex2(faces);
+	Block::loadTextures();
 
 	myShader.use();
 	myShader.setInt("myTexture1", 0);
@@ -99,7 +90,7 @@ int main()
 		processInput(window);
 
 		Chunk chunk;
-		renderChunk(&chunk, VAO, &myShader, &myTex2);
+		renderChunk(&chunk, VAO, &myShader, &Block::textures[4]);
 
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
@@ -121,7 +112,6 @@ void renderChunk(Chunk* chunk, unsigned int VAO, Shader* myShader, Texture* myTe
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	myShader->use();//激活着色器程序
 	//变换：
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
