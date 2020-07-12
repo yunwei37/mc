@@ -1,7 +1,11 @@
 #include "Texture.h"
 #include <iostream>
 
-Texture::Texture(GLenum type, const std::string& dataPath) :Type(type) {
+Texture::Texture(GLenum type, const std::string& dataPath) {
+	init(type, dataPath);
+}
+void Texture::init(GLenum type, const std::string& dataPath) {
+	Type = type;
 	glGenTextures(1, &ID);
 	glBindTexture(type, ID);
 	stbi_set_flip_vertically_on_load(true);

@@ -75,6 +75,15 @@ void Shader::setMat4(const string& name, float value[]) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, value);
 }
+void Shader::set4fv(const string& name, float value[])const
+{
+	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1,value);
+}
+void Shader::set3fv(const string& name, float value[])const
+{
+	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, value);
+}
+
 void Shader::checkCompileErrors(unsigned int shader, string type)
 {
 		int success;
