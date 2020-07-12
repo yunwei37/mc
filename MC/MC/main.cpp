@@ -122,10 +122,10 @@ int main()
 	vector<std::string> faces
 	{
 		"blocks/grass_side.png",
-		"blocks/wool_colored_lime.png",
+		"blocks/grass.png",
 		"blocks/grass_side.png",
 		"blocks/grass_side.png",
-		"blocks/wool_colored_lime.png",
+		"blocks/grass.png",
 		"blocks/grass_side.png"
 	};
 	Texture myTex2(faces);
