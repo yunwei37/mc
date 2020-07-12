@@ -16,6 +16,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void renderChunk(Chunk* chunk, unsigned int VAO, Shader* myShader, Texture* myTex2);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -54,49 +55,6 @@ int main()
 	glEnable(GL_DEPTH_TEST);//开启深度测试
 	glEnable(GL_CULL_FACE);//面剔除
 	Shader myShader("test_vs.txt", "test_fs.txt");
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-	// Front face
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-	// Left face
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-	// Right face
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
-	// Bottom face
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-	// Top face
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
-	};
 
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
@@ -106,7 +64,7 @@ int main()
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, Block::vsize, Block::vertices, GL_STATIC_DRAW);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -115,17 +73,13 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	Texture myTex1(GL_TEXTURE_2D, "blocks/grass_side.png");
-	myTex1.wrap(GL_REPEAT, GL_REPEAT);
-	myTex1.filter(GL_LINEAR, GL_LINEAR);
-
 	vector<std::string> faces
 	{
 		"blocks/grass_side.png",
 		"blocks/grass.png",
 		"blocks/grass_side.png",
 		"blocks/grass_side.png",
-		"blocks/grass.png",
+		"blocks/grass_side.png",
 		"blocks/grass_side.png"
 	};
 	Texture myTex2(faces);
@@ -140,48 +94,9 @@ int main()
 		lastFrame = curTime;
 		processInput(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//激活纹理单元： 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(myTex2.Type, myTex2.ID);
-
-		myShader.use();//激活着色器程序
-		//变换：
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-
-		view = myCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		myShader.setMat4("view", glm::value_ptr(view));
-		myShader.setMat4("projection", glm::value_ptr(projection));
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		//myShader.setMat4("model", glm::value_ptr(model));
 		Chunk chunk;
-		int x = 0, y = 0, z = 0;//block position in chunk	
+		renderChunk(&chunk, VAO, &myShader, &myTex2);
 
-		for (int i = 0; i < chunk.width; i++) {//z axis
-			for (int j = 0; j < chunk.width; j++) {//y axis
-				//x = (int)(PerlinNoise(x, y + x, z + x)) % chunk.height;
-				x = (int)((PerlinNoise2D(y * 0.3, z * 0.3) + 1) * 10);
-				for (int k = 0; k < x + chunk.baseHeight; k++) {//1-4,x axis,height
-					/*if (k == 0 || k == x+chunk.baseHeight || j == 0 || i == chunk.width) {
-						glCullFace(GL_BACK);
-					}
-					else glCullFace(GL_FRONT_AND_BACK);*/
-					glBindVertexArray(VAO);
-					glDrawArrays(GL_TRIANGLES, 0, 36);
-					model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));//height,x
-					myShader.setMat4("model", glm::value_ptr(model));
-				}
-				model = glm::translate(model, glm::vec3((x + chunk.baseHeight) * 1.0f, 1.0f, 0.0f));//y axis
-				y++;
-			}
-			model = glm::translate(model, glm::vec3(0.0f, -chunk.width * 1.0f, 1.0f));//z axis
-			z++;
-			y -= chunk.width;
-		}
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -195,6 +110,52 @@ int main()
 
 	glfwTerminate();
 	return 0;
+}
+
+void renderChunk(Chunk* chunk, unsigned int VAO, Shader* myShader, Texture* myTex2) {
+
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	myShader->use();//激活着色器程序
+	//变换：
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+
+	view = myCamera.GetViewMatrix();
+	projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	myShader->setMat4("view", glm::value_ptr(view));
+	myShader->setMat4("projection", glm::value_ptr(projection));
+	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//myShader.setMat4("model", glm::value_ptr(model));
+
+	//激活纹理单元： 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(myTex2->Type, myTex2->ID);
+
+	int z = 0, x = 0, y = 0;//block position in chunk	
+
+	for (int i = 0; i < chunk->width; i++) {//z axis
+		for (int j = 0; j < chunk->width; j++) {//y axis
+			z = (int)((PerlinNoise2D(x * 0.3, y * 0.3) + 1) * 10);
+			for (int k = 0; k < z + chunk->baseHeight; k++) {//1-4,x axis,height
+				/*if (k == 0 || k == x+chunk.baseHeight || j == 0 || i == chunk.width) {
+					glCullFace(GL_BACK);
+				}
+				else glCullFace(GL_FRONT_AND_BACK);*/
+				glBindVertexArray(VAO);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+				model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));//height,x
+				myShader->setMat4("model", glm::value_ptr(model));
+			}
+			model = glm::translate(model, glm::vec3((z + chunk->baseHeight) * 1.0f, 1.0f, 0.0f));//y axis
+			x++;
+		}
+		model = glm::translate(model, glm::vec3(0.0f, -chunk->width * 1.0f, 1.0f));//z axis
+		y++;
+		x -= chunk->width;
+	}
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

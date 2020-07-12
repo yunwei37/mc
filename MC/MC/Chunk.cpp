@@ -19,7 +19,13 @@ blockType Chunk::generateBlockType(double Pos[3]) {
 		return Soil; 
 	}  
 	else return Stone; //其他情况，当前方块类型为碎石
-} 
+}
+
+Chunk::Chunk()
+{
+
+}
+
 /*void Chunk::buildChunk() {
 	chunkMesh = new Mesh(); 
 	List<Vector3> verts = new List<Vector3>(); 

@@ -127,10 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="plantGenerator.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -142,6 +144,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="plantGenerator.h" />
     <ClInclude Include="Shader.h" />
