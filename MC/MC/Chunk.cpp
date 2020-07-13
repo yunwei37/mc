@@ -82,9 +82,11 @@ Chunk::Chunk(int x, int y)
 {
 	this->x = x;
 	this->y = y;
+	isLoad = true;
+	float radio = 3.0;
 	for (int i = 0; i < width; ++i) {
 		for (int j = 0; j < width; ++j) {
-			int h = (int)((PerlinNoise2D(i * 0.3, j * 0.3) + 1) * 10); //获取当前位置方块随机生成的高度值 
+			int h = (int)((PerlinNoise2D(x * radio + i * radio/width, y * radio + j * radio / width) + 1) * 10); //获取当前位置方块随机生成的高度值 
 			for (int k = 0; k < height; ++k) {
 				this->blocks[i][j][k] = generateBlockType(i, j, k, h);
 			}
@@ -103,30 +105,28 @@ void Chunk::renderChunk(glm::mat4 model,unsigned int VAO, Shader* myShader)
 {	
 	Block::blockType type;
 	Block::blockType lasttype = Block::Air;
-	for (int i = 0; i < width; i++) {//z axis
-		for (int j = 0; j < width; j++) {//y axis
-			for (int k = 0; k < height; k++) {//1-4,x axis,height
-				if (isRender[i][j][k]) {
-					type = blocks[i][j][k];
-					if (type != lasttype) {
-						glActiveTexture(GL_TEXTURE0);
-						glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
-						lasttype = type;
+	for (int k = 0; k < height; k++) {//1-4,x axis,height
+		for (int i = 0; i < width; i++) {//z axis
+			for (int j = 0; j < width; j++) {//y axis
+					if (isRender[i][j][k]) {
+						myShader->setMat4("model", glm::value_ptr(model));
+						type = blocks[i][j][k];
+						if (type != lasttype) {
+							glActiveTexture(GL_TEXTURE0);
+							glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
+							lasttype = type;
+						}
+						if (type != Block::Water) {
+							//激活纹理单元： 
+							glBindVertexArray(VAO);
+							glDrawArrays(GL_TRIANGLES, 0, 36);
+						}
 					}
-					if (type != Block::Water) {
-						//激活纹理单元： 
-						glBindVertexArray(VAO);
-						glDrawArrays(GL_TRIANGLES, 0, 36);
-					}
-				}
-				model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f)); //height,x
-				myShader->setMat4("model", glm::value_ptr(model));
+				model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f)); //y axis
 			}
-			model = glm::translate(model, glm::vec3((height) * 1.0f, 1.0f, 0.0f)); //y axis
-			x++;
+			model = glm::translate(model, glm::vec3(0.0f, -width * 1.0f, 1.0f)); //z axis
 		}
-		model = glm::translate(model, glm::vec3(0.0f, -width * 1.0f, 1.0f)); //z axis
-		y++;
-		x -= width;
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -width * 1.0f)); //height,x
 	}
+	model = glm::translate(model, glm::vec3((height) * 1.0f, 0.0f, 0.0f)); //y axis
 }

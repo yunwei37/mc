@@ -27,11 +27,13 @@ Map::Map(Camera* myCamera)
 	myShader->use();
 	myShader->setInt("myTexture1", 0);
 
-	chunkSize = 4;
-	for (int i = 0; i < chunkSize; ++i) {
-		chunks.push_back(new Chunk(0,0));
-	}
-
+	chunkSize = 6;
+	chunks.push_back(new Chunk(0, 0));
+	chunks.push_back(new Chunk(0, 1));
+	chunks.push_back(new Chunk(1, 0));
+	chunks.push_back(new Chunk(1, 1));
+	chunks.push_back(new Chunk(2, 0));
+	chunks.push_back(new Chunk(2, 1));
 
 }
 
@@ -62,6 +64,12 @@ void Map::renderMap()
 	myShader->setMat4("projection", glm::value_ptr(projection));
 	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	//myShader.setMat4("model", glm::value_ptr(model));
-
-	chunks[0]->renderChunk(model, VAO, myShader);
+	for (int i = 0; i < chunkSize; ++i) {
+		chunks[i]->renderChunk(model, VAO, myShader);
+		if (i < chunkSize - 1) {
+			int dx = chunks[i + 1]->x - chunks[i]->x;
+			int dy = chunks[i + 1]->y - chunks[i]->y;
+			model = glm::translate(model, glm::vec3(0.0f, Chunk::width * dy * 1.0f, Chunk::width * dx * 1.0f));
+		}
+	}
 }
