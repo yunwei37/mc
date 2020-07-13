@@ -139,6 +139,8 @@
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="StructureBuilder.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="ItemStack.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
@@ -151,6 +153,8 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="StructureBuilder.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="ItemStack.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
