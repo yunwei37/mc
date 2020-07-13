@@ -1,5 +1,5 @@
 #include"Chunk.h"
-#include"PerlinNoise.h"
+
 int Chunk::generateHeight(double x, double y, double z) { //让随机种子，振幅，频率，应用于我们的噪音采样结果 
 	return PerlinNoise3D(x,y,z) + baseHeight;
 } 
@@ -24,6 +24,37 @@ Block::blockType Chunk::generateBlockType(double Pos[3]) {
 Chunk::Chunk()
 {
 
+}
+
+void Chunk::renderChunk(glm::mat4 model,unsigned int VAO, Shader* myShader)
+{
+	int z = 0, x = 0, y = 0;//block position in chunk	
+
+	for (int i = 0; i < width; i++) {//z axis
+		for (int j = 0; j < width; j++) {//y axis
+			z = (int)((PerlinNoise2D(x * 0.3, y * 0.3) + 1) * 10);
+			for (int k = 0; k < z + baseHeight; k++) {//1-4,x axis,height
+				/*if (k == 0 || k == x+chunk.baseHeight || j == 0 || i == chunk.width) {
+					glCullFace(GL_BACK);
+				}
+				else glCullFace(GL_FRONT_AND_BACK);*/
+				glBindVertexArray(VAO);
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+				model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f)); //height,x
+				myShader->setMat4("model", glm::value_ptr(model));
+			}
+			model = glm::translate(model, glm::vec3((z + baseHeight) * 1.0f, 1.0f, 0.0f)); //y axis
+			x++;
+		}
+		model = glm::translate(model, glm::vec3(0.0f, -width * 1.0f, 1.0f)); //z axis
+		y++;
+		x -= width;
+	}
+}
+
+int Chunk::generateChunk(double x, double y)
+{
+	return 0;
 }
 
 /*void Chunk::buildChunk() {
