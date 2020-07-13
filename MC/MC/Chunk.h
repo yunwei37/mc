@@ -34,7 +34,7 @@ public:
 	int y;
 
 private:
-	//int generateHeight(double x, double y, double z);
+	int generateHeight(double x, double y);
 	Block::blockType generateBlockType(int x, int y, int z, int h);
 	//BlockType[,,] map; 
 	//Mesh chunkMesh; //存储着此Chunk内的所有Block信息 

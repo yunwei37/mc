@@ -79,10 +79,6 @@ void prepare()
 }
 
 
-
-float persistence = 0.0250;
-int Number_Of_Octaves = 6;
-
 double Noise(int x, int y)    // 根据(x,y)获取一个初步噪声值
 {
 	int n = x + y * 57;
@@ -119,7 +115,7 @@ double InterpolatedNoise(float x, float y)   // 获取插值噪声
 	return Cosine_Interpolate(i1, i2, fractional_Y);
 }
 
-double PerlinNoise2D(double x, double y)    // 最终调用：根据(x,y)获得其对应的PerlinNoise值
+double PerlinNoise2D(double x, double y, double persistence,int Number_Of_Octaves)    // 最终调用：根据(x,y)获得其对应的PerlinNoise值
 {
 	double total = 0;
 	double p = persistence;
