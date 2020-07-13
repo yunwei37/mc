@@ -9,6 +9,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Map.h"
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include "Shader.h"
+#include "Text.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -25,54 +29,64 @@ bool firstMouse = true;
 clock_t lastPress = 0;
 int seqPress = 0;
 Camera myCamera(glm::vec3(-15.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-
+/// Holds all state information relevant to a character as loaded using FreeType
+GLuint VAO;
+GLuint VBO;
 int main()
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	// glfw window creation
 	// --------------------
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	glfwMakeContextCurrent(window);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_move_callback);
-	glfwSetScrollCallback(window, scroll_callback);
-	glfwSetMouseButtonCallback(window, mouse_click_callback);
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_move_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouse_click_callback);
 	glEnable(GL_DEPTH_TEST);//开启深度测试
 	glEnable(GL_CULL_FACE);//面剔除
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	Map* myMap = new Map(&myCamera);
-
 	Block::loadTextures();
+	
 
 	while (!glfwWindowShouldClose(window))
 	{
+		glEnable(GL_DEPTH_TEST);//开启深度测试
 		float curTime = glfwGetTime();
 		deltaTime = curTime - lastFrame;
 		lastFrame = curTime;
 		processInput(window);
-		
 		myMap->renderMap();
-
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		/*glfwPollEvents();
+		// Clear the colorbuffer
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		Text text;
+		glfwSwapBuffers(window);*/
+		
 	}
 	delete myMap;
 
