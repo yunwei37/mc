@@ -67,8 +67,6 @@ int main()
 		deltaTime = curTime - lastFrame;
 		lastFrame = curTime;
 		processInput(window);
-
-		Chunk chunk;
 		
 		myMap->renderMap();
 

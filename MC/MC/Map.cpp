@@ -27,16 +27,19 @@ Map::Map(Camera* myCamera)
 	myShader->use();
 	myShader->setInt("myTexture1", 0);
 
-	int chunkSize = 1;
+	chunkSize = 4;
 	for (int i = 0; i < chunkSize; ++i) {
-		chunks.push_back(Chunk());
+		chunks.push_back(new Chunk(0,0));
 	}
 
 
 }
 
 Map::~Map()
-{
+{	
+	for (int i = 0; i < chunkSize; ++i) {
+		delete chunks[i];
+	}
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
@@ -60,9 +63,5 @@ void Map::renderMap()
 	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	//myShader.setMat4("model", glm::value_ptr(model));
 
-	//激活纹理单元： 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(Block::textures[4].Type, Block::textures[4].ID);
-
-	chunks[0].renderChunk(model, VAO, myShader);
+	chunks[0]->renderChunk(model, VAO, myShader);
 }

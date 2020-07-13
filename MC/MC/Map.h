@@ -13,11 +13,13 @@
 class Map
 {
 private:
-	std::vector<Chunk> chunks;
+	std::vector<Chunk*> chunks;
 
 	unsigned int VBO, VAO;
 	Shader* myShader;
 	Camera* myCamera;
+
+	int chunkSize;
 
 public:
 	Map(Camera* myCamera);
