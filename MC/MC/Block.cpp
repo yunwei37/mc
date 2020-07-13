@@ -46,8 +46,71 @@ const float Block::vertices[] = {
 
 const size_t Block::vsize = sizeof(Block::vertices);
 
+std::vector<Texture> Block::textures;
+
 int Block::loadTextures()
 {   
+    std::vector<std::string> grass
+    {
+        "blocks/grass_side.png",
+        "blocks/grass.png",
+        "blocks/grass_side.png",
+        "blocks/grass_side.png",
+        "blocks/grass_side.png",
+        "blocks/grass_side.png"
+    };
+    Texture myTexGrass(grass);
 
+    std::vector<std::string> dirt
+    {
+        "blocks/dirt.png",
+        "blocks/dirt.png",
+        "blocks/dirt.png",
+        "blocks/dirt.png",
+        "blocks/dirt.png",
+        "blocks/dirt.png"
+    };
+    Texture myTexDirt(dirt);
+
+    std::vector<std::string> sand
+    {
+        "blocks/sand.png",
+        "blocks/sand.png",
+        "blocks/sand.png",
+        "blocks/sand.png",
+        "blocks/sand.png",
+        "blocks/sand.png"
+    };
+    Texture myTexSand(sand);
+
+    std::vector<std::string> stond
+    {
+        "blocks/stone.png",
+        "blocks/stone.png",
+        "blocks/stone.png",
+        "blocks/stone.png",
+        "blocks/stone.png",
+        "blocks/stone.png"
+    };
+    Texture myTexStond(stond);
+
+    std::vector<std::string> stbrick
+    {
+        "blocks/stonebrick.png",
+        "blocks/stonebrick.png",
+        "blocks/stonebrick.png",
+        "blocks/stonebrick.png",
+        "blocks/stonebrick.png",
+        "blocks/stonebrick.png"
+    };
+    Texture myTexStb(stbrick);
+     
+    Block::textures.push_back(myTexDirt); //0
+    Block::textures.push_back(myTexDirt); //1
+    Block::textures.push_back(myTexDirt); //2
+    Block::textures.push_back(myTexStond); //3
+    Block::textures.push_back(myTexGrass); //4
+    Block::textures.push_back(myTexSand); //5
+    Block::textures.push_back(myTexStb); //6
     return 0;
 }
