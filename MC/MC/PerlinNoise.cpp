@@ -81,7 +81,7 @@ void prepare()
 
 
 float persistence = 0.0250;
-int Number_Of_Octaves = 4;
+int Number_Of_Octaves = 6;
 
 double Noise(int x, int y)    // 根据(x,y)获取一个初步噪声值
 {

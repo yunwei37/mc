@@ -15,7 +15,7 @@
 class Chunk {
 public:
 	//List<Chunk> chunks = new List<Chunk>(); 
-	static const int width = 32; //每个Chunk的长宽Size 
+	static const int width = 16; //每个Chunk的长宽Size 
 	static const int height = 64; //每个Chunk的高度 
 	int seed; //随机种子 
 	float baseHeight = 0; //最小生成高度 
@@ -30,9 +30,10 @@ public:
 	Block::blockType blocks[width][width][height]; //Chunk的网格
 	bool isRender[width][width][height];
 
-private:
 	int x;
 	int y;
+
+private:
 	//int generateHeight(double x, double y, double z);
 	Block::blockType generateBlockType(int x, int y, int z, int h);
 	//BlockType[,,] map; 
