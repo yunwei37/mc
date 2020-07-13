@@ -27,13 +27,12 @@ Map::Map(Camera* myCamera)
 	myShader->use();
 	myShader->setInt("myTexture1", 0);
 
-	chunkSize = 6;
-	chunks.push_back(new Chunk(0, 0));
-	chunks.push_back(new Chunk(0, 1));
-	chunks.push_back(new Chunk(1, 0));
-	chunks.push_back(new Chunk(1, 1));
-	chunks.push_back(new Chunk(2, 0));
-	chunks.push_back(new Chunk(2, 1));
+	chunkSize = 9;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			chunks.push_back(new Chunk(i, j));
+		}
+	}
 
 }
 

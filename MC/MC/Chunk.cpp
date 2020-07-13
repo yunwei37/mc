@@ -4,6 +4,12 @@
 //	return PerlinNoise3D(x,y,z) + baseHeight;
 //} 
 
+int Chunk::generateHeight(double x, double y)
+{	
+	int small = (PerlinNoise2D(x, y, 0.025, 4) + 1) * 10;
+	return small;
+}
+
 Block::blockType Chunk::generateBlockType(int x, int y, int z, int h) {
 	if (z > h) { //当前方块位置高于随机生成的高度值时，当前方块类型为空 
 		return Block::Air;
@@ -83,10 +89,10 @@ Chunk::Chunk(int x, int y)
 	this->x = x;
 	this->y = y;
 	isLoad = true;
-	float radio = 3.0;
+	double radio = 3.0;
 	for (int i = 0; i < width; ++i) {
 		for (int j = 0; j < width; ++j) {
-			int h = (int)((PerlinNoise2D(x * radio + i * radio/width, y * radio + j * radio / width) + 1) * 10); //获取当前位置方块随机生成的高度值 
+			int h = generateHeight(x * radio + i * radio/width, y * radio + j * radio / width); //获取当前位置方块随机生成的高度值 
 			for (int k = 0; k < height; ++k) {
 				this->blocks[i][j][k] = generateBlockType(i, j, k, h);
 			}
