@@ -1,9 +1,5 @@
 #include"Chunk.h"
 
-//int Chunk::generateHeight(double x, double y, double z) { //让随机种子，振幅，频率，应用于我们的噪音采样结果 
-//	return PerlinNoise3D(x,y,z) + baseHeight;
-//} 
-
 int Chunk::generateHeight(double x, double y)
 {	
 	int small = (PerlinNoise2D(x, y, 0.025, 4) + 1) * 10;
@@ -24,8 +20,8 @@ Block::blockType Chunk::generateBlockType(int x, int y, int z, int h) {
 	else return Block::Stone; //其他情况，当前方块类型为碎石
 }
 
-bool Chunk::isVisible(int x, int y, int z)
-{	
+bool Chunk::isVisible(int x, int y, int z)//block在chunk中的坐标
+{	//flag==true, render; flag==false, not render
 	if (blocks[x][y][z] == Block::Air) {
 		return false;
 	}
@@ -34,7 +30,7 @@ bool Chunk::isVisible(int x, int y, int z)
 		Block::blockType type;
 		if (x > 0) {
 			type = blocks[x - 1][y][z];
-			if (type == Block::Air || type == Block::Water) {
+			if (type == Block::Air || type == Block::Water) {//adjacent to Air/Water, render
 				flag = true;
 			}
 		}
@@ -84,15 +80,17 @@ bool Chunk::isVisible(int x, int y, int z)
 	}
 }
 
-Chunk::Chunk(int x, int y)
+Chunk::Chunk(int x, int y, int width, int height):width(width), height(height)
 {
 	this->x = x;
 	this->y = y;
 	isLoad = true;
 	double radio = 3.0;
+	//render a chunk
 	for (int i = 0; i < width; ++i) {
 		for (int j = 0; j < width; ++j) {
-			int h = generateHeight(x * radio + i * radio/width, y * radio + j * radio / width); //获取当前位置方块随机生成的高度值 
+			int h = generateHeight(x * radio + i * radio / width, y * radio + j * radio / width); //获取当前位置方块随机生成的高度值 
+			visibleHeight[i][j] = h;//write down random visible height
 			for (int k = 0; k < height; ++k) {
 				this->blocks[i][j][k] = generateBlockType(i, j, k, h);
 			}
@@ -101,11 +99,12 @@ Chunk::Chunk(int x, int y)
 	for (int i = 0; i < width; ++i) {
 		for (int j = 0; j < width; ++j) {
 			for (int k = 0; k < height; ++k) {
-				this->isRender[i][j][k] = isVisible(i,j,k);
+				this->isRender[i][j][k] = isVisible(i, j, k);
 			}
 		}
 	}
 }
+
 
 void Chunk::renderChunk(glm::mat4 model,unsigned int VAO, Shader* myShader)
 {	

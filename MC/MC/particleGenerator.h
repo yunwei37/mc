@@ -23,7 +23,6 @@ public:
 	void Update(GLfloat dt, glm::vec3 blockPos, GLuint newParticles, glm::vec3 offset);
 	void Draw();// Render all particles
 private:
-	// State
 	std::vector<Particle> particles;
 	GLuint amount;
 	// Render state

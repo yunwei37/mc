@@ -1,9 +1,10 @@
 #include "Map.h"
-
+#include "particleGenerator.h"
+#include "Chunk.h"
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 
-Map::Map(Camera* myCamera)
+Map::Map(Camera* myCamera, int chunkSize):chunkSize(chunkSize)
 {	
 	myShader = new Shader("test_vs.txt", "test_fs.txt");
 	this->myCamera = myCamera;
@@ -27,13 +28,13 @@ Map::Map(Camera* myCamera)
 	myShader->use();
 	myShader->setInt("myTexture1", 0);
 
-	chunkSize = 9;
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			chunks.push_back(new Chunk(i, j));
+	//chunkSize = 9;
+	int len = sqrt(chunkSize);
+	for (int i = 0; i < len; ++i) {
+		for (int j = 0; j < len; ++j) {
+			chunks.push_back(new Chunk(i, j, CHUNK_WIDTH, CHUNK_HEIGHT));//render a chunk
 		}
 	}
-
 }
 
 Map::~Map()
@@ -49,9 +50,6 @@ Map::~Map()
 
 void Map::renderMap()
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	//变换：
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
@@ -65,10 +63,46 @@ void Map::renderMap()
 	//myShader.setMat4("model", glm::value_ptr(model));
 	for (int i = 0; i < chunkSize; ++i) {
 		chunks[i]->renderChunk(model, VAO, myShader);
+		if (i < chunkSize - 1 && chunkSize != 1) {
+			int dx = chunks[i + 1]->x - chunks[i]->x;
+			int dy = chunks[i + 1]->y - chunks[i]->y;
+			model = glm::translate(model, glm::vec3(0.0f, CHUNK_WIDTH * dy * 1.0f, CHUNK_WIDTH * dx * 1.0f));
+		}
+	}
+}
+void Map::renderBlock(int extraBlocks[], Block::blockType type)
+{//map_x, chunk_x横着, map_y, chunk_y竖着
+	int map_x = extraBlocks[0];
+	int map_y = extraBlocks[1];
+	int chunk_x = extraBlocks[2];
+	int chunk_y = extraBlocks[3];
+
+	//变换：
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+
+	view = myCamera->GetViewMatrix();
+	projection = glm::perspective(glm::radians(myCamera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	myShader->setMat4("view", glm::value_ptr(view));
+	myShader->setMat4("projection", glm::value_ptr(projection));
+	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	int loop = map_y * sqrt(MAP_SIZE) + map_y;//get chunk position in map
+	int i = 0;
+	for (i = 0; i < loop; ++i) {
 		if (i < chunkSize - 1) {
 			int dx = chunks[i + 1]->x - chunks[i]->x;
 			int dy = chunks[i + 1]->y - chunks[i]->y;
-			model = glm::translate(model, glm::vec3(0.0f, Chunk::width * dy * 1.0f, Chunk::width * dx * 1.0f));
+			model = glm::translate(model, glm::vec3(0.0f, CHUNK_WIDTH * dy * 1.0f, CHUNK_WIDTH * dx * 1.0f));
 		}
 	}
+	//find block position in chunks[i]:	
+	int hoffset = chunks[i]->visibleHeight[chunk_x][chunk_y] + 1;//height to place extra block
+	model = glm::translate(model, glm::vec3(hoffset*(-1.0f), chunk_x*1.0f, chunk_y*1.0f));
+	//render the extra block:
+	myShader->setMat4("model", glm::value_ptr(model));
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }

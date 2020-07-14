@@ -1,7 +1,7 @@
 #pragma once
 #ifndef MAP_H
 #define MAP_H
-
+#define MAP_SIZE 9
 #include <map>
 #include <vector>
 #include <string>
@@ -19,12 +19,13 @@ private:
 	Shader* myShader;
 	Camera* myCamera;
 
-	int chunkSize;
+	int chunkSize;//amount of chunks in map
 
 public:
-	Map(Camera* myCamera);
+	Map(Camera* myCamera, int chunkSize);
 	~Map();
 	void renderMap();
+	void renderBlock(int extraBlocks[], Block::blockType type);
 };
 
 #endif 

@@ -1,7 +1,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <GL/glut.h>
+#include <GL/GL.H>
+#include <GL/GLAUX.H>
+#include <GL/GLU.H>
 #include"Camera.h"
 #include"Chunk.h"
+#include"particleGenerator.h"
 #include"stb_image.h"
 #include<time.h>
 #include <iostream>
@@ -9,12 +14,16 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Map.h"
-
+//typedef int* localPos;
+//vector<localPos> extraBlocks;
+int extraBlocks[4];
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void screen2world(double xpos, double ypos, glm::vec3 *worldPos);
+
 // settings
 extern const unsigned int SCR_WIDTH = 800;
 extern const unsigned int SCR_HEIGHT = 600;
@@ -22,9 +31,7 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-clock_t lastPress = 0;
-int seqPress = 0;
-Camera myCamera(glm::vec3(-15.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+Camera myCamera(glm::vec3(-30.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
 int main()
 {
@@ -47,6 +54,7 @@ int main()
 	glfwSetCursorPosCallback(window, mouse_move_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetMouseButtonCallback(window, mouse_click_callback);
+	
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -57,9 +65,11 @@ int main()
 	glEnable(GL_DEPTH_TEST);//开启深度测试
 	glEnable(GL_CULL_FACE);//面剔除
 
-	Map* myMap = new Map(&myCamera);
-
+	Map* myMap = new Map(&myCamera, MAP_SIZE);
 	Block::loadTextures();
+	/*Shader partShader("particles_vs.txt", "particles_fs.txt");
+	Texture partTex(GL_TEXTURE_2D, "blocks/dirt.png");
+	blockParticles = new ParticleGen(partShader, partTex, 10);*/
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -67,9 +77,14 @@ int main()
 		deltaTime = curTime - lastFrame;
 		lastFrame = curTime;
 		processInput(window);
-		
-		myMap->renderMap();
-
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		extraBlocks[0] = 0;
+		extraBlocks[1] = 0;
+		extraBlocks[2] = 0;
+		extraBlocks[3] = 0;
+		myMap->renderMap();//draw map
+		myMap->renderBlock(extraBlocks,Block::Stone);
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -107,7 +122,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
-{
+{//screen origin(0,0): 左上角
 	if (firstMouse) {
 		lastX = xpos;
 		lastY = ypos;
@@ -120,35 +135,67 @@ void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 	myCamera.ProcessMouseMovement(xoffset, yoffset, true);
 }
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
+	glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f);
+	double cursor_x = 0, cursor_y = 0;
 	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
-		if ((double)((clock() - lastPress) / CLOCKS_PER_SEC) < 0.1) {//multi press
-			seqPress++;
-			cout << "multi press " << seqPress << endl;
-			if (seqPress == 6) {
-				//block break
-				seqPress = 0;
-			}
-		}
-		else {//short press
-			seqPress = 0;
-			cout << "short press " << endl;
-			//place block
-		}
-		lastPress = clock();
+		cout << "left press " << endl;
+		glfwGetCursorPos(window, &cursor_x, &cursor_y);
+		screen2world(cursor_x, cursor_y, &world);//place block
+		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
+		
 	}
-	/*else if (action = GLFW_RELEASE) {
-		lastPress = clock();
-		if ((double)((clock() - lastPress) / CLOCKS_PER_SEC) > 5) {
-			cout << "long press " << endl;
-		}
-		else cout << "short press " << endl;
-	}*/
-	//else if (action == GLFW_REPEAT) {//long press
-	//	cout << "long press" << endl;
-	//}
+	else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
+		cout << "right press " << endl;
+		double cursor_x = 0, cursor_y = 0;
+		glfwGetCursorPos(window, &cursor_x, &cursor_y);
+		screen2world(cursor_x, cursor_y, &world);//place block
+		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
+	}
 	return;
 }
+
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	myCamera.ProcessMouseScroll(yoffset);
+}
+void screen2world(double xpos, double ypos, glm::vec3 *worldPos) 
+{//creeen coordiate to world coordiate
+	GLint viewport[4];
+	glm::mat4 model=glm::mat4(1.0f);
+	glm::mat4 projection=glm::mat4(1.0f);
+	glm::mat4 view=glm::mat4(1.0f);
+	GLfloat winX, winY, winZ;//鼠标处坐标+鼠标处像素深度
+	GLdouble object_x, object_y, object_z;//所求的世界坐标
+	glm::vec3 pp = glm::vec3(0.0f, 0.0f, 0.f);
+	int mouse_x = xpos;
+	int mouse_y = ypos;
+	
+	view = myCamera.GetViewMatrix();
+	projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	winX = (float)mouse_x;
+	winY = (float)viewport[3] - (float)mouse_y;
+	glReadBuffer(GL_BACK);
+	glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+	gluUnProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, (GLdouble*)glm::value_ptr(view*model), (GLdouble*)glm::value_ptr(projection), viewport, &object_x, &object_y, &object_z);
+	pp.x = object_x;
+	pp.y = object_y;
+	pp.z = object_z;
+	
+	//求视点的UVN系统
+	glm::vec3 U, V, N;                 
+	glm::vec3 up = { 0.0,1.0,0.0 };
+	glm::vec3 eye, direction;            //视点坐标与观察点坐标
+
+	N = eye - direction;                 //矢量减法
+	U = glm::cross(N, up);                //矢量叉乘
+	V = glm::cross(N, U);
+	glm::normalize(N);                      //矢量归一化
+	glm::normalize(U);
+	glm::normalize(V);
+	worldPos->x = U.x * pp.x + V.x * pp.y + N.x * pp.z + eye.x;
+	worldPos->y = U.y * pp.x + V.y * pp.y + N.y * pp.z + eye.y;
+	worldPos->z = U.z * pp.x + V.z * pp.y + N.z * pp.z + eye.z;
 }
