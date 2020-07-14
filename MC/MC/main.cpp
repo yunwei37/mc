@@ -1,9 +1,5 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <GL/glut.h>
-#include <GL/GL.H>
-#include <GL/GLAUX.H>
-#include <GL/GLU.H>
 #include"Camera.h"
 #include"Chunk.h"
 #include"particleGenerator.h"
@@ -22,7 +18,7 @@ void processInput(GLFWwindow* window);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void screen2world(double xpos, double ypos, glm::vec3 *worldPos);
+void screen2world(double xpos, double ypos, glm::vec3* worldPos);
 
 // settings
 extern const unsigned int SCR_WIDTH = 800;
@@ -56,7 +52,7 @@ int main()
 	glfwSetCursorPosCallback(window, mouse_move_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetMouseButtonCallback(window, mouse_click_callback);
-	
+
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -81,7 +77,7 @@ int main()
 		processInput(window);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		myMap->destroyBlock(delBlocks);//detroy blocks
 		myMap->renderMap();//draw map
 		myMap->renderBlock(extraBlocks);//render extra blocks
@@ -134,6 +130,7 @@ void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 	lastY = ypos;
 	myCamera.ProcessMouseMovement(xoffset, yoffset, true);
 }
+
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
 	glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f);
 	double cursor_x = 0, cursor_y = 0;
@@ -143,7 +140,7 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 		screen2world(cursor_x, cursor_y, &world);
 		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
 		//place a block
-		operateBlock *p = new operateBlock;
+		operateBlock* p = new operateBlock;
 		p->mapCoord[0] = 0;
 		p->mapCoord[1] = 0;
 		p->chunkCoord[0] = 0;
@@ -158,7 +155,7 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 		screen2world(cursor_x, cursor_y, &world);//place block
 		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
 		//destroy a block:
-		operateBlock *p = new operateBlock;
+		operateBlock* p = new operateBlock;
 		p->mapCoord[0] = 0;
 		p->mapCoord[1] = 0;
 		p->chunkCoord[0] = 1;
@@ -172,18 +169,18 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	myCamera.ProcessMouseScroll(yoffset);
 }
-void screen2world(double xpos, double ypos, glm::vec3 *worldPos) 
+void screen2world(double xpos, double ypos, glm::vec3* worldPos)
 {//creeen coordiate to world coordiate
 	GLint viewport[4];
-	glm::mat4 model=glm::mat4(1.0f);
-	glm::mat4 projection=glm::mat4(1.0f);
-	glm::mat4 view=glm::mat4(1.0f);
-	GLfloat winX, winY, winZ;//鼠标处坐标+鼠标处像素深度
-	GLdouble object_x, object_y, object_z;//所求的世界坐标
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	GLfloat winX, winY, winZ;							//鼠标处坐标+鼠标处像素深度
+	GLdouble object_x, object_y, object_z;				//所求的世界坐标
 	glm::vec3 pp = glm::vec3(0.0f, 0.0f, 0.f);
 	int mouse_x = xpos;
 	int mouse_y = ypos;
-	
+
 	view = myCamera.GetViewMatrix();
 	projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -193,13 +190,14 @@ void screen2world(double xpos, double ypos, glm::vec3 *worldPos)
 	winY = (float)viewport[3] - (float)mouse_y;
 	glReadBuffer(GL_BACK);
 	glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-	gluUnProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, (GLdouble*)glm::value_ptr(view*model), (GLdouble*)glm::value_ptr(projection), viewport, &object_x, &object_y, &object_z);
-	pp.x = object_x;
-	pp.y = object_y;
-	pp.z = object_z;
-	
+	//glm::unProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, (GLdouble*)glm::value_ptr(view*model), 
+	//	(GLdouble*)glm::value_ptr(projection), viewport, &object_x, &object_y, &object_z);
+	//pp.x = object_x;
+	//pp.y = object_y;
+	//pp.z = object_z;
+
 	//求视点的UVN系统
-	glm::vec3 U, V, N;                 
+	glm::vec3 U, V, N;
 	glm::vec3 up = { 0.0,1.0,0.0 };
 	glm::vec3 eye, direction;            //视点坐标与观察点坐标
 
