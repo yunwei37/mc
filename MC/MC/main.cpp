@@ -28,6 +28,7 @@ float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
 Camera myCamera(glm::vec3(-30.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+Map* myMap;
 std::vector<operateBlock*> extraBlocks;
 std::vector<operateBlock*> delBlocks;
 
@@ -63,7 +64,8 @@ int main()
 	glEnable(GL_DEPTH_TEST);//开启深度测试
 	glEnable(GL_CULL_FACE);//面剔除
 
-	Map* myMap = new Map(&myCamera, MAP_SIZE);
+	myMap = new Map(&myCamera);
+	myMap->updateMap();
 	Block::loadTextures();
 	/*Shader partShader("particles_vs.txt", "particles_fs.txt");
 	Texture partTex(GL_TEXTURE_2D, "blocks/dirt.png");
@@ -78,9 +80,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		myMap->destroyBlock(delBlocks);//detroy blocks
+		//myMap->destroyBlock(delBlocks);//detroy blocks
 		myMap->renderMap();//draw map
-		myMap->renderBlock(extraBlocks);//render extra blocks
+		//myMap->renderBlock(extraBlocks);//render extra blocks
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -109,6 +111,7 @@ void processInput(GLFWwindow* window)
 		myCamera.ProcessKeyboard(DOWN, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	myMap->updateMap();
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
