@@ -70,39 +70,66 @@ void Map::renderMap()
 		}
 	}
 }
-void Map::renderBlock(int extraBlocks[], Block::blockType type)
+void Map::renderBlock(std::vector<operateBlock*> extraBlocks)
 {//map_x, chunk_xºá×Å, map_y, chunk_yÊú×Å
-	int map_x = extraBlocks[0];
-	int map_y = extraBlocks[1];
-	int chunk_x = extraBlocks[2];
-	int chunk_y = extraBlocks[3];
-
+	if (extraBlocks.size() == 0) return;//place no blocks
+	int map_x = 0;
+	int map_y = 0;
+	int chunk_x = 0;
+	int chunk_y = 0;
+	int i = 0;
+	int loop = 0;
+	Block::blockType type;
 	//±ä»»£º
-	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
-
 	view = myCamera->GetViewMatrix();
 	projection = glm::perspective(glm::radians(myCamera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	myShader->setMat4("view", glm::value_ptr(view));
 	myShader->setMat4("projection", glm::value_ptr(projection));
-	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	int loop = map_y * sqrt(MAP_SIZE) + map_y;//get chunk position in map
-	int i = 0;
-	for (i = 0; i < loop; ++i) {
-		if (i < chunkSize - 1) {
-			int dx = chunks[i + 1]->x - chunks[i]->x;
-			int dy = chunks[i + 1]->y - chunks[i]->y;
-			model = glm::translate(model, glm::vec3(0.0f, CHUNK_WIDTH * dy * 1.0f, CHUNK_WIDTH * dx * 1.0f));
+	for (int itr = 0; itr < extraBlocks.size(); itr++) {
+		map_x = extraBlocks[itr]->mapCoord[0];
+		map_y = extraBlocks[itr]->mapCoord[1];
+		chunk_x = extraBlocks[itr]->chunkCoord[0];
+		chunk_y = extraBlocks[itr]->chunkCoord[1];
+		type = extraBlocks[itr]->type;
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		loop = map_y * sqrt(MAP_SIZE) + map_y;//get chunk position in map
+		for (i = 0; i < loop; ++i) {
+			if (i < chunkSize - 1) {
+				int dx = chunks[i + 1]->x - chunks[i]->x;
+				int dy = chunks[i + 1]->y - chunks[i]->y;
+				model = glm::translate(model, glm::vec3(0.0f, CHUNK_WIDTH * dy * 1.0f, CHUNK_WIDTH * dx * 1.0f));
+			}
 		}
+		//find block position in chunks[i]:	
+		int hoffset = chunks[i]->visibleHeight[chunk_x][chunk_y]+1;//height to place extra block
+		model = glm::translate(model, glm::vec3(hoffset*(-1.0f), chunk_x*1.0f, chunk_y*1.0f));
+		//render the extra block:
+		myShader->setMat4("model", glm::value_ptr(model));
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
-	//find block position in chunks[i]:	
-	int hoffset = chunks[i]->visibleHeight[chunk_x][chunk_y] + 1;//height to place extra block
-	model = glm::translate(model, glm::vec3(hoffset*(-1.0f), chunk_x*1.0f, chunk_y*1.0f));
-	//render the extra block:
-	myShader->setMat4("model", glm::value_ptr(model));
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
+{
+	if (delBlocks.size() == 0) return;
+	int map_x = 0;
+	int map_y = 0;
+	int chunk_x = 0;
+	int chunk_y = 0;
+	int chunkIdx = 0;
+	for (int itr = 0; itr < delBlocks.size(); itr++) {
+		map_x = delBlocks[itr]->mapCoord[0];
+		map_y = delBlocks[itr]->mapCoord[1];
+		chunk_x = delBlocks[itr]->chunkCoord[0];
+		chunk_y = delBlocks[itr]->chunkCoord[1];
+		chunkIdx = map_y * sqrt(MAP_SIZE) + map_y;
+		int h = chunks[chunkIdx]->visibleHeight[chunk_x][chunk_y];
+		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h] = false;
+		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h-1] = true;
+	}
 }

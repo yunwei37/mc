@@ -28,5 +28,18 @@ public:
 	static int loadTextures();
 
 };
-#endif // 
+struct operateBlock//the placed block's information
+{
+	int mapCoord[2];
+	int chunkCoord[2];
+	Block::blockType type;
+	operateBlock() {
+		type = Block::Air;
+		mapCoord[0] = 0;
+		mapCoord[1] = 0;
+		chunkCoord[0] = 0;
+		chunkCoord[1] = 0;
+	}
+};
 
+#endif // 

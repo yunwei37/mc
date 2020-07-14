@@ -25,7 +25,8 @@ public:
 	Map(Camera* myCamera, int chunkSize);
 	~Map();
 	void renderMap();
-	void renderBlock(int extraBlocks[], Block::blockType type);
+	void renderBlock(std::vector<operateBlock*> extraBlocks);//add blocks
+	void destroyBlock(std::vector<operateBlock*> delBlocks);//delete blocks
 };
 
 #endif 

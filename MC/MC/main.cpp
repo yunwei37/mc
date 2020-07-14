@@ -8,15 +8,15 @@
 #include"Chunk.h"
 #include"particleGenerator.h"
 #include"stb_image.h"
+#include"Block.h"
 #include<time.h>
+#include<vector>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Map.h"
-//typedef int* localPos;
-//vector<localPos> extraBlocks;
-int extraBlocks[4];
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
@@ -32,6 +32,8 @@ float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
 Camera myCamera(glm::vec3(-30.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+std::vector<operateBlock*> extraBlocks;
+std::vector<operateBlock*> delBlocks;
 
 int main()
 {
@@ -79,12 +81,10 @@ int main()
 		processInput(window);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);//background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		extraBlocks[0] = 0;
-		extraBlocks[1] = 0;
-		extraBlocks[2] = 0;
-		extraBlocks[3] = 0;
+		
+		myMap->destroyBlock(delBlocks);//detroy blocks
 		myMap->renderMap();//draw map
-		myMap->renderBlock(extraBlocks,Block::Stone);
+		myMap->renderBlock(extraBlocks);//render extra blocks
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -140,9 +140,16 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
 		cout << "left press " << endl;
 		glfwGetCursorPos(window, &cursor_x, &cursor_y);
-		screen2world(cursor_x, cursor_y, &world);//place block
+		screen2world(cursor_x, cursor_y, &world);
 		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
-		
+		//place a block
+		operateBlock *p = new operateBlock;
+		p->mapCoord[0] = 0;
+		p->mapCoord[1] = 0;
+		p->chunkCoord[0] = 0;
+		p->chunkCoord[1] = 0;
+		p->type = Block::Stone;
+		extraBlocks.push_back(p);
 	}
 	else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
 		cout << "right press " << endl;
@@ -150,6 +157,13 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 		glfwGetCursorPos(window, &cursor_x, &cursor_y);
 		screen2world(cursor_x, cursor_y, &world);//place block
 		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
+		//destroy a block:
+		operateBlock *p = new operateBlock;
+		p->mapCoord[0] = 0;
+		p->mapCoord[1] = 0;
+		p->chunkCoord[0] = 1;
+		p->chunkCoord[1] = 0;
+		delBlocks.push_back(p);
 	}
 	return;
 }
