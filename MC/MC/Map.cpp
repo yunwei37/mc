@@ -1,6 +1,8 @@
 #include "Map.h"
 #include "particleGenerator.h"
 #include "Chunk.h"
+#include "particleGenerator.h"
+#include "resource_manager.h"
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 
@@ -116,12 +118,20 @@ void Map::renderBlock(std::vector<operateBlock*> extraBlocks)
 }
 void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
 {
+	ParticleGen* Particles;
 	if (delBlocks.size() == 0) return;
 	int map_x = 0;
 	int map_y = 0;
 	int chunk_x = 0;
 	int chunk_y = 0;
 	int chunkIdx = 0;
+	ResourceManager::LoadShader("particle.vs", "particle.frag", nullptr, "particle");
+	ResourceManager::LoadTexture("particle.png", GL_TRUE, "particle");
+	Particles = new ParticleGen(
+		ResourceManager::GetShader("particle"),
+		ResourceManager::GetTexture("particle"),
+		500
+	);
 	for (int itr = 0; itr < delBlocks.size(); itr++) {
 		map_x = delBlocks[itr]->mapCoord[0];
 		map_y = delBlocks[itr]->mapCoord[1];
@@ -131,5 +141,7 @@ void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
 		int h = chunks[chunkIdx]->visibleHeight[chunk_x][chunk_y];
 		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h] = false;
 		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h-1] = true;
+//		Particles->Update(dt, , 2, glm::vec3);
+ 		Particles->Draw();
 	}
 }

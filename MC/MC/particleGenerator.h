@@ -4,21 +4,23 @@
 #include<glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include"Shader.h"
-#include"Texture.h"
+#include "Shader.h"
+#include "texture_two.h" 
+#include "resource_manager.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 struct Particle {// Represents a single particle and its state
 	glm::vec3 Position, Velocity;//粒子速度，位置
 	glm::vec4 Color;//粒子颜色
 	GLfloat Life;//粒子生命时长
 
-	Particle() : Position(0.0f), Velocity(glm::vec3(0.1f,0.1f,0.1f)), Color(1.0f), Life(0.0f) { }
+	Particle() : Position(0.0f), Velocity(glm::vec3(0.1f,0.1f,0.1f)), Color(1.0f), Life(10.0f) { }
 };
 class ParticleGen {
 public:
-	ParticleGen(Shader& shader, Texture& texture, GLuint amount);//ctor
+	ParticleGen(Shader shader, Texture2D texture, GLuint amount);//ctor
 	// Update all particles
 	void Update(GLfloat dt, glm::vec3 blockPos, GLuint newParticles, glm::vec3 offset);
 	void Draw();// Render all particles
@@ -27,7 +29,7 @@ private:
 	GLuint amount;
 	// Render state
 	Shader shader;
-	Texture texture;
+	Texture2D texture;
 	GLuint VAO;
 
 	void init();// Initializes buffer and vertex attributes

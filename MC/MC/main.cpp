@@ -1,9 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <GL/glut.h>
-#include <GL/GL.H>
-#include <GL/GLAUX.H>
-#include <GL/GLU.H>
+
 #include"Camera.h"
 #include"Chunk.h"
 #include"particleGenerator.h"
@@ -179,7 +176,9 @@ void screen2world(double xpos, double ypos, glm::vec3 *worldPos)
 	glm::mat4 projection=glm::mat4(1.0f);
 	glm::mat4 view=glm::mat4(1.0f);
 	GLfloat winX, winY, winZ;//鼠标处坐标+鼠标处像素深度
-	GLdouble object_x, object_y, object_z;//所求的世界坐标
+	GLdouble object_x=0;
+	GLdouble object_y = 0;
+	GLdouble object_z = 0;//所求的世界坐标
 	glm::vec3 pp = glm::vec3(0.0f, 0.0f, 0.f);
 	int mouse_x = xpos;
 	int mouse_y = ypos;
@@ -193,7 +192,7 @@ void screen2world(double xpos, double ypos, glm::vec3 *worldPos)
 	winY = (float)viewport[3] - (float)mouse_y;
 	glReadBuffer(GL_BACK);
 	glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-	gluUnProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, (GLdouble*)glm::value_ptr(view*model), (GLdouble*)glm::value_ptr(projection), viewport, &object_x, &object_y, &object_z);
+//	gluUnProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, (GLdouble*)glm::value_ptr(view*model), (GLdouble*)glm::value_ptr(projection), viewport, &object_x, &object_y, &object_z);
 	pp.x = object_x;
 	pp.y = object_y;
 	pp.z = object_z;
