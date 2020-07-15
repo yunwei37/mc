@@ -46,10 +46,10 @@ void Map::generateBlock(int m)
 			}
 		}
 	}
-	for (int i = 1; i < 10; ++i) {
-		chunks[m]->blocks[5][5][i + chunks[m]->visibleHeight[5][5]] = Block::Bark;
-		chunks[m]->isRender[5][5][i + chunks[m]->visibleHeight[5][5]] = true;
-	}
+	//for (int i = 1; i < 10; ++i) {
+	//	chunks[m]->blocks[5][5][i + chunks[m]->visibleHeight[5][5]] = Block::Bark;
+	//	chunks[m]->isRender[5][5][i + chunks[m]->visibleHeight[5][5]] = true;
+	//}
 	//makePalmTree(*chunks[m], 12, 5, 5, chunks[m]->visibleHeight[5][5]);
 }
 
