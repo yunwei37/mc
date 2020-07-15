@@ -5,9 +5,11 @@
 void makePalmTree(Chunk &chunk, int seed, int x, int y, int z)
 {
 	StructureBuilder builder;
-	srand((unsigned)time(NULL) + seed);
-	int height = rand() % 3 + 7;//range 7-9
+	srand(seed);
+	//int height = rand() % 3 + 7;//range 7-9
+	int height = 7;//range 7-9
 	int diameter = rand() % 3 + 4;//range 4 - 6
+	/*
 	for (int xLeaf = -diameter; xLeaf < diameter; xLeaf++) {
 		builder.addBlock(xLeaf + x, y + height, z, Block::Leaf);
 	}
@@ -19,9 +21,11 @@ void makePalmTree(Chunk &chunk, int seed, int x, int y, int z)
 	builder.addBlock(x + diameter, y + height - 1, z, Block::Leaf);
 	builder.addBlock(x - diameter, y + height - 1, z, Block::Leaf);
 	builder.addBlock(x, y + height + 1, z, Block::Leaf);
-	builder.addY(x, z, y, height, Block::Bark);
+	*/
+	builder.addZ(z, z+ height, x, y, Block::Bark);
 	builder.build(chunk);
 }
+
 void makeCactus(Chunk &chunk, int seed, int x, int y, int z)
 {
 	srand(seed);
@@ -36,6 +40,7 @@ void makeCactus(Chunk &chunk, int seed, int x, int y, int z)
 	default:break;
 	}
 }
+
 void cactus1(Chunk &chunk, int seed, int x, int y, int z)
 {
 	StructureBuilder builder;
@@ -43,6 +48,7 @@ void cactus1(Chunk &chunk, int seed, int x, int y, int z)
 	builder.addY(x, z, y, (rand()&0x03)+4, Block::Cactus);//range 4-7
 	builder.build(chunk);
 }
+
 void cactus2(Chunk &chunk, int seed, int x, int y, int z)
 {
 	StructureBuilder builder;

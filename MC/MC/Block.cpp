@@ -104,6 +104,28 @@ int Block::loadTextures()
         "blocks/stonebrick.png"
     };
     Texture myTexStb(stbrick);
+
+    std::vector<std::string> leaf
+    {
+        "blocks/leaves_oak.png",
+        "blocks/leaves_oak.png",
+        "blocks/leaves_oak.png",
+        "blocks/leaves_oak.png",
+        "blocks/leaves_oak.png",
+        "blocks/leaves_oak.png"
+    };
+    Texture myTexleaf(leaf);
+
+    std::vector<std::string> log
+    {
+        "blocks/log_oak_top.png",
+        "blocks/log_oak_top.png",
+        "blocks/log_oak.png",
+        "blocks/log_oak.png",
+        "blocks/log_oak.png",
+        "blocks/log_oak.png"
+    };
+    Texture myTexlog(log);
      
     Block::textures.push_back(myTexDirt); //0
     Block::textures.push_back(myTexDirt); //1
@@ -112,5 +134,7 @@ int Block::loadTextures()
     Block::textures.push_back(myTexGrass); //4
     Block::textures.push_back(myTexSand); //5
     Block::textures.push_back(myTexStb); //6
+    Block::textures.push_back(myTexleaf); //7
+    Block::textures.push_back(myTexlog); //8
     return 0;
 }

@@ -4,6 +4,7 @@ void StructureBuilder::build(Chunk &chunk)
 {
 	for (auto &block : m_blocks) {
 		//chunk.setBlock(block.x, block.y, block.z, block.Type);
+		chunk.blocks[block.x][block.y][block.z] = block.Type;
 	}
 }
 void StructureBuilder::addY(int x, int z, int yStart, int height, Block::blockType type)

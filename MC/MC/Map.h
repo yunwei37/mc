@@ -8,6 +8,7 @@
 #include "Chunk.h"
 #include"Shader.h"
 #include"PerlinNoise.h"
+#include"plantGenerator.h"
 #include"Camera.h"
 
 /*

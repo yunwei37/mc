@@ -44,10 +44,15 @@ void Map::generateBlock(int m)
 			}
 		}
 	}
+	for (int i = 1; i < 10; ++i) {
+		chunks[m]->blocks[5][5][i + chunks[m]->visibleHeight[5][5]] = Block::Bark;
+		chunks[m]->isRender[5][5][i + chunks[m]->visibleHeight[5][5]] = true;
+	}
+	//makePalmTree(*chunks[m], 12, 5, 5, chunks[m]->visibleHeight[5][5]);
 }
 
 int Map::getBlockIndex(int x, int y)
-{	
+{
 	x = x / Chunk::width;
 	y = y / Chunk::width;
 	for (int i = 0; i < chunkSize; ++i) {
@@ -120,7 +125,7 @@ bool Map::isVisible(int m, int x, int y, int z)       //block在chunk中的坐标
 }
 
 bool Map::isVisible(int x, int y, int z)
-{	
+{
 	return false;
 }
 
@@ -149,10 +154,10 @@ Map::Map(Camera* myCamera)
 	myShader->setInt("myTexture1", 0);
 
 	chunkSize = 0;
-	currentChunkMaxX = 1;
-	currentChunkMinX = -1;
-	currentChunkMaxY = 1;
-	currentChunkMinY = -1;
+	currentChunkMaxX = 2;
+	currentChunkMinX = 0;
+	currentChunkMaxY = 2;
+	currentChunkMinY = 0;
 	for (int i = currentChunkMinX; i <= currentChunkMaxX; ++i) {
 		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
 			chunks.push_back(new Chunk(i, j));//render a chunk
@@ -202,68 +207,70 @@ void Map::renderMap()
 }
 
 void Map::updateMap()
-{	
+{
+	bool isChange = false;
+	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
+	if (myCamera->Position.z > currentChunkMaxX * Chunk::width) {
+		for (int i = 0; i < chunkSize; ++i) {
+			if (chunks[i]->x == currentChunkMinX) {
+				chunks[i]->isLoad = false;
+			}
+		}
+		currentChunkMinX++;
+		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
+			chunks.push_back(new Chunk(currentChunkMaxX + 1, j));//render a chunk
+			generateBlock(chunkSize);
+			chunkSize++;
+		}
+		currentChunkMaxX++;
+	}
+	/*
+	else if (myCamera->Position.z < (currentChunkMinX + 1) * Chunk::width) {
+		for (int i = 0; i < chunkSize; ++i) {
+			if (chunks[i]->x == currentChunkMaxX) {
+				chunks[i]->isLoad = false;
+			}
+		}
+		currentChunkMaxX--;
+		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
+			chunks.push_back(new Chunk(currentChunkMinX - 1, j));//render a chunk
+			generateBlock(chunkSize);
+			chunkSize++;
+		}
+		currentChunkMinX--;
+	}
 
-		if (myCamera->Position.z > currentChunkMaxX * Chunk::width) {
-			for (int i = 0; i < chunkSize; ++i) {
-				if (chunks[i]->x == currentChunkMinX) {
-					chunks[i]->isLoad = false;
-				}
+	else if (myCamera->Position.y > currentChunkMaxY * Chunk::width) {
+		for (int i = 0; i < chunkSize; ++i) {
+			if (chunks[i]->y == currentChunkMinY) {
+				chunks[i]->isLoad = false;
 			}
-			currentChunkMinX++;
-			for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
-				chunks.push_back(new Chunk(currentChunkMaxX+1, j));//render a chunk
-				generateBlock(chunkSize);
-				chunkSize++;
-			}
-			currentChunkMaxX++;
 		}
-		
-		else if (myCamera->Position.z < (currentChunkMinX + 1) * Chunk::width) {
-			for (int i = 0; i < chunkSize; ++i) {
-				if (chunks[i]->x == currentChunkMaxX) {
-					chunks[i]->isLoad = false;
-				}
-			}
-			currentChunkMaxX--;
-			for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
-				chunks.push_back(new Chunk(currentChunkMinX - 1, j));//render a chunk
-				generateBlock(chunkSize);
-				chunkSize++;
-			}
-			currentChunkMinX--;
+		currentChunkMinY++;
+		for (int j = currentChunkMinX; j <= currentChunkMaxX; ++j) {
+			chunks.push_back(new Chunk(j, currentChunkMaxY + 1));//render a chunk
+			generateBlock(chunkSize);
+			chunkSize++;
 		}
-		
-		else if (myCamera->Position.y > currentChunkMaxY * Chunk::width) {
-			for (int i = 0; i < chunkSize; ++i) {
-				if (chunks[i]->y == currentChunkMinY) {
-					chunks[i]->isLoad = false;
-				}
-			}
-			currentChunkMinY++;
-			for (int j = currentChunkMinX; j <= currentChunkMaxX; ++j) {
-				chunks.push_back(new Chunk(j, currentChunkMaxY + 1));//render a chunk
-				generateBlock(chunkSize);
-				chunkSize++;
-			}
-			currentChunkMaxY++;
-		}
-		
-		else if (myCamera->Position.z < (currentChunkMinY + 1) * Chunk::width) {
-			for (int i = 0; i < chunkSize; ++i) {
-				if (chunks[i]->y == currentChunkMaxY) {
-					chunks[i]->isLoad = false;
-				}
-			}
-			currentChunkMaxY--;
-			for (int j = currentChunkMinX; j <= currentChunkMinX; ++j) {
-				chunks.push_back(new Chunk(j, currentChunkMinY - 1));//render a chunk
-				generateBlock(chunkSize);
-				chunkSize++;
-			}
-			currentChunkMinY--;
-		}
+		currentChunkMaxY++;
+	}
 
+	else if (myCamera->Position.z < (currentChunkMinY + 1) * Chunk::width) {
+		for (int i = 0; i < chunkSize; ++i) {
+			if (chunks[i]->y == currentChunkMaxY) {
+				chunks[i]->isLoad = false;
+			}
+		}
+		currentChunkMaxY--;
+		for (int j = currentChunkMinX; j <= currentChunkMinX; ++j) {
+			chunks.push_back(new Chunk(j, currentChunkMinY - 1));//render a chunk
+			generateBlock(chunkSize);
+			chunkSize++;
+		}
+		currentChunkMinY--;
+	}
+	*/
+	if (isChange) {
 		std::vector<Chunk*> chunks1;
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->isLoad != false) {
@@ -275,6 +282,7 @@ void Map::updateMap()
 		}
 		chunks = chunks1;
 		chunkSize = chunks1.size();
+	}
 }
 
 void Map::renderBlock(std::vector<operateBlock*> extraBlocks)
@@ -368,8 +376,8 @@ void Map::setBlock(int x, int y, int z, Block::blockType type)
 }
 
 Block::blockType Map::getBlockType(int x, int y, int z)
-{	
-	if (x > ( currentChunkMaxX+1 ) * Chunk::width) {
+{
+	if (x > (currentChunkMaxX + 1) * Chunk::width) {
 		return Block::Air;
 	}
 	else if (x < currentChunkMinX * Chunk::width) {
@@ -384,7 +392,7 @@ Block::blockType Map::getBlockType(int x, int y, int z)
 	int index = getBlockIndex(x, y);
 	assert(index != -1);
 	if (x < 0) {
-		x = - chunks[index]->x * Chunk::width + x;
+		x = -chunks[index]->x * Chunk::width + x;
 	}
 	else {
 		x = x % Chunk::width;
@@ -395,7 +403,7 @@ Block::blockType Map::getBlockType(int x, int y, int z)
 	else {
 		y = y % Chunk::width;
 	}
-	assert( x < Chunk::width && x > 0 );
-	assert( y < Chunk::width && y > 0);
+	assert(x < Chunk::width&& x > 0);
+	assert(y < Chunk::width&& y > 0);
 	return chunks[index]->blocks[x][y][z];
 }
