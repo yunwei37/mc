@@ -42,7 +42,8 @@ private:
 	Shader* myShader;
 	Camera* myCamera;
 
-	const static int sandheight = 20;
+	const static int sandheight = 23;
+	const static int waterheight = 20;
 
 	int chunkSize;//amount of chunks in map
 
@@ -50,6 +51,9 @@ private:
 	int currentChunkMaxX;
 	int currentChunkMinY;
 	int currentChunkMaxY;
+
+	int startPosX;
+	int startPosY;
 
 	// 用来尝试地形生成的私有函数，后续进一步重构应该要拆除
 	// 可见方块判别算法

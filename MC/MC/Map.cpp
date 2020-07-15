@@ -12,7 +12,7 @@ int Map::generateHeight(double x, double y, double interval)
 	double large = PNoiseSmoth2D(-x, -y, 0.025, 2, interval)/2 + 1;
 	int h = (int)(small * large) + 2;
 	//std::cout << h <<std:: endl;
-	return h;
+	return h > waterheight ? h:waterheight;
 }
 
 Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
@@ -29,11 +29,17 @@ Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
 		}
 		else return Block::Stone; //其他情况，当前方块类型为碎石
 	}
-	else {
+	else if( h > waterheight ) {
 		if (z <= h && z > h - 5) {
 			return Block::Sand;
 		}
 		else return Block::Stone;
+	}
+	else {
+		if (z <= h && z > h - 5) {
+			return Block::Water;
+		}
+		else return Block::Sand;
 	}
 }
 
@@ -88,7 +94,7 @@ void Map::generateBlock(int m)
 					makePalmTree(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
 				}
 			}
-			else {
+			else if (chunks[m]->visibleHeight[i + 1][j + 1] > waterheight) {
 				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.45) {
 					makeCactus(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
 				}
@@ -134,62 +140,6 @@ bool Map::isVisible(int m, int x, int y, int z)       //block在chunk中的坐标
 		}
 		return flag;
 	}
-	/*
-	else {
-		bool flag = false;
-		Block::blockType type;
-		if (x > 0) {
-			type = chunks[m]->blocks[x - 1][y][z];
-			if (type == Block::Air || type == Block::Water) {   //adjacent to Air/Water, render
-				flag = true;
-			}
-		}
-		else {
-			flag = true;
-		}
-		if (x < Chunk::width - 1) {
-			type = chunks[m]->blocks[x + 1][y][z];
-			if (type == Block::Air || type == Block::Water) {
-				flag = true;
-			}
-		}
-		else {
-			flag = true;
-		}
-		if (y > 0) {
-			type = chunks[m]->blocks[x][y - 1][z];
-			if (type == Block::Air || type == Block::Water) {
-				flag = true;
-			}
-		}
-		else {
-			flag = true;
-		}
-		if (y < Chunk::width - 1) {
-			type = chunks[m]->blocks[x][y + 1][z];
-			if (type == Block::Air || type == Block::Water) {
-				flag = true;
-			}
-		}
-		else {
-			flag = true;
-		}
-		if (z > 0) {
-			type = chunks[m]->blocks[x][y][z - 1];
-			if (type == Block::Air || type == Block::Water) {
-				flag = true;
-			}
-		}
-		if (z < Chunk::height - 1) {
-			type = chunks[m]->blocks[x][y][z + 1];
-			if (type == Block::Air || type == Block::Water) {
-				flag = true;
-			}
-		}
-
-		return flag;
-	}
-	*/
 }
 
 Map::Map(Camera* myCamera)
@@ -217,10 +167,12 @@ Map::Map(Camera* myCamera)
 	myShader->setInt("myTexture1", 0);
 
 	chunkSize = 0;
-	currentChunkMaxX = 2;
+	currentChunkMaxX = 3;
 	currentChunkMinX = 0;
-	currentChunkMaxY = 2;
+	currentChunkMaxY = 3;
 	currentChunkMinY = 0;
+	startPosX = currentChunkMinX * Chunk::width;
+	startPosY = currentChunkMinY * Chunk::width;
 	for (int i = currentChunkMinX; i <= currentChunkMaxX; ++i) {
 		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
 			chunks.push_back(new Chunk(i, j));//render a chunk
@@ -273,7 +225,7 @@ void Map::updateMap()
 {
 	bool isChange = false;
 	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
-	if (myCamera->Position.z > currentChunkMaxX * Chunk::width) {
+	if (myCamera->Position.z + startPosX > currentChunkMaxX * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMinX) {
 				chunks[i]->isLoad = false;
@@ -286,9 +238,10 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMaxX++;
+		isChange = true;
 	}
 	/*
-	else if (myCamera->Position.z < (currentChunkMinX + 1) * Chunk::width) {
+	else if (myCamera->Position.z + startPosX < (currentChunkMinX + 1) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMaxX) {
 				chunks[i]->isLoad = false;
@@ -301,10 +254,11 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMinX--;
+		isChange = true;
 	}
 	*/
 
-	else if (myCamera->Position.y > currentChunkMaxY * Chunk::width) {
+	else if (myCamera->Position.y + startPosY > currentChunkMaxY * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->y == currentChunkMinY) {
 				chunks[i]->isLoad = false;
@@ -317,24 +271,26 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMaxY++;
+		isChange = true;
 	}
 	/*
-	else if (myCamera->Position.z < (currentChunkMinY + 1) * Chunk::width) {
+	else if (myCamera->Position.y + startPosY < (currentChunkMinY + 1) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->y == currentChunkMaxY) {
 				chunks[i]->isLoad = false;
 			}
 		}
 		currentChunkMaxY--;
-		for (int j = currentChunkMinX; j <= currentChunkMinX; ++j) {
+		for (int j = currentChunkMinX; j <= currentChunkMaxX; ++j) {
 			chunks.push_back(new Chunk(j, currentChunkMinY - 1));//render a chunk
 			generateBlock(chunkSize);
 			chunkSize++;
 		}
 		currentChunkMinY--;
+		isChange = true;
 	}
 	*/
-	if (isChange) {
+	if (false) {
 		std::vector<Chunk*> chunks1;
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->isLoad != false) {

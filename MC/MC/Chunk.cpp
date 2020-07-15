@@ -23,11 +23,9 @@ void Chunk::renderChunk(glm::mat4 model, unsigned int VAO, Shader* myShader)
 						glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
 						lasttype = type;
 					}
-					if (type != Block::Water) {
-						//激活纹理单元： 
-						glBindVertexArray(VAO);
-						glDrawArrays(GL_TRIANGLES, 0, 36);
-					}
+					//激活纹理单元： 
+					glBindVertexArray(VAO);
+					glDrawArrays(GL_TRIANGLES, 0, 36);
 				}
 				model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0f)); //y axis
 			}
