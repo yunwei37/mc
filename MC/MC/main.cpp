@@ -27,7 +27,7 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(-30.0f, 4.0f, 4.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+Camera myCamera(glm::vec3(-20.0f, 40.0f, 40.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,00.0f);
 Map* myMap;
 std::vector<operateBlock*> extraBlocks;
 std::vector<operateBlock*> delBlocks;

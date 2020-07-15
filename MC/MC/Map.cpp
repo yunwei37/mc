@@ -50,7 +50,7 @@ void Map::generateBlock(int m)
 	//	chunks[m]->blocks[5][5][i + chunks[m]->visibleHeight[5][5]] = Block::Bark;
 	//	chunks[m]->isRender[5][5][i + chunks[m]->visibleHeight[5][5]] = true;
 	//}
-	//makePalmTree(*chunks[m], 12, 5, 5, chunks[m]->visibleHeight[5][5]);
+	makePalmTree(*chunks[m], 12, 5, 5, chunks[m]->visibleHeight[5][5]);
 }
 
 int Map::getBlockIndex(int x, int y)
