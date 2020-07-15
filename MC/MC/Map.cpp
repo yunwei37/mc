@@ -8,8 +8,9 @@ extern const unsigned int SCR_HEIGHT;
 
 int Map::generateHeight(double x, double y)
 {
-	int small = (PerlinNoise2D(x, y, 0.025, 4) + 1) * 10;
-	return small;
+	double small = PerlinNoise2D(x, y, 0.025, 4) * 16 + 16;
+	double large = 1;//PerlinNoise2D(-x, -y, 0.025, 4);
+	return (int)(small * large);
 }
 
 Block::blockType Map::generateBlockType(int x, int y, int z, int h) {

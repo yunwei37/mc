@@ -8,6 +8,9 @@ uniform samplerCube myTexture2; // 立方体贴图的纹理采样器
 
 void main()
 {
-    //FragColor = texture(myTexture1, texCoord);
-    FragColor = texture(myTexture2, TexCoords);
+    vec4 texColor = texture(myTexture2, TexCoords);
+    if(texColor.a<0.5)
+        discard;
+    FragColor = texColor;
+    
 }
