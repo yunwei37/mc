@@ -1,6 +1,6 @@
 #pragma once
 #ifndef STRUCTBUILDER_H
-#define STRUCTBUILDER
+#define STRUCTBUILDER_H
 #include<vector>
 #include"Chunk.h"
 #include "Block.h"
