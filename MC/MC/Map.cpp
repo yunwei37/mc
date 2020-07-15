@@ -8,28 +8,38 @@ extern const unsigned int SCR_HEIGHT;
 
 int Map::generateHeight(double x, double y)
 {
-	double small = PerlinNoise2D(x, y, 0.025, 4) * 16 + 16;
-	double large = 1;//PerlinNoise2D(-x, -y, 0.025, 4);
-	return (int)(small * large);
+	double small = PerlinNoise2D(x, y, 0.025, 4) * 16 + 12;
+	double large = PerlinNoise2D(-x, -y, 0.025, 2)/2 + 1;
+	int h = (int)(small * large)+2;
+	//std::cout << h <<std:: endl;
+	return h;
 }
 
 Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
 	if (z > h) { //当前方块位置高于随机生成的高度值时，当前方块类型为空 
 		return Block::Air;
 	}
-	else if (z == h) { //当前方块位置等于随机生成的高度值时，当前方块类型为草地 
-		return Block::Grass;
+	if (h > 10) {
+		if (z == h) { //当前方块位置等于随机生成的高度值时，当前方块类型为草地 
+			return Block::Grass;
+		}
+		//当前方块位置小于随机生成的高度值 且 大于 genHeight - 5时，当前方块类型为泥土 
+		if (z < h && z > h - 5) {
+			return Block::Soil;
+		}
+		else return Block::Stone; //其他情况，当前方块类型为碎石
 	}
-	//当前方块位置小于随机生成的高度值 且 大于 genHeight - 5时，当前方块类型为泥土 
-	else if (z < h && z > h - 5) {
-		return Block::Soil;
+	else {
+		if (z <= h && z > h - 5) {
+			return Block::Sand;
+		}
+		else return Block::Stone;
 	}
-	else return Block::Stone; //其他情况，当前方块类型为碎石
 }
 
 void Map::generateBlock(int m)
 {
-	double radio = 3.0;
+	double radio = 2.0;
 	//render a chunk
 	for (int i = 0; i < Chunk::width; ++i) {
 		for (int j = 0; j < Chunk::width; ++j) {
@@ -51,7 +61,20 @@ void Map::generateBlock(int m)
 	//	chunks[m]->blocks[5][5][i + chunks[m]->visibleHeight[5][5]] = Block::Bark;
 	//	chunks[m]->isRender[5][5][i + chunks[m]->visibleHeight[5][5]] = true;
 	//}
-	makePalmTree(*chunks[m], 12, 5, 5, chunks[m]->visibleHeight[5][5]);
+	for (int i = 0; i < Chunk::width; ++i) {
+		for (int j = 0; j < Chunk::width; ++j) {
+			if (chunks[m]->visibleHeight[i][j] > 10) {
+				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.45) {
+					makePalmTree(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i][j]);
+				}
+			}
+			else {
+				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.45) {
+					makeCactus(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i][j]);
+				}
+			}
+		}
+	}
 }
 
 int Map::getBlockIndex(int x, int y)

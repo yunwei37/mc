@@ -126,6 +126,17 @@ int Block::loadTextures()
         "blocks/log_oak.png"
     };
     Texture myTexlog(log);
+
+    std::vector<std::string> cactus
+    {
+        "blocks/cactus_top.png",
+        "blocks/cactus_top.png",
+        "blocks/cactus_side.png",
+        "blocks/cactus_side.png",
+        "blocks/cactus_side.png",
+        "blocks/cactus_side.png"
+    };
+    Texture myTexcac(cactus);
      
     Block::textures.push_back(myTexDirt); //0
     Block::textures.push_back(myTexDirt); //1
@@ -136,5 +147,6 @@ int Block::loadTextures()
     Block::textures.push_back(myTexStb); //6
     Block::textures.push_back(myTexleaf); //7
     Block::textures.push_back(myTexlog); //8
+    Block::textures.push_back(myTexcac); //9
     return 0;
 }
