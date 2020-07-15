@@ -6,10 +6,10 @@
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 
-int Map::generateHeight(double x, double y)
+int Map::generateHeight(double x, double y, double interval)
 {
-	double small = PerlinNoise2D(x, y, 0.025, 4) * 16 + 12;
-	double large = PerlinNoise2D(-x, -y, 0.025, 2)/2 + 1;
+	double small = PNoiseSmoth2D(x, y, 0.025, 4, interval) * 24 + 24;
+	double large = PNoiseSmoth2D(-x, -y, 0.025, 2, interval)/2 + 1;
 	int h = (int)(small * large) + 2;
 	//std::cout << h <<std:: endl;
 	return h;
@@ -42,9 +42,9 @@ void Map::generateBlock(int m)
 	//render a chunk
 	// 生成高度
 	for (int i = -1; i < Chunk::width + 1; ++i) {
-		double radio = 2.0;
+		double radio = 1.0;
 		for (int j = -1; j < Chunk::width + 1; ++j) {
-			int h = generateHeight(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width); //获取当前位置方块随机生成的高度值 
+			int h = generateHeight(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 1.0 * radio / Chunk::width); //获取当前位置方块随机生成的高度值 
 			chunks[m]->visibleHeight[i+1][j+1] = h;//write down random visible height
 		}
 	}

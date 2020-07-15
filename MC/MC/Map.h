@@ -42,7 +42,7 @@ private:
 	Shader* myShader;
 	Camera* myCamera;
 
-	const static int sandheight = 10;
+	const static int sandheight = 20;
 
 	int chunkSize;//amount of chunks in map
 
@@ -55,7 +55,7 @@ private:
 	// 可见方块判别算法
 	bool isVisible(int index,int x, int y, int z);
 
-	int generateHeight(double x, double y);
+	int generateHeight(double x, double y, double interval);
 	Block::blockType generateBlockType(int x, int y, int z, int h);
 	void generateBlock(int index);
 

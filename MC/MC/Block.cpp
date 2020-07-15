@@ -61,6 +61,17 @@ int Block::loadTextures()
     };
     Texture myTexGrass(grass);
 
+    std::vector<std::string> water
+    {
+        "blocks/water.png",
+        "blocks/water.png",
+        "blocks/water.png",
+        "blocks/water.png",
+        "blocks/water.png",
+        "blocks/water.png"
+    };
+    Texture myTexWater(water);
+
     std::vector<std::string> dirt
     {
         "blocks/dirt.png",
@@ -150,7 +161,7 @@ int Block::loadTextures()
     Texture myTexCloud(cloud);
      
     Block::textures.push_back(myTexDirt); //0
-    Block::textures.push_back(myTexDirt); //1
+    Block::textures.push_back(myTexWater); //1
     Block::textures.push_back(myTexDirt); //2
     Block::textures.push_back(myTexStond); //3
     Block::textures.push_back(myTexGrass); //4
