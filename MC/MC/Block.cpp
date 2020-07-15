@@ -137,6 +137,17 @@ int Block::loadTextures()
         "blocks/cactus_side.png"
     };
     Texture myTexcac(cactus);
+
+    std::vector<std::string> cloud
+    {
+        "blocks/glass_white.png",
+        "blocks/glass_white.png",
+        "blocks/glass_white.png",
+        "blocks/glass_white.png",
+        "blocks/glass_white.png",
+        "blocks/glass_white.png"
+    };
+    Texture myTexCloud(cloud);
      
     Block::textures.push_back(myTexDirt); //0
     Block::textures.push_back(myTexDirt); //1
@@ -148,5 +159,6 @@ int Block::loadTextures()
     Block::textures.push_back(myTexleaf); //7
     Block::textures.push_back(myTexlog); //8
     Block::textures.push_back(myTexcac); //9
+    Block::textures.push_back(myTexCloud); //10
     return 0;
 }

@@ -28,7 +28,7 @@ public:
 
 	Block::blockType blocks[width][width][height]; //Chunk的网格
 	bool isRender[width][width][height];
-	int visibleHeight[width][width]; //随机生成的可见地表高度 
+	int visibleHeight[ width + 2 ][ width + 2 ]; //随机生成的可见地表高度 
 	//chunk在map中的坐标：
 	int x;
 	int y;

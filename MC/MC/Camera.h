@@ -39,10 +39,15 @@ public:
 
 	Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
+
+	void setPos(glm::vec3 position);
+
 	glm::mat4 GetViewMatrix();
 	void ProcessKeyboard(Camera_Movement direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch);
 	void ProcessMouseScroll(float yoffset);
+
+
 private:
 	// calculates the front vector from the Camera's (updated) Euler Angles
 	void updateCameraVectors();

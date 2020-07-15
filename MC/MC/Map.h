@@ -42,6 +42,8 @@ private:
 	Shader* myShader;
 	Camera* myCamera;
 
+	const static int sandheight = 10;
+
 	int chunkSize;//amount of chunks in map
 
 	int currentChunkMinX;
@@ -50,8 +52,8 @@ private:
 	int currentChunkMaxY;
 
 	// 用来尝试地形生成的私有函数，后续进一步重构应该要拆除
+	// 可见方块判别算法
 	bool isVisible(int index,int x, int y, int z);
-	bool isVisible(int x, int y, int z);
 
 	int generateHeight(double x, double y);
 	Block::blockType generateBlockType(int x, int y, int z, int h);
@@ -73,9 +75,9 @@ public:
 	void updateMap();
 
 	// 可以改用下面两个
-	void renderBlock(std::vector<operateBlock*> extraBlocks);//add blocks
-	void destroyBlock(std::vector<operateBlock*> delBlocks);//delete blocks
-
+	//void renderBlock(std::vector<operateBlock*> extraBlocks);//add blocks
+	//void destroyBlock(std::vector<operateBlock*> delBlocks);//delete blocks
+	
 	// 将mc世界坐标转换为chunk存储坐标，然后操作方块
 	// 操作方块的时候用
 	void setBlock(int x, int y, int z, Block::blockType type);

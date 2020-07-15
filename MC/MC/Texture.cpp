@@ -54,7 +54,7 @@ unsigned int Texture::loadCubemap(std::vector<std::string> faces)
 	{
 		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 		format = (nrChannels == 3) ? GL_RGB : GL_RGBA;
-		// std::cout << faces[i].c_str() << " " << (format == GL_RGB ? "RGB" : "RGBA") << std::endl;
+		//std::cout << faces[i].c_str() << " " << (format == GL_RGB ? "RGB" : "RGBA") << std::endl;
 		if (data)
 		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,

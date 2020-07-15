@@ -18,7 +18,8 @@ public:
 		StondBrick = 6,//й╞в╘
 		Leaf = 7,//йВр╤
 		Bark = 8,//йВф╓
-		Cactus = 9//оихкуф
+		Cactus = 9,//оихкуф
+		Cloud = 10,//оихкуф
 	};
 
 	static std::vector<Texture> textures;
