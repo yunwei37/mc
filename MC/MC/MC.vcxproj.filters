@@ -66,7 +66,7 @@
     <ClCompile Include="texture_two.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="text_renderer.cpp">
+    <ClCompile Include="Text.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,7 +116,7 @@
     <ClInclude Include="texture_two.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="text_renderer.h">
+    <ClInclude Include="Text.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

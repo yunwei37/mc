@@ -13,11 +13,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Map.h"
 #include "Player.h"
+#include "Text.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void screen2world(double xpos, double ypos, glm::vec3* worldPos);
 
 // settings
 extern const unsigned int SCR_WIDTH = 800;
@@ -30,6 +33,8 @@ Camera myCamera(glm::vec3(0.0f,30.0f,0.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.
 Map* myMap;
 operateBlock changeBlock;
 Player myPlayer(&myCamera);
+int state;
+
 int main()
 {
 	glfwInit();
@@ -59,8 +64,6 @@ int main()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
-	glEnable(GL_DEPTH_TEST);//开启深度测试
-	glEnable(GL_CULL_FACE);//面剔除
 
 	myMap = new Map(&myCamera);
 	myMap->updateMap();
@@ -68,21 +71,49 @@ int main()
 	/*Shader partShader("particles_vs.txt", "particles_fs.txt");
 	Texture partTex(GL_TEXTURE_2D, "blocks/dirt.png");
 	blockParticles = new ParticleGen(partShader, partTex, 10);*/
-
+	state = 0;
 	while (!glfwWindowShouldClose(window))
 	{
-		float curTime = glfwGetTime();
-		deltaTime = curTime - lastFrame;
-		lastFrame = curTime;
-		processInput(window);
-		glClearColor(91.0f / 255.0f, 206.0f/255.0f, 1.0f, 1.0f);//background
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		if (state == 0)
+		{
+			// Set OpenGL options
+			glEnable(GL_CULL_FACE);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			// Check and call events
+			glfwPollEvents();
+			// Clear the colorbuffer
+			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+			Text text;
+			glfwSwapBuffers(window);
+//			processInput(window);
+			if (state == 0 && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+			{
+				state = 1;
+				glDisable(GL_BLEND);
+				glDisable(GL_CULL_FACE);
+
+				glEnable(GL_DEPTH_TEST);//开启深度测试
+				glEnable(GL_CULL_FACE);//面剔除
+				myMap = new Map(&myCamera);
+			}
+		}
+		else//start the game
+		{
+			float curTime = glfwGetTime();
+			deltaTime = curTime - lastFrame;
+			lastFrame = curTime;
+			processInput(window);
+			glClearColor(91.0f / 255.0f, 206.0f/255.0f, 1.0f, 1.0f);//background
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		myMap->renderMap(&changeBlock);//draw map
-		changeBlock.init();
-		// 交换缓冲并查询IO事件：
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+			myMap->renderMap(&changeBlock);//draw map
+			// 交换缓冲并查询IO事件：
+			glfwSwapBuffers(window);
+			glfwPollEvents();
+		}
+		
 	}
 	delete myMap;
 
@@ -94,24 +125,29 @@ int main()
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(RIGHT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(UP, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		myCamera.ProcessKeyboard(DOWN, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		myPlayer.exchangeHandBlock();//空格变换手上的方块类型
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-	myMap->limitCamera();//控制摄像机位置
-	myMap->updateMap();
+	if (state == 0 && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+	{
+		state = 1;
+	}
+	else if (state == 1)
+	{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			myCamera.ProcessKeyboard(FORWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			myCamera.ProcessKeyboard(BACKWARD, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			myCamera.ProcessKeyboard(RIGHT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			myCamera.ProcessKeyboard(LEFT, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+			myCamera.ProcessKeyboard(UP, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+			myCamera.ProcessKeyboard(DOWN, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, true);
+		myMap->updateMap();
+	}
+	
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

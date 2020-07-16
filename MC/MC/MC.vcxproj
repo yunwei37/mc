@@ -140,11 +140,11 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="StructureBuilder.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="ItemStack.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="texture_two.cpp" />
-    <ClCompile Include="text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
@@ -158,11 +158,11 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="StructureBuilder.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ItemStack.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="texture_two.h" />
-    <ClInclude Include="text_renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

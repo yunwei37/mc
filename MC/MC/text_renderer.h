@@ -17,6 +17,8 @@
 #include "texture_two.h"
 #include "shader.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {
