@@ -18,7 +18,8 @@ public:
 		StondBrick = 6,// Ø◊©
 		Leaf = 7,// ˜“∂
 		Bark = 8,// ˜∆§
-		Cactus = 9//œ…»À’∆
+		Cactus = 9,//œ…»À’∆
+		Cloud = 10,//‘∆∂‰
 	};
 
 	static std::vector<Texture> textures;
@@ -28,18 +29,13 @@ public:
 	static int loadTextures();
 
 };
-struct operateBlock//the placed block's information
+class operateBlock//the placed block's information
 {
-	int mapCoord[2];
-	int chunkCoord[2];
+public:
+	void init();
+	operateBlock();
+	int mapCoord[3];
 	Block::blockType type;
-	operateBlock() {
-		type = Block::Air;
-		mapCoord[0] = 0;
-		mapCoord[1] = 0;
-		chunkCoord[0] = 0;
-		chunkCoord[1] = 0;
-	}
 };
 
 #endif // 

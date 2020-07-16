@@ -22,6 +22,11 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 	updateCameraVectors();
 }
 
+void Camera::setPos(glm::vec3 position)
+{
+	this->Position = position;
+}
+
 // returns the view matrix calculated using Euler Angles and the LookAt Matrix
 glm::mat4 Camera::GetViewMatrix()
 {
@@ -85,6 +90,9 @@ void Camera::updateCameraVectors()
 		front.y = sin(glm::radians(Pitch));
 		front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 		Front = glm::normalize(front);
+		glm::vec3 tmp = Front + Position;
+		//std::cout << Front.x << " " << Front.y << " " << Front.z << " " << std::endl;
+		std::cout << tmp.x << " " << tmp.y << " " << tmp.z << "#" << std::endl;
 		// also re-calculate the Right and Up vector
 		Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 		Up = glm::normalize(glm::cross(Right, Front));

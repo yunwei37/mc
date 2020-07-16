@@ -4,6 +4,17 @@ void StructureBuilder::build(Chunk &chunk)
 {
 	for (auto &block : m_blocks) {
 		//chunk.setBlock(block.x, block.y, block.z, block.Type);
+		if (block.x >= Chunk::width || block.x < 0) {
+			continue;
+		}
+		if (block.y >= Chunk::width || block.y < 0) {
+			continue;
+		}
+		if (block.z >= Chunk::height || block.z < 0) {
+			continue;
+		}
+		chunk.blocks[block.x][block.y][block.z] = block.Type;
+		chunk.isRender[block.x][block.y][block.z] = true;
 	}
 }
 void StructureBuilder::addY(int x, int z, int yStart, int height, Block::blockType type)

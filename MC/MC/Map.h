@@ -8,6 +8,7 @@
 #include "Chunk.h"
 #include"Shader.h"
 #include"PerlinNoise.h"
+#include"plantGenerator.h"
 #include"Camera.h"
 
 /*
@@ -41,6 +42,9 @@ private:
 	Shader* myShader;
 	Camera* myCamera;
 
+	const static int sandheight = 23;
+	const static int waterheight = 20;
+
 	int chunkSize;//amount of chunks in map
 
 	int currentChunkMinX;
@@ -48,17 +52,20 @@ private:
 	int currentChunkMinY;
 	int currentChunkMaxY;
 
-	// 用来尝试地形生成的私有函数，后续进一步重构应该要拆除
-	bool isVisible(int index,int x, int y, int z);
-	bool isVisible(int x, int y, int z);
+	int startPosX;
+	int startPosY;
 
-	int generateHeight(double x, double y);
+	// 用来尝试地形生成的私有函数，后续进一步重构应该要拆除
+	// 可见方块判别算法
+	bool isVisible(int index,int x, int y, int z);
+
+	int generateHeight(double x, double y, double interval);
 	Block::blockType generateBlockType(int x, int y, int z, int h);
 	void generateBlock(int index);
 
 	// 坐标转换系列
 
-	// 通过世界坐标获取 chunk 下标
+	// 通过block的世界坐标获取 chunk 下标
 	int getBlockIndex(int x, int y);
 
 public:
@@ -66,19 +73,19 @@ public:
 	~Map();
 
 	// 在主函数刷新中需要调用的唯一一个函数，用来渲染地图
-	void renderMap();
+	void renderMap(operateBlock* changeBlock);
 
 	// 当摄像机改变位置或者放置砖块后调用
 	void updateMap();
 
 	// 可以改用下面两个
-	void renderBlock(std::vector<operateBlock*> extraBlocks);//add blocks
-	void destroyBlock(std::vector<operateBlock*> delBlocks);//delete blocks
-
+	//void renderBlock(std::vector<operateBlock*> extraBlocks);//add blocks
+	//void destroyBlock(std::vector<operateBlock*> delBlocks);//delete blocks
+	
 	// 将mc世界坐标转换为chunk存储坐标，然后操作方块
 	// 操作方块的时候用
-	void setBlock(int x, int y, int z, Block::blockType type);
-	Block::blockType getBlockType(int x, int y, int z);
+	void setBlock(int worldPos[], Block::blockType type);//xyz是block世界坐标，放置方块
+	Block::blockType getBlockType(int x, int y, int z);//xyz是block世界坐标，得到该位置block类型
 
 	// 预留接口，还没想好名字
 	// 通过摄像机和方块的交线判断删除方块；没参数

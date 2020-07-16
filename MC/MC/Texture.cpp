@@ -52,12 +52,13 @@ unsigned int Texture::loadCubemap(std::vector<std::string> faces)
 	int width, height, nrChannels;
 	for (unsigned int i = 0; i < faces.size(); i++)
 	{
-		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 		format = (nrChannels == 3) ? GL_RGB : GL_RGBA;
+		//std::cout << faces[i].c_str() << " " << (format == GL_RGB ? "RGB" : "RGBA") << std::endl;
 		if (data)
 		{
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data
+				0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data
 			);
 			glGenerateMipmap(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 			stbi_image_free(data);

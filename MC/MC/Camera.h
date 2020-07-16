@@ -19,7 +19,7 @@ enum Camera_Movement {
 const float YAW = 0.0f;//偏航角
 const float PITCH = 0.0f;//俯仰角
 const float SPEED = 2.5f;//鼠标速度
-const float SENSITIVITY = 0.22f;//鼠标位移敏感度
+const float SENSITIVITY = 0.38f;//鼠标位移敏感度
 const float ZOOM = 45.0f;//缩放
 class Camera {
 public:
@@ -39,10 +39,15 @@ public:
 
 	Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
 	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
+
+	void setPos(glm::vec3 position);
+
 	glm::mat4 GetViewMatrix();
 	void ProcessKeyboard(Camera_Movement direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch);
 	void ProcessMouseScroll(float yoffset);
+
+
 private:
 	// calculates the front vector from the Camera's (updated) Euler Angles
 	void updateCameraVectors();
