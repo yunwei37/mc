@@ -17,7 +17,7 @@ Text::Text()
 
 	// Load font as face
 	FT_Face face;
-	if (FT_New_Face(ft, "Antonio-Bold.ttf", 0, &face))
+	if (FT_New_Face(ft, "fonts/Antonio-Bold.ttf", 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 	// Set size to load glyphs as
@@ -80,8 +80,8 @@ Text::Text()
 	glBindVertexArray(0);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-	RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-	RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText(shader, "Welcome to MC", 280.0f, 290.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	RenderText(shader, "Press enter to start the game", 510.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
 }
 

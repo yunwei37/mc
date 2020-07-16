@@ -21,7 +21,10 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height)
     // load and configure shader
     this->TextShader = ResourceManager::LoadShader("text.vs", "text.fs", nullptr, "text");
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f, static_cast<GLfloat>(height));
-    this->TextShader.setInt("text", 0);
+    TextShader.use();
+    glUniformMatrix4fv(glGetUniformLocation(TextShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+//    this->TextShader.setInt("text", 0);
     // configure VAO/VBO for texture quads
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
