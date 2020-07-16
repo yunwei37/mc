@@ -20,7 +20,6 @@ void processInput(GLFWwindow* window);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void screen2world(double xpos, double ypos, glm::vec3* worldPos);
 
 // settings
 extern const unsigned int SCR_WIDTH = 800;
@@ -109,6 +108,7 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 			myMap->renderMap(&changeBlock);//draw map
+			changeBlock.init();
 			// 交换缓冲并查询IO事件：
 			glfwSwapBuffers(window);
 			glfwPollEvents();
@@ -143,8 +143,11 @@ void processInput(GLFWwindow* window)
 			myCamera.ProcessKeyboard(UP, deltaTime);
 		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
 			myCamera.ProcessKeyboard(DOWN, deltaTime);
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+			myPlayer.exchangeHandBlock();//空格换防止方块的类型，bug
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
+		myMap->limitCamera();
 		myMap->updateMap();
 	}
 	
@@ -191,7 +194,7 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 		//destroy a block:
 		changeBlock.type = Block::Air;
 		myPlayer.getWorldPos(changeBlock.mapCoord);//get player's world position
-		changeBlock.mapCoord[1] += 3;//y axis
+		//changeBlock.mapCoord[1] += 3;//y axis
 	}
 }
 
