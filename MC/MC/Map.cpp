@@ -290,7 +290,7 @@ void Map::updateMap()
 		isChange = true;
 	}
 	*/
-	if (flase) {
+	if (false) {
 		std::vector<Chunk*> chunks1;
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->isLoad != false) {//‘≠chunk±£¡Ù
