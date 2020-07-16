@@ -106,7 +106,7 @@ void Map::generateBlock(int m)
 
 int Map::getBlockIndex(int x, int y)
 {
-	x = x / Chunk::width;
+	x = x / Chunk::width;//chunk在map中的坐标
 	y = y / Chunk::width;
 	for (int i = 0; i < chunkSize; ++i) {
 		if (chunks[i]->x == x && chunks[i]->y == y) {
@@ -394,7 +394,7 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 	assert(worldPos[0] >= currentChunkMinX * Chunk::width);
 	assert(worldPos[1] <= (currentChunkMaxY + 1) * Chunk::width);
 	assert(worldPos[1] >= currentChunkMinY * Chunk::width);
-	int index = getBlockIndex(worldPos[0], worldPos[1]);//获得该添加block所在的chunk下标
+	int index = getBlockIndex(worldPos[0], worldPos[1]);//获得该block所在的chunk下标
 	assert(index != -1);
 	//获得block在chunk中的坐标:
 	if (worldPos[0] < 0) {
@@ -409,11 +409,20 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 	else {
 		y = worldPos[1] % Chunk::width;
 	}
-	assert(x < Chunk::width&& x > 0);
-	assert(y < Chunk::width&& y > 0);
-	chunks[index]->blocks[x][y][worldPos[2]] = type;
-	// 如果不是空气，设置可见
-	chunks[index]->isRender[x][y][worldPos[2]] = (type == Block::Air) ? false : true;
+	assert(x < Chunk::width&& x >= 0);
+	assert(y < Chunk::width&& y >= 0);
+	int z = getBlockHeight(worldPos[0], worldPos[1]);//得到最贴近地表的空气块纵坐标
+	assert(z != -1);//all Air
+	if (type == Block::Air) {//delete block
+		chunks[index]->blocks[x][y][z-1] = type;
+		//设置不可见
+		chunks[index]->isRender[x][y][z-1] = false;
+	}
+	else {//add block
+		chunks[index]->blocks[x][y][z] = type;
+		//设置可见
+		chunks[index]->isRender[x][y][z] = true;
+	}
 	// 设置周围方块为可见
 	/*setBlock(x - 1, y, z, getBlockType(x - 1, y, z)); 
 	setBlock(x + 1, y, z, getBlockType(x + 1, y, z));
@@ -451,7 +460,20 @@ Block::blockType Map::getBlockType(int x, int y, int z)
 	else {
 		y = y % Chunk::width;
 	}
-	assert(x < Chunk::width&& x > 0);
-	assert(y < Chunk::width&& y > 0);
+	assert(x < Chunk::width&& x >= 0);
+	assert(y < Chunk::width&& y >= 0);
 	return chunks[index]->blocks[x][y][z];
+}
+int Map::getBlockHeight(int x, int y)//get the highest height in thr position
+{//x,y是block在map中的世界坐标
+	bool flag = false;
+	for (int i = 0; i < Chunk::height; i++) {
+		if (getBlockType(x, y, i) != Block::Air) {
+			flag = true;
+		}
+		if (flag && getBlockType(x, y, i) == Block::Air) {
+			return i;
+		}
+	}
+	return -1;//all Air
 }

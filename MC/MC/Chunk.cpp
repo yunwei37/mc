@@ -9,7 +9,7 @@ Chunk::Chunk(int x, int y)
 
 
 void Chunk::renderChunk(glm::mat4 model, unsigned int VAO, Shader* myShader)
-{
+{//回到vec3(0.0f,0.0f,0.0f)起点
 	Block::blockType type;
 	Block::blockType lasttype = Block::Air;
 	for (int k = 0; k < height; k++) {//1-4,x axis,height

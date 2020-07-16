@@ -1,11 +1,7 @@
 #include "Player.h"
 #include <iostream>
 #include <sstream>
-/*
-#include "Keyboard.h"
-#include "RenderMaster.h"
-#include "World.h"
-*/
+
 
 
 /*Player::Player()
@@ -44,4 +40,26 @@
 void Player::addItem(int itemindex)
 {
 	MyBag.add(itemindex, 1);
+}
+void Player::getWorldPos(int worldPos[])
+{
+	worldPos[0] = (int)((myCamera->Position + myCamera->Front).x / 1.0f);//向右
+	worldPos[1] = (int)((myCamera->Position + myCamera->Front).z / 1.0f);//height
+	worldPos[2] = (int)((myCamera->Position + myCamera->Front).y / 1.0f);//向前
+}
+Player::Player(Camera *myCamera) 
+{
+	this->myCamera = myCamera;
+	inHand = Block::Stone;
+}
+void Player::exchangeHandBlock()//exchange block type in hand
+{//空格键变换
+	switch (inHand) {
+	case(Block::Stone):
+		inHand = Block::Sand;
+	case(Block::Sand):
+		inHand = Block::Soil;
+	case(Block::Soil):
+		inHand = Block::Stone;
+	}
 }

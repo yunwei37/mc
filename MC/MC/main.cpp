@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Map.h"
+#include "Player.h"
 #include "Text.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -28,9 +29,10 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(3.0f, 48.0f, 25.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
+Camera myCamera(glm::vec3(0.0f,30.0f,0.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
 Map* myMap;
 operateBlock changeBlock;
+Player myPlayer(&myCamera);
 int state;
 
 int main()
@@ -174,72 +176,27 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
 		cout << "left press " << endl;
 		glfwGetCursorPos(window, &cursor_x, &cursor_y);
-		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
+		cout << cursor_x << "," << cursor_y << endl;
 		//place a block
-		changeBlock.init();
-		changeBlock.mapCoord[0] = 4;
-		changeBlock.mapCoord[1] = 4;
-		changeBlock.mapCoord[2] = 35;
-		changeBlock.type = Block::Stone;
+		myPlayer.getWorldPos(changeBlock.mapCoord);//get placing world position
+		//changeBlock.mapCoord[1] += 3;//在player前面2格处放置方块
+		//changeBlock.mapCoord[0] += 3;//在player前面2格处放置方块
+		changeBlock.type = myPlayer.inHand;
 	}
 	else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
 		cout << "right press " << endl;
 		double cursor_x = 0, cursor_y = 0;
 		glfwGetCursorPos(window, &cursor_x, &cursor_y);
-		screen2world(cursor_x, cursor_y, &world);//place block
-		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
+		cout << cursor_x << "," << cursor_y << endl;
 		//destroy a block:
-		changeBlock.init();
-		changeBlock.mapCoord[0] = 4;
-		changeBlock.mapCoord[1] = 4;
-		changeBlock.mapCoord[2] = 35;
+		changeBlock.type = Block::Air;
+		myPlayer.getWorldPos(changeBlock.mapCoord);//get player's world position
+		changeBlock.mapCoord[1] += 3;//y axis
 	}
-	return;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	myCamera.ProcessMouseScroll(yoffset);
 }
-void screen2world(double xpos, double ypos, glm::vec3* worldPos)
-{//creeen coordiate to world coordiate
-	GLint viewport[4];
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
-	GLfloat winX, winY, winZ;							//鼠标处坐标+鼠标处像素深度
-	GLdouble object_x, object_y, object_z;				//所求的世界坐标
-	glm::vec3 pp = glm::vec3(0.0f, 0.0f, 0.f);
-	int mouse_x = xpos;
-	int mouse_y = ypos;
 
-	view = myCamera.GetViewMatrix();
-	projection = glm::perspective(glm::radians(myCamera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	winX = (float)mouse_x;
-	winY = (float)viewport[3] - (float)mouse_y;
-	glReadBuffer(GL_BACK);
-	glReadPixels((int)winX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
-	//glm::unProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, (GLdouble*)glm::value_ptr(view*model), 
-	//	(GLdouble*)glm::value_ptr(projection), viewport, &object_x, &object_y, &object_z);
-	//pp.x = object_x;
-	//pp.y = object_y;
-	//pp.z = object_z;
-
-	//求视点的UVN系统
-	glm::vec3 U, V, N;
-	glm::vec3 up = { 0.0,1.0,0.0 };
-	glm::vec3 eye, direction;            //视点坐标与观察点坐标
-
-	N = eye - direction;                 //矢量减法
-	U = glm::cross(N, up);                //矢量叉乘
-	V = glm::cross(N, U);
-	glm::normalize(N);                      //矢量归一化
-	glm::normalize(U);
-	glm::normalize(V);
-	worldPos->x = U.x * pp.x + V.x * pp.y + N.x * pp.z + eye.x;
-	worldPos->y = U.y * pp.x + V.y * pp.y + N.y * pp.z + eye.y;
-	worldPos->z = U.z * pp.x + V.z * pp.y + N.z * pp.z + eye.z;
-}
