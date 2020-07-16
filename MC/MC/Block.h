@@ -19,7 +19,7 @@ public:
 		Leaf = 7,//Ê÷Ò¶
 		Bark = 8,//Ê÷Æ¤
 		Cactus = 9,//ÏÉÈËÕÆ
-		Cloud = 10,//ÏÉÈËÕÆ
+		Cloud = 10,//ÔÆ¶ä
 	};
 
 	static std::vector<Texture> textures;

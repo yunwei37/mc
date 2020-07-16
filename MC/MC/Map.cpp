@@ -254,7 +254,7 @@ void Map::renderMap()
 	projection = glm::perspective(glm::radians(myCamera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	myShader->setMat4("view", glm::value_ptr(view));
 	myShader->setMat4("projection", glm::value_ptr(projection));
-	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	//myShader.setMat4("model", glm::value_ptr(model));
 	for (int i = 0; i < chunkSize; ++i) {
 		if (chunks[i]->isLoad) {
@@ -273,6 +273,7 @@ void Map::updateMap()
 {
 	bool isChange = false;
 	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
+	//面内外是x，横着z，竖着y
 	if (myCamera->Position.z > currentChunkMaxX * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMinX) {
@@ -335,12 +336,12 @@ void Map::updateMap()
 	}
 	*/
 	if (isChange) {
-		std::vector<Chunk*> chunks1;
+		std::vector<Chunk*> chunks1;//要渲染的新chunk
 		for (int i = 0; i < chunkSize; ++i) {
-			if (chunks[i]->isLoad != false) {
+			if (chunks[i]->isLoad != false) {//原chunk保留
 				chunks1.push_back(chunks[i]);
 			}
-			else {
+			else {//原chunk不保留，删
 				delete chunks[i];
 			}
 		}
@@ -432,8 +433,9 @@ void Map::setBlock(int x, int y, int z, Block::blockType type)
 	assert(x >= currentChunkMinX * Chunk::width);
 	assert(y <= (currentChunkMaxY + 1) * Chunk::width);
 	assert(y >= currentChunkMinY * Chunk::width);
-	int index = getBlockIndex(x, y);
+	int index = getBlockIndex(x, y);//获得该添加block所在的chunk下标
 	assert(index != -1);
+	//获得该添加block在chunk中的坐标xyz：
 	if (x < 0) {
 		x = -chunks[index]->x * Chunk::width + x;
 	}
