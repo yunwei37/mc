@@ -128,3 +128,13 @@ double PerlinNoise2D(double x, double y, double persistence,int Number_Of_Octave
 	}
 	return total;
 }
+
+double PNoiseSmoth2D(double x, double y, double persistence, int Number_Of_Octaves, double interval)
+{
+	double total = PerlinNoise2D(x, y, persistence, Number_Of_Octaves);
+	total += PerlinNoise2D(x + interval, y, persistence, Number_Of_Octaves);
+	total += PerlinNoise2D(x - interval, y, persistence, Number_Of_Octaves);
+	total += PerlinNoise2D(x, y - interval, persistence, Number_Of_Octaves);
+	total += PerlinNoise2D(x, y + interval, persistence, Number_Of_Octaves);
+	return total / 5;
+}
