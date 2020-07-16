@@ -195,8 +195,10 @@ Map::~Map()
 
 
 
-void Map::renderMap()
+void Map::renderMap(operateBlock* changeBlock)
 {
+	if (changeBlock->mapCoord[0] != -1)
+		this->setBlock(changeBlock->mapCoord, changeBlock->type);
 	//变换：
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
@@ -218,7 +220,6 @@ void Map::renderMap()
 			model = glm::translate(model, glm::vec3(0.0f, Chunk::width * dy * 1.0f, Chunk::width * dx * 1.0f));
 		}
 	}
-	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
 }
 
 void Map::updateMap()
@@ -382,40 +383,41 @@ void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
 
 */
 
-void Map::setBlock(int x, int y, int z, Block::blockType type)
+void Map::setBlock(int worldPos[], Block::blockType type)
 {
-	assert(x <= (currentChunkMaxX + 1) * Chunk::width);
-	assert(x >= currentChunkMinX * Chunk::width);
-	assert(y <= (currentChunkMaxY + 1) * Chunk::width);
-	assert(y >= currentChunkMinY * Chunk::width);
-	int index = getBlockIndex(x, y);//获得该添加block所在的chunk下标
+	int x = 0; //block在chunk中的坐标
+	int y = 0;
+	assert(worldPos[0] <= (currentChunkMaxX + 1) * Chunk::width);
+	assert(worldPos[0] >= currentChunkMinX * Chunk::width);
+	assert(worldPos[1] <= (currentChunkMaxY + 1) * Chunk::width);
+	assert(worldPos[1] >= currentChunkMinY * Chunk::width);
+	int index = getBlockIndex(worldPos[0], worldPos[1]);//获得该添加block所在的chunk下标
 	assert(index != -1);
-	//获得该添加block在chunk中的坐标xyz：
-	if (x < 0) {
-		x = -chunks[index]->x * Chunk::width + x;
+	//获得block在chunk中的坐标:
+	if (worldPos[0] < 0) {
+		x = -chunks[index]->x * Chunk::width + worldPos[0];
 	}
 	else {
-		x = x % Chunk::width;
+		x = worldPos[0] % Chunk::width;
 	}
-	if (y < 0) {
-		y = -chunks[index]->y * Chunk::width + y;
+	if (worldPos[1] < 0) {
+		y = -chunks[index]->y * Chunk::width + worldPos[1];
 	}
 	else {
-		y = y % Chunk::width;
+		y = worldPos[1] % Chunk::width;
 	}
 	assert(x < Chunk::width&& x > 0);
 	assert(y < Chunk::width&& y > 0);
-	chunks[index]->blocks[x][y][z] = type;
+	chunks[index]->blocks[x][y][worldPos[2]] = type;
 	// 如果不是空气，设置可见
-	if(type!=Block::Air)
-		chunks[index]->isRender[x][y][z] = true;
+	chunks[index]->isRender[x][y][worldPos[2]] = (type == Block::Air) ? false : true;
 	// 设置周围方块为可见
-	setBlock(x - 1, y, z, getBlockType(x - 1, y, z)); 
+	/*setBlock(x - 1, y, z, getBlockType(x - 1, y, z)); 
 	setBlock(x + 1, y, z, getBlockType(x + 1, y, z));
 	setBlock(x, y - 1, z, getBlockType(x, y - 1, z));
 	setBlock(x, y - 1, z, getBlockType(x, y - 1, z));
 	setBlock(x, y, z + 1, getBlockType(x, y, z + 1));
-	setBlock(x, y, z - 1, getBlockType(x, y, z - 1));
+	setBlock(x, y, z - 1, getBlockType(x, y, z - 1));*/
 }
 
 Block::blockType Map::getBlockType(int x, int y, int z)

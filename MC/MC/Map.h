@@ -73,7 +73,7 @@ public:
 	~Map();
 
 	// 在主函数刷新中需要调用的唯一一个函数，用来渲染地图
-	void renderMap();
+	void renderMap(operateBlock* changeBlock);
 
 	// 当摄像机改变位置或者放置砖块后调用
 	void updateMap();
@@ -84,7 +84,7 @@ public:
 	
 	// 将mc世界坐标转换为chunk存储坐标，然后操作方块
 	// 操作方块的时候用
-	void setBlock(int x, int y, int z, Block::blockType type);//xyz是block世界坐标，放置方块
+	void setBlock(int worldPos[], Block::blockType type);//xyz是block世界坐标，放置方块
 	Block::blockType getBlockType(int x, int y, int z);//xyz是block世界坐标，得到该位置block类型
 
 	// 预留接口，还没想好名字

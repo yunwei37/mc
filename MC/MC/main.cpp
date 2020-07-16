@@ -27,10 +27,9 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(3.0f, 28.0f, 25.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
+Camera myCamera(glm::vec3(3.0f, 48.0f, 25.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
 Map* myMap;
-std::vector<operateBlock*> extraBlocks;
-std::vector<operateBlock*> delBlocks;
+operateBlock changeBlock;
 
 int main()
 {
@@ -41,7 +40,7 @@ int main()
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Minecraft", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -79,9 +78,8 @@ int main()
 		processInput(window);
 		glClearColor(91.0f / 255.0f, 206.0f/255.0f, 1.0f, 1.0f);//background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		myMap->renderMap();//draw map
 		
+		myMap->renderMap(&changeBlock);//draw map
 		// 交换缓冲并查询IO事件：
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -139,16 +137,13 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
 		cout << "left press " << endl;
 		glfwGetCursorPos(window, &cursor_x, &cursor_y);
-		screen2world(cursor_x, cursor_y, &world);
 		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
 		//place a block
-		operateBlock* p = new operateBlock;
-		p->mapCoord[0] = 0;
-		p->mapCoord[1] = 0;
-		p->chunkCoord[0] = 0;
-		p->chunkCoord[1] = 0;
-		p->type = Block::Stone;
-		extraBlocks.push_back(p);
+		changeBlock.init();
+		changeBlock.mapCoord[0] = 4;
+		changeBlock.mapCoord[1] = 4;
+		changeBlock.mapCoord[2] = 35;
+		changeBlock.type = Block::Stone;
 	}
 	else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
 		cout << "right press " << endl;
@@ -157,12 +152,10 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 		screen2world(cursor_x, cursor_y, &world);//place block
 		cout << cursor_x << "," << cursor_y << "  #   " << world.x << "," << world.y << "," << world.z << endl;
 		//destroy a block:
-		operateBlock* p = new operateBlock;
-		p->mapCoord[0] = 0;
-		p->mapCoord[1] = 0;
-		p->chunkCoord[0] = 1;
-		p->chunkCoord[1] = 0;
-		delBlocks.push_back(p);
+		changeBlock.init();
+		changeBlock.mapCoord[0] = 4;
+		changeBlock.mapCoord[1] = 4;
+		changeBlock.mapCoord[2] = 35;
 	}
 	return;
 }

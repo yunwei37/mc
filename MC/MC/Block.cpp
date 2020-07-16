@@ -173,3 +173,14 @@ int Block::loadTextures()
     Block::textures.push_back(myTexCloud); //10
     return 0;
 }
+operateBlock::operateBlock() 
+{
+	this->init();
+}
+void operateBlock::init() 
+{
+	type = Block::Air;
+	mapCoord[0] = -1;
+	mapCoord[1] = -1;
+	mapCoord[2] = -1;
+}
