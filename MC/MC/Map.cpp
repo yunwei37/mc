@@ -225,7 +225,7 @@ void Map::updateMap()
 {
 	bool isChange = false;
 	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
-	if (myCamera->Position.z > currentChunkMaxX * Chunk::width) {
+	if (myCamera->Position.z + startPosX > currentChunkMaxX * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMinX) {
 				chunks[i]->isLoad = false;
@@ -290,7 +290,7 @@ void Map::updateMap()
 		isChange = true;
 	}
 	*/
-	if (isChange) {
+	if (flase) {
 		std::vector<Chunk*> chunks1;
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->isLoad != false) {//‘≠chunk±£¡Ù
