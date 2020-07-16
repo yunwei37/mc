@@ -333,7 +333,7 @@ void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
 	int chunk_x = 0;
 	int chunk_y = 0;
 	int chunkIdx = 0;
-	ResourceManager::LoadShader("particle.vs", "particle.frag", nullptr, "particle");
+	ResourceManager::LoadShader("particle.vs", "particle.fs", nullptr, "particle");
 	ResourceManager::LoadTexture("particle.png", GL_TRUE, "particle");
 	Particles = new ParticleGen(
 		ResourceManager::GetShader("particle"),
@@ -349,7 +349,10 @@ void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
 		int h = chunks[chunkIdx]->visibleHeight[chunk_x][chunk_y];
 		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h] = false;
 		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h - 1] = true;
+		// Draw particles   
+		Particles->Draw();
 	}
+
 }
 
 void Map::setBlock(int x, int y, int z, Block::blockType type)
