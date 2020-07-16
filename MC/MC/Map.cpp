@@ -1,108 +1,10 @@
 #include "Map.h"
 #include "particleGenerator.h"
 #include "Chunk.h"
-#include "particleGenerator.h"
 #include "resource_manager.h"
+#include "MapGenerator.h"
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
-
-int Map::generateHeight(double x, double y, double interval)
-{
-	double small = PNoiseSmoth2D(x, y, 0.025, 4, interval) * 24 + 24;
-	double large = PNoiseSmoth2D(-x, -y, 0.025, 2, interval)/2 + 1;
-	int h = (int)(small * large) + 2;
-	//std::cout << h <<std:: endl;
-	return h > waterheight ? h:waterheight;
-}
-
-Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
-	if (z > h) { //当前方块位置高于随机生成的高度值时，当前方块类型为空 
-		return Block::Air;
-	}
-	if (h > sandheight) {
-		if (z == h) { //当前方块位置等于随机生成的高度值时，当前方块类型为草地 
-			return Block::Grass;
-		}
-		//当前方块位置小于随机生成的高度值 且 大于 genHeight - 5时，当前方块类型为泥土 
-		if (z < h && z > h - 5) {
-			return Block::Soil;
-		}
-		else return Block::Stone; //其他情况，当前方块类型为碎石
-	}
-	else if( h > waterheight ) {
-		if (z <= h && z > h - 5) {
-			return Block::Sand;
-		}
-		else return Block::Stone;
-	}
-	else {
-		if (z <= h && z > h - 5) {
-			return Block::Water;
-		}
-		else return Block::Sand;
-	}
-}
-
-void Map::generateBlock(int m)
-{
-	//render a chunk
-	// 生成高度
-	for (int i = -1; i < Chunk::width + 1; ++i) {
-		double radio = 1.0;
-		for (int j = -1; j < Chunk::width + 1; ++j) {
-			int h = generateHeight(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 1.0 * radio / Chunk::width); //获取当前位置方块随机生成的高度值 
-			chunks[m]->visibleHeight[i+1][j+1] = h;//write down random visible height
-		}
-	}
-	// 生成基本方块类型
-	for (int i = 0; i < Chunk::width; ++i) {
-		for (int j = 0; j < Chunk::width; ++j) {
-			for (int k = 0; k < Chunk::height; ++k) {
-				chunks[m]->blocks[i][j][k] = generateBlockType(i, j, k, chunks[m]->visibleHeight[i + 1][j + 1]);
-			}
-		}
-	}
-	// 可见判别
-	for (int i = 0; i < Chunk::width; ++i) {
-		double radio = 3;
-		for (int j = 0; j < Chunk::width; ++j) {
-			for (int k = 0; k < Chunk::height; ++k) {
-				chunks[m]->isRender[i][j][k] = false;
-				if (k <= chunks[m]->visibleHeight[i + 1][j + 1]) {
-					chunks[m]->isRender[i][j][k] = isVisible(m, i, j, k);
-				}
-			}
-		}
-	}
-
-	// 生成云朵
-	for (int i = 0; i < Chunk::width; ++i) {
-		double radio = 3;
-		for (int j = 0; j < Chunk::width; ++j) {
-			if (PerlinNoise2D(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 0.5, 1) > 0.2) {
-					chunks[m]->blocks[i][j][Chunk::height-1] = Block::Cloud;
-					chunks[m]->isRender[i][j][Chunk::height - 1] = true;
-			}
-		}
-	}
-	
-	// 生成花草树木
-	for (int i = 0; i < Chunk::width; ++i) {
-		for (int j = 0; j < Chunk::width; ++j) {
-			if (chunks[m]->visibleHeight[i+1][j+1] > sandheight) {
-				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.47) {
-					makePalmTree(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
-				}
-			}
-			else if (chunks[m]->visibleHeight[i + 1][j + 1] > waterheight) {
-				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.45) {
-					makeCactus(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
-				}
-			}
-		}
-	}
-
-}
 
 int Map::getBlockIndex(int x, int y)
 {
@@ -114,32 +16,6 @@ int Map::getBlockIndex(int x, int y)
 		}
 	}
 	return -1;
-}
-
-bool Map::isVisible(int m, int x, int y, int z)       //block在chunk中的坐标
-{	//flag==true, render; flag==false, not render
-	if (chunks[m]->blocks[x][y][z] == Block::Air) {
-		return false;
-	}
-	else {
-		bool flag = false;
-		if (z >= chunks[m]->visibleHeight[x+1][y+1]) {
-			flag = true;
-		}
-		if (z > chunks[m]->visibleHeight[x][y + 1]) {
-			flag = true;
-		}
-		if (z > chunks[m]->visibleHeight[x + 1][y]) {
-			flag = true;
-		}
-		if (z >= chunks[m]->visibleHeight[x + 2][y + 1]) {
-			flag = true;
-		}
-		if (z >= chunks[m]->visibleHeight[x + 1][y + 2]) {
-			flag = true;
-		}
-		return flag;
-	}
 }
 
 Map::Map(Camera* myCamera)
@@ -223,7 +99,6 @@ void Map::renderMap()
 
 void Map::updateMap()
 {
-	bool isChange = false;
 	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
 	if (myCamera->Position.z + startPosX > currentChunkMaxX * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
@@ -238,7 +113,6 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMaxX++;
-		isChange = true;
 	}
 	/*
 	else if (myCamera->Position.z + startPosX < (currentChunkMinX + 1) * Chunk::width) {
@@ -254,7 +128,6 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMinX--;
-		isChange = true;
 	}
 	*/
 
@@ -271,7 +144,6 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMaxY++;
-		isChange = true;
 	}
 	/*
 	else if (myCamera->Position.y + startPosY < (currentChunkMinY + 1) * Chunk::width) {
@@ -287,100 +159,9 @@ void Map::updateMap()
 			chunkSize++;
 		}
 		currentChunkMinY--;
-		isChange = true;
 	}
 	*/
-	if (false) {
-		std::vector<Chunk*> chunks1;
-		for (int i = 0; i < chunkSize; ++i) {
-			if (chunks[i]->isLoad != false) {
-				chunks1.push_back(chunks[i]);
-			}
-			else {
-				delete chunks[i];
-			}
-		}
-		chunks = chunks1;
-		chunkSize = chunks1.size();
-	}
 }
-
-/*
-
-void Map::renderBlock(std::vector<operateBlock*> extraBlocks)
-{//map_x, chunk_x横着, map_y, chunk_y竖着
-	if (extraBlocks.size() == 0) return;//place no blocks
-	int map_x = 0;
-	int map_y = 0;
-	int chunk_x = 0;
-	int chunk_y = 0;
-	int i = 0;
-	int loop = 0;
-	Block::blockType type;
-	//变换：
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	view = myCamera->GetViewMatrix();
-	projection = glm::perspective(glm::radians(myCamera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	myShader->setMat4("view", glm::value_ptr(view));
-	myShader->setMat4("projection", glm::value_ptr(projection));
-	for (int itr = 0; itr < extraBlocks.size(); itr++) {
-		map_x = extraBlocks[itr]->mapCoord[0];
-		map_y = extraBlocks[itr]->mapCoord[1];
-		chunk_x = extraBlocks[itr]->chunkCoord[0];
-		chunk_y = extraBlocks[itr]->chunkCoord[1];
-		type = extraBlocks[itr]->type;
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		loop = map_y * sqrt(MAP_SIZE) + map_y;//get chunk position in map
-		for (i = 0; i < loop; ++i) {
-			if (i < chunkSize - 1) {
-				int dx = chunks[i + 1]->x - chunks[i]->x;
-				int dy = chunks[i + 1]->y - chunks[i]->y;
-				model = glm::translate(model, glm::vec3(0.0f, Chunk::width * dy * 1.0f, Chunk::width * dx * 1.0f));
-			}
-		}
-		//find block position in chunks[i]:	
-		int hoffset = chunks[i]->visibleHeight[chunk_x][chunk_y] + 1;//height to place extra block
-		model = glm::translate(model, glm::vec3(hoffset * (-1.0f), chunk_x * 1.0f, chunk_y * 1.0f));
-		//render the extra block:
-		myShader->setMat4("model", glm::value_ptr(model));
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
-}
-
-void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
-{
-	ParticleGen* Particles;
-	if (delBlocks.size() == 0) return;
-	int map_x = 0;
-	int map_y = 0;
-	int chunk_x = 0;
-	int chunk_y = 0;
-	int chunkIdx = 0;
-	ResourceManager::LoadShader("particle.vs", "particle.frag", nullptr, "particle");
-	ResourceManager::LoadTexture("particle.png", GL_TRUE, "particle");
-	Particles = new ParticleGen(
-		ResourceManager::GetShader("particle"),
-		ResourceManager::GetTexture("particle"),
-		500
-	);
-	for (int itr = 0; itr < delBlocks.size(); itr++) {
-		map_x = delBlocks[itr]->mapCoord[0];
-		map_y = delBlocks[itr]->mapCoord[1];
-		chunk_x = delBlocks[itr]->chunkCoord[0];
-		chunk_y = delBlocks[itr]->chunkCoord[1];
-		chunkIdx = map_y * sqrt(MAP_SIZE) + map_y;
-		int h = chunks[chunkIdx]->visibleHeight[chunk_x][chunk_y];
-		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h] = false;
-		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h - 1] = true;
-	}
-}
-
-*/
 
 void Map::setBlock(int x, int y, int z, Block::blockType type)
 {

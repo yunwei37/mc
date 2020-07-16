@@ -133,9 +133,9 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapGenerator.cpp" />
     <ClCompile Include="particleGenerator.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
-    <ClCompile Include="plantGenerator.cpp" />
     <ClCompile Include="resource_manager.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -150,10 +150,11 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapGenerator.h" />
     <ClInclude Include="particleGenerator.h" />
     <ClInclude Include="PerlinNoise.h" />
-    <ClInclude Include="plantGenerator.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />

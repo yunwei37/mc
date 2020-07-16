@@ -39,9 +39,6 @@
     <ClCompile Include="PerlinNoise.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="plantGenerator.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="StructureBuilder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -69,6 +66,9 @@
     <ClCompile Include="text_renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MapGenerator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -87,9 +87,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="PerlinNoise.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="plantGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="StructureBuilder.h">
@@ -117,6 +114,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="text_renderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGenerator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
