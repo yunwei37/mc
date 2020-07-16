@@ -78,15 +78,11 @@ public:
 	// 当摄像机改变位置或者放置砖块后调用
 	void updateMap();
 
-	// 可以改用下面两个
-	//void renderBlock(std::vector<operateBlock*> extraBlocks);//add blocks
-	//void destroyBlock(std::vector<operateBlock*> delBlocks);//delete blocks
-	
 	// 将mc世界坐标转换为chunk存储坐标，然后操作方块
 	// 操作方块的时候用
 	void setBlock(int worldPos[], Block::blockType type);//xyz是block世界坐标，放置方块
 	Block::blockType getBlockType(int x, int y, int z);//xyz是block世界坐标，得到该位置block类型
-
+	int getBlockHeight(int x, int y);//得到最贴近地表的空气块纵坐标
 	// 预留接口，还没想好名字
 	// 通过摄像机和方块的交线判断删除方块；没参数
 	// 通过摄像机和方块的交线判断添加方块；没参数

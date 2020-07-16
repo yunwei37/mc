@@ -106,7 +106,7 @@ void Map::generateBlock(int m)
 
 int Map::getBlockIndex(int x, int y)
 {
-	x = x / Chunk::width;
+	x = x / Chunk::width;//chunk在map中的坐标
 	y = y / Chunk::width;
 	for (int i = 0; i < chunkSize; ++i) {
 		if (chunks[i]->x == x && chunks[i]->y == y) {
@@ -306,83 +306,6 @@ void Map::updateMap()
 	}
 }
 
-/*
-
-void Map::renderBlock(std::vector<operateBlock*> extraBlocks)
-{//map_x, chunk_x横着, map_y, chunk_y竖着
-	if (extraBlocks.size() == 0) return;//place no blocks
-	int map_x = 0;
-	int map_y = 0;
-	int chunk_x = 0;
-	int chunk_y = 0;
-	int i = 0;
-	int loop = 0;
-	Block::blockType type;
-	//变换：
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	view = myCamera->GetViewMatrix();
-	projection = glm::perspective(glm::radians(myCamera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	myShader->setMat4("view", glm::value_ptr(view));
-	myShader->setMat4("projection", glm::value_ptr(projection));
-	for (int itr = 0; itr < extraBlocks.size(); itr++) {
-		map_x = extraBlocks[itr]->mapCoord[0];
-		map_y = extraBlocks[itr]->mapCoord[1];
-		chunk_x = extraBlocks[itr]->chunkCoord[0];
-		chunk_y = extraBlocks[itr]->chunkCoord[1];
-		type = extraBlocks[itr]->type;
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		loop = map_y * sqrt(MAP_SIZE) + map_y;//get chunk position in map
-		for (i = 0; i < loop; ++i) {
-			if (i < chunkSize - 1) {
-				int dx = chunks[i + 1]->x - chunks[i]->x;
-				int dy = chunks[i + 1]->y - chunks[i]->y;
-				model = glm::translate(model, glm::vec3(0.0f, Chunk::width * dy * 1.0f, Chunk::width * dx * 1.0f));
-			}
-		}
-		//find block position in chunks[i]:	
-		int hoffset = chunks[i]->visibleHeight[chunk_x][chunk_y] + 1;//height to place extra block
-		model = glm::translate(model, glm::vec3(hoffset * (-1.0f), chunk_x * 1.0f, chunk_y * 1.0f));
-		//render the extra block:
-		myShader->setMat4("model", glm::value_ptr(model));
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
-}
-
-void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
-{
-	ParticleGen* Particles;
-	if (delBlocks.size() == 0) return;
-	int map_x = 0;
-	int map_y = 0;
-	int chunk_x = 0;
-	int chunk_y = 0;
-	int chunkIdx = 0;
-	ResourceManager::LoadShader("particle.vs", "particle.frag", nullptr, "particle");
-	ResourceManager::LoadTexture("particle.png", GL_TRUE, "particle");
-	Particles = new ParticleGen(
-		ResourceManager::GetShader("particle"),
-		ResourceManager::GetTexture("particle"),
-		500
-	);
-	for (int itr = 0; itr < delBlocks.size(); itr++) {
-		map_x = delBlocks[itr]->mapCoord[0];
-		map_y = delBlocks[itr]->mapCoord[1];
-		chunk_x = delBlocks[itr]->chunkCoord[0];
-		chunk_y = delBlocks[itr]->chunkCoord[1];
-		chunkIdx = map_y * sqrt(MAP_SIZE) + map_y;
-		int h = chunks[chunkIdx]->visibleHeight[chunk_x][chunk_y];
-		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h] = false;
-		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h - 1] = true;
-	}
-}
-
-*/
-
 void Map::setBlock(int worldPos[], Block::blockType type)
 {
 	int x = 0; //block在chunk中的坐标
@@ -391,7 +314,7 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 	assert(worldPos[0] >= currentChunkMinX * Chunk::width);
 	assert(worldPos[1] <= (currentChunkMaxY + 1) * Chunk::width);
 	assert(worldPos[1] >= currentChunkMinY * Chunk::width);
-	int index = getBlockIndex(worldPos[0], worldPos[1]);//获得该添加block所在的chunk下标
+	int index = getBlockIndex(worldPos[0], worldPos[1]);//获得该block所在的chunk下标
 	assert(index != -1);
 	//获得block在chunk中的坐标:
 	if (worldPos[0] < 0) {
@@ -406,11 +329,20 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 	else {
 		y = worldPos[1] % Chunk::width;
 	}
-	assert(x < Chunk::width&& x > 0);
-	assert(y < Chunk::width&& y > 0);
-	chunks[index]->blocks[x][y][worldPos[2]] = type;
-	// 如果不是空气，设置可见
-	chunks[index]->isRender[x][y][worldPos[2]] = (type == Block::Air) ? false : true;
+	assert(x < Chunk::width&& x >= 0);
+	assert(y < Chunk::width&& y >= 0);
+	int z = getBlockHeight(worldPos[0], worldPos[1]);//得到最贴近地表的空气块纵坐标
+	assert(z != -1);//all Air
+	if (type == Block::Air) {//delete block
+		chunks[index]->blocks[x][y][z-1] = type;
+		//设置不可见
+		chunks[index]->isRender[x][y][z-1] = false;
+	}
+	else {//add block
+		chunks[index]->blocks[x][y][z] = type;
+		//设置可见
+		chunks[index]->isRender[x][y][z] = true;
+	}
 	// 设置周围方块为可见
 	/*setBlock(x - 1, y, z, getBlockType(x - 1, y, z)); 
 	setBlock(x + 1, y, z, getBlockType(x + 1, y, z));
@@ -448,7 +380,20 @@ Block::blockType Map::getBlockType(int x, int y, int z)
 	else {
 		y = y % Chunk::width;
 	}
-	assert(x < Chunk::width&& x > 0);
-	assert(y < Chunk::width&& y > 0);
+	assert(x < Chunk::width&& x >= 0);
+	assert(y < Chunk::width&& y >= 0);
 	return chunks[index]->blocks[x][y][z];
+}
+int Map::getBlockHeight(int x, int y)//get the highest height in thr position
+{//x,y是block在map中的世界坐标
+	bool flag = false;
+	for (int i = 0; i < Chunk::height; i++) {
+		if (getBlockType(x, y, i) != Block::Air) {
+			flag = true;
+		}
+		if (flag && getBlockType(x, y, i) == Block::Air) {
+			return i;
+		}
+	}
+	return -1;//all Air
 }
