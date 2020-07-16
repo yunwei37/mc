@@ -397,3 +397,12 @@ int Map::getBlockHeight(int x, int y)//get the highest height in thr position
 	}
 	return -1;//all Air
 }
+void Map::limitCamera()
+{
+	int cameraPos[3] = { 0 };
+	myCamera->getWorldPos(cameraPos);
+	int h = getBlockHeight(cameraPos[0], cameraPos[1]);//最贴近地表的空块
+	if (cameraPos[2] <= h+2) {
+		myCamera->Position.y = 2.0f + h;
+	}
+}

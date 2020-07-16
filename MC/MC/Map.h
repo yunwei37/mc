@@ -77,7 +77,8 @@ public:
 
 	// 当摄像机改变位置或者放置砖块后调用
 	void updateMap();
-
+	void limitCamera();//控制摄像机不会穿透表层
+private:
 	// 将mc世界坐标转换为chunk存储坐标，然后操作方块
 	// 操作方块的时候用
 	void setBlock(int worldPos[], Block::blockType type);//xyz是block世界坐标，放置方块

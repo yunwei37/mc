@@ -18,7 +18,6 @@ void processInput(GLFWwindow* window);
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void screen2world(double xpos, double ypos, glm::vec3* worldPos);
 
 // settings
 extern const unsigned int SCR_WIDTH = 800;
@@ -111,6 +110,7 @@ void processInput(GLFWwindow* window)
 		myPlayer.exchangeHandBlock();//空格变换手上的方块类型
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	myMap->limitCamera();//控制摄像机位置
 	myMap->updateMap();
 }
 

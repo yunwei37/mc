@@ -50,7 +50,12 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 	if (direction == DOWN)
 		Position -= Up * velocity;
 }
-
+void Camera::getWorldPos(int worldPos[])
+{
+	worldPos[0] = (int)(Position.x / 1.0f);//œÚ”“
+	worldPos[1] = (int)(Position.z / 1.0f);//height
+	worldPos[2] = (int)(Position.y / 1.0f);//œÚ«∞
+}
 // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
 {
