@@ -41,11 +41,12 @@ void Player::addItem(int itemindex)
 {
 	MyBag.add(itemindex, 1);
 }
-void Player::getWorldPos(int worldPos[])
+void Player::getPlacingPos(int worldPos[])
 {
-	worldPos[0] = (int)((myCamera->Position + myCamera->Front).x / 1.0f);//向右
-	worldPos[1] = (int)((myCamera->Position + myCamera->Front).z / 1.0f);//height
-	worldPos[2] = (int)((myCamera->Position + myCamera->Front).y / 1.0f);//向前
+	myCamera->getWorldPos(worldPos);
+	//worldPos[0] = (int)((myCamera->Position + myCamera->Front).x / 1.0f);//向右
+	//worldPos[1] = (int)((myCamera->Position + myCamera->Front).z / 1.0f);//height
+	//worldPos[2] = (int)((myCamera->Position + myCamera->Front).y / 1.0f);//向前
 }
 Player::Player(Camera *myCamera) 
 {

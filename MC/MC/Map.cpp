@@ -306,86 +306,6 @@ void Map::updateMap()
 	}
 }
 
-/*
-
-void Map::renderBlock(std::vector<operateBlock*> extraBlocks)
-{//map_x, chunk_x横着, map_y, chunk_y竖着
-	if (extraBlocks.size() == 0) return;//place no blocks
-	int map_x = 0;
-	int map_y = 0;
-	int chunk_x = 0;
-	int chunk_y = 0;
-	int i = 0;
-	int loop = 0;
-	Block::blockType type;
-	//变换：
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
-	view = myCamera->GetViewMatrix();
-	projection = glm::perspective(glm::radians(myCamera->Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	myShader->setMat4("view", glm::value_ptr(view));
-	myShader->setMat4("projection", glm::value_ptr(projection));
-	for (int itr = 0; itr < extraBlocks.size(); itr++) {
-		map_x = extraBlocks[itr]->mapCoord[0];
-		map_y = extraBlocks[itr]->mapCoord[1];
-		chunk_x = extraBlocks[itr]->chunkCoord[0];
-		chunk_y = extraBlocks[itr]->chunkCoord[1];
-		type = extraBlocks[itr]->type;
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		loop = map_y * sqrt(MAP_SIZE) + map_y;//get chunk position in map
-		for (i = 0; i < loop; ++i) {
-			if (i < chunkSize - 1) {
-				int dx = chunks[i + 1]->x - chunks[i]->x;
-				int dy = chunks[i + 1]->y - chunks[i]->y;
-				model = glm::translate(model, glm::vec3(0.0f, Chunk::width * dy * 1.0f, Chunk::width * dx * 1.0f));
-			}
-		}
-		//find block position in chunks[i]:	
-		int hoffset = chunks[i]->visibleHeight[chunk_x][chunk_y] + 1;//height to place extra block
-		model = glm::translate(model, glm::vec3(hoffset * (-1.0f), chunk_x * 1.0f, chunk_y * 1.0f));
-		//render the extra block:
-		myShader->setMat4("model", glm::value_ptr(model));
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-	}
-}
-
-void Map::destroyBlock(std::vector<operateBlock*> delBlocks)//delete blocks
-{
-	ParticleGen* Particles;
-	if (delBlocks.size() == 0) return;
-	int map_x = 0;
-	int map_y = 0;
-	int chunk_x = 0;
-	int chunk_y = 0;
-	int chunkIdx = 0;
-	ResourceManager::LoadShader("particle.vs", "particle.fs", nullptr, "particle");
-	ResourceManager::LoadTexture("particle.png", GL_TRUE, "particle");
-	Particles = new ParticleGen(
-		ResourceManager::GetShader("particle"),
-		ResourceManager::GetTexture("particle"),
-		500
-	);
-	for (int itr = 0; itr < delBlocks.size(); itr++) {
-		map_x = delBlocks[itr]->mapCoord[0];
-		map_y = delBlocks[itr]->mapCoord[1];
-		chunk_x = delBlocks[itr]->chunkCoord[0];
-		chunk_y = delBlocks[itr]->chunkCoord[1];
-		chunkIdx = map_y * sqrt(MAP_SIZE) + map_y;
-		int h = chunks[chunkIdx]->visibleHeight[chunk_x][chunk_y];
-		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h] = false;
-		chunks[chunkIdx]->isRender[chunk_x][chunk_y][h - 1] = true;
-		// Draw particles   
-		Particles->Draw();
-	}
-
-}
-
-*/
-
 void Map::setBlock(int worldPos[], Block::blockType type)
 {
 	int x = 0; //block在chunk中的坐标
@@ -417,6 +337,7 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 		chunks[index]->blocks[x][y][z-1] = type;
 		//设置不可见
 		chunks[index]->isRender[x][y][z-1] = false;
+		chunks[index]->isRender[x][y][z-2] = true;
 	}
 	else {//add block
 		chunks[index]->blocks[x][y][z] = type;
@@ -485,4 +406,12 @@ void Map::limitCamera()
 	if (cameraPos[2] <= h+2) {
 		myCamera->Position.y = 2.0f + h;
 	}
+	if (cameraPos[0] < 0)
+		cameraPos[0] = 0;
+	else if (cameraPos[0] >= Chunk::width*sqrt(chunkSize))
+		cameraPos[0] = Chunk::width*sqrt(chunkSize) - 1;
+	if (cameraPos[1] < 0)
+		cameraPos[1] = 0;
+	else if (cameraPos[1] >= Chunk::width*sqrt(chunkSize))
+		cameraPos[1] = Chunk::width*sqrt(chunkSize) - 1;
 }

@@ -9,7 +9,7 @@
 class Player {
 public:
     Player(Camera *myCamera);
-	void getWorldPos(int worldPos[]);//get placing world position
+	void getPlacingPos(int worldPos[]);//get placing world position
 	void exchangeHandBlock();//exchange block type in hand
 //    void handleInput(const sf::Window& window, Keyboard& keyboard);
 //    void update(float dt, World& wolrd);

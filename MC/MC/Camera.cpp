@@ -52,9 +52,10 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 }
 void Camera::getWorldPos(int worldPos[])
 {
-	worldPos[0] = (int)(Position.x / 1.0f);//向右
-	worldPos[1] = (int)(Position.z / 1.0f);//height
-	worldPos[2] = (int)(Position.y / 1.0f);//向前
+	
+	worldPos[0] = (Position.z/1.0f - (int)(Position.z/1.0f))==0 ? (int)(Position.z / 1.0f): (int)(Position.z / 1.0f)+1;//向右
+	worldPos[1] = (Position.x/1.0f - (int)(Position.x/1.0f))==0 ? (int)(Position.x / 1.0f): (int)(Position.x / 1.0f)+1;//height
+	worldPos[2] = (Position.y/1.0f - (int)(Position.y/1.0f))==0 ? (int)(Position.y / 1.0f): (int)(Position.y / 1.0f)+1;//向前
 }
 // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)

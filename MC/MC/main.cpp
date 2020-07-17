@@ -63,10 +63,6 @@ int main()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
-
-	myMap = new Map(&myCamera);
-	myMap->updateMap();
-	Block::loadTextures();
 	/*Shader partShader("particles_vs.txt", "particles_fs.txt");
 	Texture partTex(GL_TEXTURE_2D, "blocks/dirt.png");
 	blockParticles = new ParticleGen(partShader, partTex, 10);*/
@@ -82,7 +78,8 @@ int main()
 			// Check and call events
 			glfwPollEvents();
 			// Clear the colorbuffer
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 			Text text;
 			glfwSwapBuffers(window);
@@ -92,13 +89,13 @@ int main()
 				state = 1;
 				glDisable(GL_BLEND);
 				glDisable(GL_CULL_FACE);
-
 				glEnable(GL_DEPTH_TEST);//开启深度测试
 				glEnable(GL_CULL_FACE);//面剔除
 				myMap = new Map(&myCamera);
+				Block::loadTextures();
 			}
 		}
-		else//start the game
+		else //start the game
 		{
 			float curTime = glfwGetTime();
 			deltaTime = curTime - lastFrame;
@@ -174,27 +171,25 @@ void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
-	glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f);
-	double cursor_x = 0, cursor_y = 0;
-	if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
-		cout << "left press " << endl;
-		glfwGetCursorPos(window, &cursor_x, &cursor_y);
-		cout << cursor_x << "," << cursor_y << endl;
-		//place a block
-		myPlayer.getWorldPos(changeBlock.mapCoord);//get placing world position
-		//changeBlock.mapCoord[1] += 3;//在player前面2格处放置方块
-		//changeBlock.mapCoord[0] += 3;//在player前面2格处放置方块
-		changeBlock.type = myPlayer.inHand;
-	}
-	else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
-		cout << "right press " << endl;
-		double cursor_x = 0, cursor_y = 0;
-		glfwGetCursorPos(window, &cursor_x, &cursor_y);
-		cout << cursor_x << "," << cursor_y << endl;
-		//destroy a block:
-		changeBlock.type = Block::Air;
-		myPlayer.getWorldPos(changeBlock.mapCoord);//get player's world position
-		//changeBlock.mapCoord[1] += 3;//y axis
+	if (state == 1) {
+		//double cursor_x = 0, cursor_y = 0;
+		if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
+			/*cout << "left press " << endl;
+			glfwGetCursorPos(window, &cursor_x, &cursor_y);
+			cout << cursor_x << "," << cursor_y << endl;*/
+			//place a block
+			myPlayer.getPlacingPos(changeBlock.mapCoord);//get placing world position
+			changeBlock.type = myPlayer.inHand;
+		}
+		else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
+
+			/*double cursor_x = 0, cursor_y = 0;
+			glfwGetCursorPos(window, &cursor_x, &cursor_y);
+			cout << cursor_x << "," << cursor_y << endl;*/
+			//destroy a block:
+			changeBlock.type = Block::Air;
+			myPlayer.getPlacingPos(changeBlock.mapCoord);//get player's world position
+		}
 	}
 }
 
