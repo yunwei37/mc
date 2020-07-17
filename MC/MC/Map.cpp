@@ -167,9 +167,9 @@ Map::Map(Camera* myCamera)
 	myShader->setInt("myTexture1", 0);
 
 	chunkSize = 0;
-	currentChunkMaxX = 3;
+	currentChunkMaxX = 4;
 	currentChunkMinX = 0;
-	currentChunkMaxY = 3;
+	currentChunkMaxY = 4;
 	currentChunkMinY = 0;
 	startPosX = currentChunkMinX * Chunk::width;
 	startPosY = currentChunkMinY * Chunk::width;
@@ -210,6 +210,7 @@ void Map::renderMap(operateBlock* changeBlock)
 	myShader->setMat4("projection", glm::value_ptr(projection));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	//myShader.setMat4("model", glm::value_ptr(model));
+	model = glm::translate(model, glm::vec3(0.0f, Chunk::width * chunks[0]->x * 1.0f, Chunk::width * chunks[0]->y * 1.0f));
 	for (int i = 0; i < chunkSize; ++i) {
 		if (chunks[i]->isLoad) {
 			chunks[i]->renderChunk(model, VAO, myShader);
@@ -223,10 +224,12 @@ void Map::renderMap(operateBlock* changeBlock)
 }
 
 void Map::updateMap()
-{
+{	
+	limitCamera();
 	bool isChange = false;
-	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
-	if (myCamera->Position.z + startPosX > currentChunkMaxX * Chunk::width) {
+	std::cout << currentChunkMaxX * Chunk::width << endl;
+	std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
+	if (myCamera->Position.z + startPosX > (currentChunkMaxX - 1) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMinX) {
 				chunks[i]->isLoad = false;
@@ -241,8 +244,8 @@ void Map::updateMap()
 		currentChunkMaxX++;
 		isChange = true;
 	}
-	/*
-	else if (myCamera->Position.z + startPosX < (currentChunkMinX + 1) * Chunk::width) {
+	
+	else if (myCamera->Position.z + startPosX < (currentChunkMinX + 2) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMaxX) {
 				chunks[i]->isLoad = false;
@@ -257,8 +260,8 @@ void Map::updateMap()
 		currentChunkMinX--;
 		isChange = true;
 	}
-	*/
-
+	
+	/*
 	else if (myCamera->Position.y + startPosY > currentChunkMaxY * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->y == currentChunkMinY) {
@@ -274,7 +277,7 @@ void Map::updateMap()
 		currentChunkMaxY++;
 		isChange = true;
 	}
-	/*
+	
 	else if (myCamera->Position.y + startPosY < (currentChunkMinY + 1) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->y == currentChunkMaxY) {
@@ -291,7 +294,7 @@ void Map::updateMap()
 		isChange = true;
 	}
 	*/
-	if (false) {
+	if (isChange) {
 		std::vector<Chunk*> chunks1;
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->isLoad != false) {//‘≠chunk±£¡Ù

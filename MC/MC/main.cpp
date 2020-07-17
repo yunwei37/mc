@@ -128,24 +128,34 @@ void processInput(GLFWwindow* window)
 	}
 	else if (state == 1)
 	{
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(FORWARD, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			myMap->updateMap();
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(BACKWARD, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			myMap->updateMap();
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(RIGHT, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			myMap->updateMap();
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(LEFT, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+			myMap->updateMap();
+		}
+		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(UP, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+			myMap->updateMap();
+		}
+		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(DOWN, deltaTime);
+			myMap->updateMap();
+		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			myPlayer.exchangeHandBlock();//空格换防止方块的类型，bug
+			myPlayer.exchangeHandBlock();//空格换放置方块的类型，bug
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
-		myMap->limitCamera();
-		myMap->updateMap();
 	}
 	
 }
