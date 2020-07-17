@@ -335,9 +335,12 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 	assert(z != -1);//all Air
 	if (type == Block::Air) {//delete block
 		chunks[index]->blocks[x][y][z-1] = type;
-		//设置不可见
-		chunks[index]->isRender[x][y][z-1] = false;
-		chunks[index]->isRender[x][y][z-2] = true;
+		chunks[index]->isRender[x][y][z-1] = false;//删除对象,设置不可见
+		chunks[index]->isRender[x][y][z-2] = true;//下面的
+		chunks[index]->isRender[x][y-1][z-1] = getBlockType(x, y - 1, z - 1) == Block::Air ? false : true;//周围的设置可见
+		chunks[index]->isRender[x][y+1][z-1] = getBlockType(x, y + 1, z - 1) == Block::Air ? false : true;
+		chunks[index]->isRender[x-1][y][z-1] = getBlockType(x - 1, y, z - 1) == Block::Air ? false : true;
+		chunks[index]->isRender[x+1][y][z-1] = getBlockType(x + 1, y, z - 1) == Block::Air ? false : true;
 	}
 	else {//add block
 		chunks[index]->blocks[x][y][z] = type;

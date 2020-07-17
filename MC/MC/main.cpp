@@ -28,7 +28,7 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 float lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(0.0f,30.0f,0.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
+Camera myCamera(glm::vec3(10.0f,28.0f,12.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
 Map* myMap;
 operateBlock changeBlock;
 Player myPlayer(&myCamera);
