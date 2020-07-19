@@ -2,7 +2,7 @@
 #ifndef  BLOCK_H
 #define BLOCK_H
 #include <string>
-#include "Texture.h"
+#include "../view/Texture.h"
 #include <glm/glm.hpp>
 class Block
 {

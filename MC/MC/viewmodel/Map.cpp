@@ -1,8 +1,4 @@
 #include "Map.h"
-#include "particleGenerator.h"
-#include "Chunk.h"
-#include "particleGenerator.h"
-#include "resource_manager.h"
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 

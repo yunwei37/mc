@@ -18,109 +18,130 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="model\Block.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="model\Chunk.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.cpp">
+    <ClCompile Include="model\ItemStack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="model\PerlinNoise.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
+    <ClCompile Include="model\plantGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Chunk.cpp">
+    <ClCompile Include="model\Player.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="PerlinNoise.cpp">
+    <ClCompile Include="model\StructureBuilder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="plantGenerator.cpp">
+    <ClCompile Include="viewmodel\Map.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="StructureBuilder.cpp">
+    <ClCompile Include="view\Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="view\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Block.cpp">
+    <ClCompile Include="view\particleGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ItemStack.cpp">
+    <ClCompile Include="view\resource_manager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="view\Shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="particleGenerator.cpp">
+    <ClCompile Include="view\stb_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="resource_manager.cpp">
+    <ClCompile Include="view\Text.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="texture_two.cpp">
+    <ClCompile Include="view\text_renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Text.cpp">
+    <ClCompile Include="view\Texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="view\texture_two.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="model\Block.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="model\Chunk.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="model\ItemStack.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="model\PerlinNoise.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Chunk.h">
+    <ClInclude Include="model\plantGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="PerlinNoise.h">
+    <ClInclude Include="model\Player.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="plantGenerator.h">
+    <ClInclude Include="model\StructureBuilder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="StructureBuilder.h">
+    <ClInclude Include="viewmodel\Map.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="view\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Block.h">
+    <ClInclude Include="view\particleGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ItemStack.h">
+    <ClInclude Include="view\resource_manager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="view\Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="particleGenerator.h">
+    <ClInclude Include="view\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="resource_manager.h">
+    <ClInclude Include="view\Text.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="texture_two.h">
+    <ClInclude Include="view\text_renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Text.h">
+    <ClInclude Include="view\Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="view\texture_two.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="view\particle.fs" />
+    <None Include="view\particle.vs" />
+    <None Include="view\text.fs" />
+    <None Include="view\text.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="view\particle.png">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="view\particles_fs.txt" />
+    <Text Include="view\particles_vs.txt" />
+    <Text Include="view\test_fs.txt" />
+    <Text Include="view\test_vs.txt" />
   </ItemGroup>
 </Project>

@@ -5,11 +5,13 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "Chunk.h"
-#include"Shader.h"
-#include"PerlinNoise.h"
-#include"plantGenerator.h"
-#include"Camera.h"
+#include "../view/particleGenerator.h"
+#include "../view/resource_manager.h"
+#include "../model/Chunk.h"
+#include "../view/Shader.h"
+#include "../model/PerlinNoise.h"
+#include "../model/plantGenerator.h"
+#include "../view/Camera.h"
 
 /*
 	世界坐标系统：

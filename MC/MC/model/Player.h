@@ -1,7 +1,7 @@
 #pragma once
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Camera.h"
+#include "../view/Camera.h"
 #include "Block.h"
 #include <vector>
 #include "ItemStack.h"

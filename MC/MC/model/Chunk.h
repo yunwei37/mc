@@ -9,13 +9,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Block.h"
-#include"PerlinNoise.h"
-#include "Shader.h"
+#include "PerlinNoise.h"
+#include "../view/Shader.h"
 
 class Chunk {
 public:
 	//List<Chunk> chunks = new List<Chunk>(); 
-	const static int width = 16; //每个Chunk的长宽Size 
+	const static int width = 32; //每个Chunk的长宽Size 
 	const static int height = 64; //每个Chunk的高度 
 	//int seed; //随机种子 
 	bool isLoad;//true,loaded; false,not loaded

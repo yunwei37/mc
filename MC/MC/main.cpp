@@ -1,19 +1,19 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include"Camera.h"
-#include"Chunk.h"
-#include"particleGenerator.h"
-#include"stb_image.h"
-#include"Block.h"
+#include"view/Camera.h"
+#include"model/Chunk.h"
+#include"view/particleGenerator.h"
+#include"view/stb_image.h"
+#include"model/Block.h"
 #include<time.h>
 #include<vector>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Map.h"
-#include "Player.h"
-#include "Text.h"
+#include "viewmodel/Map.h"
+#include "model/Player.h"
+#include "view/Text.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
