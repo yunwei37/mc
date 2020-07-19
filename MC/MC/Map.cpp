@@ -227,8 +227,8 @@ void Map::updateMap()
 {	
 	limitCamera();
 	bool isChange = false;
-	std::cout << currentChunkMaxX * Chunk::width << endl;
-	std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
+	//std::cout << currentChunkMaxX * Chunk::width << endl;
+	//std::cout << myCamera->Position.x << " " << myCamera->Position.y << " " << myCamera->Position.z << " " << endl;
 	if (myCamera->Position.z + startPosX > (currentChunkMaxX - 1) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMinX) {
@@ -350,13 +350,6 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 		//设置可见
 		chunks[index]->isRender[x][y][z] = true;
 	}
-	// 设置周围方块为可见
-	/*setBlock(x - 1, y, z, getBlockType(x - 1, y, z)); 
-	setBlock(x + 1, y, z, getBlockType(x + 1, y, z));
-	setBlock(x, y - 1, z, getBlockType(x, y - 1, z));
-	setBlock(x, y - 1, z, getBlockType(x, y - 1, z));
-	setBlock(x, y, z + 1, getBlockType(x, y, z + 1));
-	setBlock(x, y, z - 1, getBlockType(x, y, z - 1));*/
 }
 
 Block::blockType Map::getBlockType(int x, int y, int z)

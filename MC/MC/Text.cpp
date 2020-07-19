@@ -78,11 +78,12 @@ Text::Text()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	RenderText(shader, "Welcome to Minecraft", 130.0f, 300.0f, 1.3f, glm::vec3(0.5, 0.8f, 0.2f));
-	RenderText(shader, "GAME RULE", 320.0f, 260.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
-	RenderText(shader, "press WASD to change your position;", 245.0f, 240.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
-	RenderText(shader, "move mouse to change your view;", 245.0f, 220.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
-	RenderText(shader, "left and right click to put and destroy an item;", 245.0f, 200.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText(shader, "Welcome to Minecraft", 130.0f, 310.0f, 1.3f, glm::vec3(0.5, 0.8f, 0.2f));
+	RenderText(shader, "GAME RULE", 320.0f, 270.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText(shader, "W-forward, S-backward, A-left, D-right, Q-up, Z-down;", 240.0f, 240.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText(shader, "move mouse to change your view;", 240.0f, 220.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText(shader, "left and right click to put and destroy an item;", 240.0f, 200.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText(shader, "press 1-6 to change item type in your hand;", 240.0f, 180.0f, 0.4f, glm::vec3(0.3, 0.7f, 0.9f));
 	RenderText(shader, "press ENTER to start the game", 510.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
 }

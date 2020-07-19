@@ -144,20 +144,41 @@ void processInput(GLFWwindow* window)
 			myCamera.ProcessKeyboard(LEFT, deltaTime);
 			myMap->updateMap();
 		}
-		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(UP, deltaTime);
 			myMap->updateMap();
 		}
-		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
 			myCamera.ProcessKeyboard(DOWN, deltaTime);
 			myMap->updateMap();
 		}
-		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-			myPlayer.exchangeHandBlock();//空格换放置方块的类型，bug
+		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+			myPlayer.inHand = Block::Soil;//换放置方块的类型:泥土
+			std::cout << "in hand: Soil" << std::endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+			myPlayer.inHand = Block::Stone;//换放置方块的类型:石头
+			std::cout << "in hand: Stone" << std::endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+			myPlayer.inHand = Block::StondBrick;//换放置方块的类型：砖块
+			std::cout << "in hand: Stone brick" << std::endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+			myPlayer.inHand = Block::Sand;//换放置方块的类型：沙块
+			std::cout << "in hand: Sand" << std::endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
+			myPlayer.inHand = Block::Bark;//换放置方块的类型：木块
+			std::cout << "in hand: Bark" << std::endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
+			myPlayer.inHand = Block::Cactus;//换放置方块的类型：仙人掌
+			std::cout << "in hand: Cactus" << std::endl;
+		}
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
 	}
-	
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

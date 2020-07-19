@@ -51,16 +51,5 @@ void Player::getPlacingPos(int worldPos[])
 Player::Player(Camera *myCamera) 
 {
 	this->myCamera = myCamera;
-	inHand = Block::Stone;
-}
-void Player::exchangeHandBlock()//exchange block type in hand
-{//¿Õ¸ñ¼ü±ä»»
-	switch (inHand) {
-	case(Block::Stone):
-		inHand = Block::Sand;
-	case(Block::Sand):
-		inHand = Block::Soil;
-	case(Block::Soil):
-		inHand = Block::Stone;
-	}
+	inHand = Block::Stone;//defalut
 }
