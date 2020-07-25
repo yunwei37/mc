@@ -1,0 +1,4 @@
+version: 1.0.{build}
+platform: x86
+build:
+  verbosity: minimal
