@@ -15,7 +15,7 @@
 #include <glad/glad.h>
 
 #include "shader.h"
-#include "texture_two.h"
+#include "Texture.h"
 
 
 class ResourceManager

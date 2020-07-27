@@ -18,12 +18,7 @@ void makePalmTree(Chunk& chunk, int seed, int x, int y, int z)
 			}
 		}
 	}
-	/*
-	builder.addBlock(x, y + diameter, z + height - 1, Block::Leaf);
-	builder.addBlock(x, y - diameter, z + height - 1, Block::Leaf);
-	builder.addBlock(x + diameter, y, z + height - 1, Block::Leaf);
-	builder.addBlock(x - diameter, y, z + height - 1, Block::Leaf);
-		*/
+
 	builder.addBlock(x, y, z + height + 1, Block::Leaf);
 	builder.addZ(z, z + height, x, y, Block::Bark);
 	builder.build(chunk);
@@ -58,7 +53,7 @@ void cactus2(Chunk& chunk, int seed, int x, int y, int z)
 
 	int stem = height / 2;
 	builder.addX(x - 2, x + 2, y, z + height - 2, Block::Cactus);
-	//builder.addY(x, z + height - 2, y - 2, y + 2, Block::Cactus);
+	
 	builder.addBlock(x, y + 1, z + height - 1, Block::Cactus);
 	builder.addBlock(x, y - 1, z + height - 1, Block::Cactus);
 	builder.build(chunk);

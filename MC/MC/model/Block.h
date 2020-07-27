@@ -29,6 +29,7 @@ public:
 	static int loadTextures();
 
 };
+
 class operateBlock//the placed block's information
 {
 public:

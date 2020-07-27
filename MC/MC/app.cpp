@@ -20,7 +20,7 @@ int app::createApp()
 {	
 	
 	myCamera = new Camera(glm::vec3(10.0f, 28.0f, 12.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-
+	myPlayer = new Player(myCamera);
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

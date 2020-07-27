@@ -87,9 +87,6 @@
     <ClCompile Include="view\Texture.cpp">
       <Filter>源文件\view</Filter>
     </ClCompile>
-    <ClCompile Include="view\texture_two.cpp">
-      <Filter>源文件\view</Filter>
-    </ClCompile>
     <ClCompile Include="app.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -117,9 +114,6 @@
       <Filter>头文件\view</Filter>
     </ClInclude>
     <ClInclude Include="view\Texture.h">
-      <Filter>头文件\view</Filter>
-    </ClInclude>
-    <ClInclude Include="view\texture_two.h">
       <Filter>头文件\view</Filter>
     </ClInclude>
     <ClInclude Include="viewmodel\Map.h">

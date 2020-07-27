@@ -14,7 +14,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "texture_two.h"
+#include "Texture.h"
 #include "shader.h"
 
 #include <glm/gtc/matrix_transform.hpp>

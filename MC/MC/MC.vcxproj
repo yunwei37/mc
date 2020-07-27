@@ -150,7 +150,6 @@
     <ClCompile Include="view\stb_image.cpp" />
     <ClCompile Include="view\Text.cpp" />
     <ClCompile Include="view\Texture.cpp" />
-    <ClCompile Include="view\texture_two.cpp" />
     <ClCompile Include="view\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +169,6 @@
     <ClInclude Include="view\stb_image.h" />
     <ClInclude Include="view\Text.h" />
     <ClInclude Include="view\Texture.h" />
-    <ClInclude Include="view\texture_two.h" />
     <ClInclude Include="view\text_renderer.h" />
   </ItemGroup>
   <ItemGroup>
