@@ -6,17 +6,17 @@ ParticleGen::ParticleGen(Shader shader, Texture2D texture, GLuint amount)
 	this->init();
 }
 
-void ParticleGen::Update(GLfloat dt, glm::vec3 blockPos, GLuint newParticles, glm::vec3 offset=glm::vec3(0.0f,0.0f,0.0f))
+void ParticleGen::Update(GLfloat dt, glm::vec3 blockPos, GLuint newParticles, glm::vec3 offset = glm::vec3(0.0f, 0.0f, 0.0f))
 {//dt:时间间隔，newParticles:新增粒子数, blockPos:被破碎的方块的位置, offset:粒子偏移量
 	for (GLuint i = 0; i < newParticles; ++i)
 	{// Add new particles 
 		int unusedParticle = this->firstUnusedParticle();
 		this->respawnParticle(this->particles[unusedParticle], blockPos, offset);
 	}
-	
+
 	for (GLuint i = 0; i < this->amount; i++)
 	{// Update all particles
-		Particle &p = this->particles[i];
+		Particle& p = this->particles[i];
 		p.Life -= dt; // reduce life
 		if (p.Life > 0.0f)
 		{	// particle is alive, thus update
@@ -51,49 +51,49 @@ void ParticleGen::init()
 {
 	// Set up mesh and attribute properties
 	GLuint VBO;
-GLfloat particle_quad[] = {
--0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
- 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
--0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
--0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-// Front face
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
- 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
- 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
- 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
--0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-// Left face
--0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
--0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
--0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-// Right face
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
- 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
- 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
- 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
-// Bottom face
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
- 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
- 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
- 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
--0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
--0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-// Top face
--0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
- 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
- 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
--0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
--0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left 
-};
+	GLfloat particle_quad[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	// Front face
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+	// Left face
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+	// Right face
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+	// Bottom face
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+	// Top face
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left 
+	};
 	glGenVertexArrays(1, &this->VAO);
 	glGenBuffers(1, &VBO);
 	glBindVertexArray(this->VAO);
@@ -101,7 +101,7 @@ GLfloat particle_quad[] = {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
 	// Set mesh attributes
-	
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);//position
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)3);//texture coordinate
@@ -136,7 +136,7 @@ GLuint ParticleGen::firstUnusedParticle()
 	return 0;
 }
 
-void ParticleGen::respawnParticle(Particle &particle, glm::vec3 blockPos, glm::vec3 offset)
+void ParticleGen::respawnParticle(Particle& particle, glm::vec3 blockPos, glm::vec3 offset)
 {//particle:操作的粒子对象，blockPos:被破碎的方块的位置, offset:粒子偏移量
 	GLfloat random = ((rand() % 100) - 50) / 10.0f;
 	GLfloat rColor = 0.5 + ((rand() % 100) / 100.0f);

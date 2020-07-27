@@ -34,14 +34,14 @@
 struct ItemStack
 {
 public:
-    int bag[MAXTYPE];
-    int add(int type, int amount);
-    int takeout(int type);
-    int remove(int type);
-    int getNumInStack() const;
+	int bag[MAXTYPE];
+	int add(int type, int amount);
+	int takeout(int type);
+	int remove(int type);
+	int getNumInStack() const;
 
 private:
-    int numInStack;
+	int numInStack;
 };
 
 #endif // 

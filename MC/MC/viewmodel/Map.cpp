@@ -5,10 +5,10 @@ extern const unsigned int SCR_HEIGHT;
 int Map::generateHeight(double x, double y, double interval)
 {
 	double small = PNoiseSmoth2D(x, y, 0.025, 4, interval) * 24 + 24;
-	double large = PNoiseSmoth2D(-x, -y, 0.025, 2, interval)/2 + 1;
+	double large = PNoiseSmoth2D(-x, -y, 0.025, 2, interval) / 2 + 1;
 	int h = (int)(small * large) + 2;
 	//std::cout << h <<std:: endl;
-	return h > waterheight ? h:waterheight;
+	return h > waterheight ? h : waterheight;
 }
 
 Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
@@ -25,7 +25,7 @@ Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
 		}
 		else return Block::Stone; //其他情况，当前方块类型为碎石
 	}
-	else if( h > waterheight ) {
+	else if (h > waterheight) {
 		if (z <= h && z > h - 5) {
 			return Block::Sand;
 		}
@@ -47,7 +47,7 @@ void Map::generateBlock(int m)
 		double radio = 1.0;
 		for (int j = -1; j < Chunk::width + 1; ++j) {
 			int h = generateHeight(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 1.0 * radio / Chunk::width); //获取当前位置方块随机生成的高度值 
-			chunks[m]->visibleHeight[i+1][j+1] = h;//write down random visible height
+			chunks[m]->visibleHeight[i + 1][j + 1] = h;//write down random visible height
 		}
 	}
 	// 生成基本方块类型
@@ -76,16 +76,16 @@ void Map::generateBlock(int m)
 		double radio = 3;
 		for (int j = 0; j < Chunk::width; ++j) {
 			if (PerlinNoise2D(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 0.5, 1) > 0.2) {
-					chunks[m]->blocks[i][j][Chunk::height-1] = Block::Cloud;
-					chunks[m]->isRender[i][j][Chunk::height - 1] = true;
+				chunks[m]->blocks[i][j][Chunk::height - 1] = Block::Cloud;
+				chunks[m]->isRender[i][j][Chunk::height - 1] = true;
 			}
 		}
 	}
-	
+
 	// 生成花草树木
 	for (int i = 0; i < Chunk::width; ++i) {
 		for (int j = 0; j < Chunk::width; ++j) {
-			if (chunks[m]->visibleHeight[i+1][j+1] > sandheight) {
+			if (chunks[m]->visibleHeight[i + 1][j + 1] > sandheight) {
 				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.47) {
 					makePalmTree(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
 				}
@@ -119,7 +119,7 @@ bool Map::isVisible(int m, int x, int y, int z)       //block在chunk中的坐标
 	}
 	else {
 		bool flag = false;
-		if (z >= chunks[m]->visibleHeight[x+1][y+1]) {
+		if (z >= chunks[m]->visibleHeight[x + 1][y + 1]) {
 			flag = true;
 		}
 		if (z > chunks[m]->visibleHeight[x][y + 1]) {
@@ -220,7 +220,7 @@ void Map::renderMap(operateBlock* changeBlock)
 }
 
 void Map::updateMap()
-{	
+{
 	limitCamera();
 	bool isChange = false;
 	//std::cout << currentChunkMaxX * Chunk::width << endl;
@@ -240,7 +240,7 @@ void Map::updateMap()
 		currentChunkMaxX++;
 		isChange = true;
 	}
-	
+
 	else if (myCamera->Position.z + startPosX < (currentChunkMinX + 2) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->x == currentChunkMaxX) {
@@ -256,7 +256,7 @@ void Map::updateMap()
 		currentChunkMinX--;
 		isChange = true;
 	}
-	
+
 	/*
 	else if (myCamera->Position.y + startPosY > currentChunkMaxY * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
@@ -273,7 +273,7 @@ void Map::updateMap()
 		currentChunkMaxY++;
 		isChange = true;
 	}
-	
+
 	else if (myCamera->Position.y + startPosY < (currentChunkMinY + 1) * Chunk::width) {
 		for (int i = 0; i < chunkSize; ++i) {
 			if (chunks[i]->y == currentChunkMaxY) {
@@ -333,13 +333,13 @@ void Map::setBlock(int worldPos[], Block::blockType type)
 	int z = getBlockHeight(worldPos[0], worldPos[1]);//得到最贴近地表的空气块纵坐标
 	assert(z != -1);//all Air
 	if (type == Block::Air) {//delete block
-		chunks[index]->blocks[x][y][z-1] = type;
-		chunks[index]->isRender[x][y][z-1] = false;//删除对象,设置不可见
-		chunks[index]->isRender[x][y][z-2] = true;//下面的
-		chunks[index]->isRender[x][y-1][z-1] = getBlockType(x, y - 1, z - 1) == Block::Air ? false : true;//周围的设置可见
-		chunks[index]->isRender[x][y+1][z-1] = getBlockType(x, y + 1, z - 1) == Block::Air ? false : true;
-		chunks[index]->isRender[x-1][y][z-1] = getBlockType(x - 1, y, z - 1) == Block::Air ? false : true;
-		chunks[index]->isRender[x+1][y][z-1] = getBlockType(x + 1, y, z - 1) == Block::Air ? false : true;
+		chunks[index]->blocks[x][y][z - 1] = type;
+		chunks[index]->isRender[x][y][z - 1] = false;//删除对象,设置不可见
+		chunks[index]->isRender[x][y][z - 2] = true;//下面的
+		chunks[index]->isRender[x][y - 1][z - 1] = getBlockType(x, y - 1, z - 1) == Block::Air ? false : true;//周围的设置可见
+		chunks[index]->isRender[x][y + 1][z - 1] = getBlockType(x, y + 1, z - 1) == Block::Air ? false : true;
+		chunks[index]->isRender[x - 1][y][z - 1] = getBlockType(x - 1, y, z - 1) == Block::Air ? false : true;
+		chunks[index]->isRender[x + 1][y][z - 1] = getBlockType(x + 1, y, z - 1) == Block::Air ? false : true;
 	}
 	else {//add block
 		chunks[index]->blocks[x][y][z] = type;
@@ -398,15 +398,15 @@ void Map::limitCamera()
 	int cameraPos[3] = { 0 };
 	myCamera->getWorldPos(cameraPos);
 	int h = getBlockHeight(cameraPos[0], cameraPos[1]);//最贴近地表的空块
-	if (cameraPos[2] <= h+2) {
+	if (cameraPos[2] <= h + 2) {
 		myCamera->Position.y = 2.0f + h;
 	}
 	if (cameraPos[0] < 0)
 		cameraPos[0] = 0;
-	else if (cameraPos[0] >= Chunk::width*sqrt(chunkSize))
-		cameraPos[0] = Chunk::width*sqrt(chunkSize) - 1;
+	else if (cameraPos[0] >= Chunk::width * sqrt(chunkSize))
+		cameraPos[0] = (int)(Chunk::width * sqrt(chunkSize) - 1);
 	if (cameraPos[1] < 0)
 		cameraPos[1] = 0;
-	else if (cameraPos[1] >= Chunk::width*sqrt(chunkSize))
-		cameraPos[1] = Chunk::width*sqrt(chunkSize) - 1;
+	else if (cameraPos[1] >= Chunk::width * sqrt(chunkSize))
+		cameraPos[1] = (int)(Chunk::width * sqrt(chunkSize) - 1);
 }

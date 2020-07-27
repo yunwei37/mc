@@ -7,7 +7,7 @@
 
 class StructureBuilder {
 public:
-	void build(Chunk &chunk);
+	void build(Chunk& chunk);
 	void addY(int x, int z, int yStart, int height, Block::blockType type);//add blocks in Y axis
 	void addX(int xStart, int xEnd, int y, int z, Block::blockType type);//add blocks in X axis
 	void addZ(int zStart, int zEnd, int x, int y, Block::blockType type);//add blocks in Z axis
@@ -22,6 +22,6 @@ private:
 	};
 	std::vector<Block1> m_blocks;
 };
-	
+
 
 #endif // !STRUCTBUILDER_H

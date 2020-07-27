@@ -93,6 +93,9 @@
     <ClCompile Include="view\texture_two.cpp">
       <Filter>源文件\view</Filter>
     </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="view\Camera.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="model\StructureBuilder.h">
       <Filter>头文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

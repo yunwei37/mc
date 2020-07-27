@@ -24,11 +24,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 // settings
 extern const unsigned int SCR_WIDTH = 800;
 extern const unsigned int SCR_HEIGHT = 600;
-float deltaTime = 0.0f; // 当前帧与上一帧的时间差
-float lastFrame = 0.0f; // 上一帧的时间
-float lastX = 400, lastY = 300;
+double deltaTime = 0.0f; // 当前帧与上一帧的时间差
+double lastFrame = 0.0f; // 上一帧的时间
+double lastX = 400, lastY = 300;
 bool firstMouse = true;
-Camera myCamera(glm::vec3(10.0f,28.0f,12.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f,0.0f);
+
+Camera myCamera(glm::vec3(10.0f, 28.0f, 12.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 Map* myMap;
 operateBlock changeBlock;
 Player myPlayer(&myCamera);
@@ -83,7 +84,7 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT);
 			Text text;
 			glfwSwapBuffers(window);
-//			processInput(window);
+			//			processInput(window);
 			if (state == 0 && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 			{
 				state = 1;
@@ -97,20 +98,20 @@ int main()
 		}
 		else //start the game
 		{
-			float curTime = glfwGetTime();
+			double curTime = glfwGetTime();
 			deltaTime = curTime - lastFrame;
 			lastFrame = curTime;
 			processInput(window);
-			glClearColor(91.0f / 255.0f, 206.0f/255.0f, 1.0f, 1.0f);//background
+			glClearColor(91.0f / 255.0f, 206.0f / 255.0f, 1.0f, 1.0f);//background
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 			myMap->renderMap(&changeBlock);//draw map
 			changeBlock.init();
 			// 交换缓冲并查询IO事件：
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
-		
+
 	}
 	delete myMap;
 
@@ -129,27 +130,27 @@ void processInput(GLFWwindow* window)
 	else if (state == 1)
 	{
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-			myCamera.ProcessKeyboard(FORWARD, deltaTime);
+			myCamera.ProcessKeyboard(FORWARD, (float)deltaTime);
 			myMap->updateMap();
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-			myCamera.ProcessKeyboard(BACKWARD, deltaTime);
+			myCamera.ProcessKeyboard(BACKWARD, (float)deltaTime);
 			myMap->updateMap();
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-			myCamera.ProcessKeyboard(RIGHT, deltaTime);
+			myCamera.ProcessKeyboard(RIGHT, (float)deltaTime);
 			myMap->updateMap();
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-			myCamera.ProcessKeyboard(LEFT, deltaTime);
+			myCamera.ProcessKeyboard(LEFT, (float)deltaTime);
 			myMap->updateMap();
 		}
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-			myCamera.ProcessKeyboard(UP, deltaTime);
+			myCamera.ProcessKeyboard(UP, (float)deltaTime);
 			myMap->updateMap();
 		}
 		if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
-			myCamera.ProcessKeyboard(DOWN, deltaTime);
+			myCamera.ProcessKeyboard(DOWN, (float)deltaTime);
 			myMap->updateMap();
 		}
 		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
@@ -194,11 +195,11 @@ void mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 		lastY = ypos;
 		firstMouse = false;
 	}
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+	double xoffset = xpos - lastX;
+	double yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
 	lastX = xpos;
 	lastY = ypos;
-	myCamera.ProcessMouseMovement(xoffset, yoffset, true);
+	myCamera.ProcessMouseMovement((float)xoffset, (float)yoffset, true);
 }
 
 void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -226,6 +227,6 @@ void mouse_click_callback(GLFWwindow* window, int button, int action, int mods) 
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	myCamera.ProcessMouseScroll(yoffset);
+	myCamera.ProcessMouseScroll((float)yoffset);
 }
 

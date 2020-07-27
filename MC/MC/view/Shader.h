@@ -12,12 +12,12 @@ class Shader {
 public:
 	unsigned int ID;
 	Shader(const GLchar* vertexPath, const GLchar* fragmentPath);//构建shader
-	Shader(){}
+	Shader() {}
 	void use();//激活shader
 	//uniform功能函数：
-	void setBool(const string &name, bool value) const;
-	void setInt(const string &name, int value) const;
-	void setFloat(const string &name, float value) const;
+	void setBool(const string& name, bool value) const;
+	void setInt(const string& name, int value) const;
+	void setFloat(const string& name, float value) const;
 	void setMat4(const string& name, float value[])const;
 	void set4fv(const string& name, float value[])const;
 	void set3fv(const string& name, float value[])const;

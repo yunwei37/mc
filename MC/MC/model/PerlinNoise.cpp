@@ -16,7 +16,7 @@ int permutation[] = { 151,160,137,91,90,15,                 // Hash lookup table
 	138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
 };//转换表
 int p[512] = { 0 };
-double PerlinNoise3D(double x, double y, double z) 
+double PerlinNoise3D(double x, double y, double z)
 {
 	int xi = (int)x & 255;                              // Calculate the "unit cube" that the point asked will be located in
 	int yi = (int)y & 255;                              // The left bound is ( |_x_|,|_y_|,|_z_| ) and the right bound is that
@@ -51,30 +51,30 @@ double lerp(double t, double a, double b)//插值
 }
 double grad(int hash, double x, double y, double z)//梯度
 {
-	switch (hash & 0xF){
-		case 0x0: return  x + y;
-		case 0x1: return -x + y;
-		case 0x2: return  x - y;
-		case 0x3: return -x - y;
-		case 0x4: return  x + z;
-		case 0x5: return -x + z;
-		case 0x6: return  x - z;
-		case 0x7: return -x - z;
-		case 0x8: return  y + z;
-		case 0x9: return -y + z;
-		case 0xA: return  y - z;
-		case 0xB: return -y - z;
-		case 0xC: return  y + x;
-		case 0xD: return -y + z;
-		case 0xE: return  y - x;
-		case 0xF: return -y - z;
-		default: return 0; // never happens
+	switch (hash & 0xF) {
+	case 0x0: return  x + y;
+	case 0x1: return -x + y;
+	case 0x2: return  x - y;
+	case 0x3: return -x - y;
+	case 0x4: return  x + z;
+	case 0x5: return -x + z;
+	case 0x6: return  x - z;
+	case 0x7: return -x - z;
+	case 0x8: return  y + z;
+	case 0x9: return -y + z;
+	case 0xA: return  y - z;
+	case 0xB: return -y - z;
+	case 0xC: return  y + x;
+	case 0xD: return -y + z;
+	case 0xE: return  y - x;
+	case 0xF: return -y - z;
+	default: return 0; // never happens
 	}
 }
-void prepare() 
+void prepare()
 {
 	for (int i = 0; i < 256; i++) {
-		p[i+256] = p[i] = permutation[i];
+		p[i + 256] = p[i] = permutation[i];
 	}
 }
 
@@ -115,7 +115,7 @@ double InterpolatedNoise(float x, float y)   // 获取插值噪声
 	return Cosine_Interpolate(i1, i2, fractional_Y);
 }
 
-double PerlinNoise2D(double x, double y, double persistence,int Number_Of_Octaves)    // 最终调用：根据(x,y)获得其对应的PerlinNoise值
+double PerlinNoise2D(double x, double y, double persistence, int Number_Of_Octaves)    // 最终调用：根据(x,y)获得其对应的PerlinNoise值
 {
 	double total = 0;
 	double p = persistence;

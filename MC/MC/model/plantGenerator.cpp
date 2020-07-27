@@ -2,10 +2,10 @@
 #include"StructureBuilder.h"
 #include<time.h>
 #include<stdlib.h>
-void makePalmTree(Chunk &chunk, int seed, int x, int y, int z)
+void makePalmTree(Chunk& chunk, int seed, int x, int y, int z)
 {
 	StructureBuilder builder;
-	srand(seed+clock());
+	srand(seed + clock());
 	int height = rand() % 6 + 4;//range 7-9
 	//int height = 7;//range 7-9
 	for (int h = height; h > height - 3 && h > 2; --h) {
@@ -25,11 +25,11 @@ void makePalmTree(Chunk &chunk, int seed, int x, int y, int z)
 	builder.addBlock(x - diameter, y, z + height - 1, Block::Leaf);
 		*/
 	builder.addBlock(x, y, z + height + 1, Block::Leaf);
-	builder.addZ(z, z+ height, x, y, Block::Bark);
+	builder.addZ(z, z + height, x, y, Block::Bark);
 	builder.build(chunk);
 }
 
-void makeCactus(Chunk &chunk, int seed, int x, int y, int z)
+void makeCactus(Chunk& chunk, int seed, int x, int y, int z)
 {
 	srand(seed);
 	int choice = rand() % 6;
@@ -41,15 +41,15 @@ void makeCactus(Chunk &chunk, int seed, int x, int y, int z)
 	}
 }
 
-void cactus1(Chunk &chunk, int seed, int x, int y, int z)
+void cactus1(Chunk& chunk, int seed, int x, int y, int z)
 {
 	StructureBuilder builder;
 	srand((unsigned)time(NULL) + seed);
-	builder.addZ(z, z + rand()%3 + 1, x, y, Block::Cactus);
+	builder.addZ(z, z + rand() % 3 + 1, x, y, Block::Cactus);
 	builder.build(chunk);
 }
 
-void cactus2(Chunk &chunk, int seed, int x, int y, int z)
+void cactus2(Chunk& chunk, int seed, int x, int y, int z)
 {
 	StructureBuilder builder;
 	srand((unsigned)time(NULL) + seed);

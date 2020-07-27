@@ -10,7 +10,7 @@ public:
 
 	enum blockType { //Block的类型 
 		Air = 0,//空气
-		Water =1,//水
+		Water = 1,//水
 		Soil = 2,//泥土
 		Stone = 3,//石
 		Grass = 4,//草皮
@@ -23,7 +23,7 @@ public:
 	};
 
 	static std::vector<Texture> textures;
-    const static float vertices[];
+	const static float vertices[];
 	const static size_t vsize;
 
 	static int loadTextures();

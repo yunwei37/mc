@@ -49,135 +49,135 @@ const size_t Block::vsize = sizeof(Block::vertices);
 std::vector<Texture> Block::textures;
 
 int Block::loadTextures()
-{   
-    std::vector<std::string> grass
-    {
-        "blocks/grass_side.png",
-        "blocks/grass.png",
-        "blocks/grass_side.png",
-        "blocks/grass_side.png",
-        "blocks/grass_side.png",
-        "blocks/grass_side.png"
-    };
-    Texture myTexGrass(grass);
+{
+	std::vector<std::string> grass
+	{
+		"blocks/grass_side.png",
+		"blocks/grass.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png"
+	};
+	Texture myTexGrass(grass);
 
-    std::vector<std::string> water
-    {
-        "blocks/water.png",
-        "blocks/water.png",
-        "blocks/water.png",
-        "blocks/water.png",
-        "blocks/water.png",
-        "blocks/water.png"
-    };
-    Texture myTexWater(water);
+	std::vector<std::string> water
+	{
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png"
+	};
+	Texture myTexWater(water);
 
-    std::vector<std::string> dirt
-    {
-        "blocks/dirt.png",
-        "blocks/dirt.png",
-        "blocks/dirt.png",
-        "blocks/dirt.png",
-        "blocks/dirt.png",
-        "blocks/dirt.png"
-    };
-    Texture myTexDirt(dirt);
+	std::vector<std::string> dirt
+	{
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png"
+	};
+	Texture myTexDirt(dirt);
 
-    std::vector<std::string> sand
-    {
-        "blocks/sand.png",
-        "blocks/sand.png",
-        "blocks/sand.png",
-        "blocks/sand.png",
-        "blocks/sand.png",
-        "blocks/sand.png"
-    };
-    Texture myTexSand(sand);
+	std::vector<std::string> sand
+	{
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png"
+	};
+	Texture myTexSand(sand);
 
-    std::vector<std::string> stond
-    {
-        "blocks/stone.png",
-        "blocks/stone.png",
-        "blocks/stone.png",
-        "blocks/stone.png",
-        "blocks/stone.png",
-        "blocks/stone.png"
-    };
-    Texture myTexStond(stond);
+	std::vector<std::string> stond
+	{
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png"
+	};
+	Texture myTexStond(stond);
 
-    std::vector<std::string> stbrick
-    {
-        "blocks/stonebrick.png",
-        "blocks/stonebrick.png",
-        "blocks/stonebrick.png",
-        "blocks/stonebrick.png",
-        "blocks/stonebrick.png",
-        "blocks/stonebrick.png"
-    };
-    Texture myTexStb(stbrick);
+	std::vector<std::string> stbrick
+	{
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png"
+	};
+	Texture myTexStb(stbrick);
 
-    std::vector<std::string> leaf
-    {
-        "blocks/leaves_oak.png",
-        "blocks/leaves_oak.png",
-        "blocks/leaves_oak.png",
-        "blocks/leaves_oak.png",
-        "blocks/leaves_oak.png",
-        "blocks/leaves_oak.png"
-    };
-    Texture myTexleaf(leaf);
+	std::vector<std::string> leaf
+	{
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png"
+	};
+	Texture myTexleaf(leaf);
 
-    std::vector<std::string> log
-    {
-        "blocks/log_oak_top.png",
-        "blocks/log_oak_top.png",
-        "blocks/log_oak.png",
-        "blocks/log_oak.png",
-        "blocks/log_oak.png",
-        "blocks/log_oak.png"
-    };
-    Texture myTexlog(log);
+	std::vector<std::string> log
+	{
+		"blocks/log_oak_top.png",
+		"blocks/log_oak_top.png",
+		"blocks/log_oak.png",
+		"blocks/log_oak.png",
+		"blocks/log_oak.png",
+		"blocks/log_oak.png"
+	};
+	Texture myTexlog(log);
 
-    std::vector<std::string> cactus
-    {
-        "blocks/cactus_top.png",
-        "blocks/cactus_top.png",
-        "blocks/cactus_side.png",
-        "blocks/cactus_side.png",
-        "blocks/cactus_side.png",
-        "blocks/cactus_side.png"
-    };
-    Texture myTexcac(cactus);
+	std::vector<std::string> cactus
+	{
+		"blocks/cactus_top.png",
+		"blocks/cactus_top.png",
+		"blocks/cactus_side.png",
+		"blocks/cactus_side.png",
+		"blocks/cactus_side.png",
+		"blocks/cactus_side.png"
+	};
+	Texture myTexcac(cactus);
 
-    std::vector<std::string> cloud
-    {
-        "blocks/glass_white.png",
-        "blocks/glass_white.png",
-        "blocks/glass_white.png",
-        "blocks/glass_white.png",
-        "blocks/glass_white.png",
-        "blocks/glass_white.png"
-    };
-    Texture myTexCloud(cloud);
-     
-    Block::textures.push_back(myTexDirt); //0
-    Block::textures.push_back(myTexWater); //1
-    Block::textures.push_back(myTexDirt); //2
-    Block::textures.push_back(myTexStond); //3
-    Block::textures.push_back(myTexGrass); //4
-    Block::textures.push_back(myTexSand); //5
-    Block::textures.push_back(myTexStb); //6
-    Block::textures.push_back(myTexleaf); //7
-    Block::textures.push_back(myTexlog); //8
-    Block::textures.push_back(myTexcac); //9
-    Block::textures.push_back(myTexCloud); //10
-    return 0;
+	std::vector<std::string> cloud
+	{
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png"
+	};
+	Texture myTexCloud(cloud);
+
+	Block::textures.push_back(myTexDirt); //0
+	Block::textures.push_back(myTexWater); //1
+	Block::textures.push_back(myTexDirt); //2
+	Block::textures.push_back(myTexStond); //3
+	Block::textures.push_back(myTexGrass); //4
+	Block::textures.push_back(myTexSand); //5
+	Block::textures.push_back(myTexStb); //6
+	Block::textures.push_back(myTexleaf); //7
+	Block::textures.push_back(myTexlog); //8
+	Block::textures.push_back(myTexcac); //9
+	Block::textures.push_back(myTexCloud); //10
+	return 0;
 }
-operateBlock::operateBlock() 
+operateBlock::operateBlock()
 {
 	this->init();
 }
-void operateBlock::init() 
+void operateBlock::init()
 {
 	type = Block::Air;
 	mapCoord[0] = -1;

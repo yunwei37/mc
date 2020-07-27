@@ -1,8 +1,8 @@
 #include"StructureBuilder.h"
 
-void StructureBuilder::build(Chunk &chunk)
+void StructureBuilder::build(Chunk& chunk)
 {
-	for (auto &block : m_blocks) {
+	for (auto& block : m_blocks) {
 		//chunk.setBlock(block.x, block.y, block.z, block.Type);
 		if (block.x >= Chunk::width || block.x < 0) {
 			continue;

@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="app.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model\Block.cpp" />
     <ClCompile Include="model\Chunk.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="view\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="app.h" />
     <ClInclude Include="model\Block.h" />
     <ClInclude Include="model\Chunk.h" />
     <ClInclude Include="model\ItemStack.h" />
