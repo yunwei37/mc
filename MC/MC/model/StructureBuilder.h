@@ -2,7 +2,7 @@
 #ifndef STRUCTBUILDER_H
 #define STRUCTBUILDER_H
 #include<vector>
-#include "Chunk.h"
+#include "../viewmodel/Chunk.h"
 #include "Block.h"
 
 class StructureBuilder {

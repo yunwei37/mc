@@ -8,8 +8,8 @@
 #include <glm/fwd.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Block.h"
-#include "PerlinNoise.h"
+#include "../model/Block.h"
+#include "../model/PerlinNoise.h"
 #include "../view/Shader.h"
 
 class Chunk {

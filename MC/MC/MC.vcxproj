@@ -135,12 +135,12 @@
     <ClCompile Include="app.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model\Block.cpp" />
-    <ClCompile Include="model\Chunk.cpp" />
     <ClCompile Include="model\ItemStack.cpp" />
     <ClCompile Include="model\PerlinNoise.cpp" />
     <ClCompile Include="model\plantGenerator.cpp" />
     <ClCompile Include="model\Player.cpp" />
     <ClCompile Include="model\StructureBuilder.cpp" />
+    <ClCompile Include="viewmodel\Chunk.cpp" />
     <ClCompile Include="viewmodel\Map.cpp" />
     <ClCompile Include="view\Camera.cpp" />
     <ClCompile Include="view\glad.c" />
@@ -156,12 +156,12 @@
   <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="model\Block.h" />
-    <ClInclude Include="model\Chunk.h" />
     <ClInclude Include="model\ItemStack.h" />
     <ClInclude Include="model\PerlinNoise.h" />
     <ClInclude Include="model\plantGenerator.h" />
     <ClInclude Include="model\Player.h" />
     <ClInclude Include="model\StructureBuilder.h" />
+    <ClInclude Include="viewmodel\Chunk.h" />
     <ClInclude Include="viewmodel\Map.h" />
     <ClInclude Include="view\Camera.h" />
     <ClInclude Include="view\particleGenerator.h" />

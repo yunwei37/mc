@@ -7,7 +7,7 @@
 #include <string>
 #include "../view/particleGenerator.h"
 #include "../view/resource_manager.h"
-#include "../model/Chunk.h"
+#include "Chunk.h"
 #include "../view/Shader.h"
 #include "../model/PerlinNoise.h"
 #include "../model/plantGenerator.h"

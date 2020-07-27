@@ -45,9 +45,6 @@
     <ClCompile Include="view\Camera.cpp">
       <Filter>源文件\view</Filter>
     </ClCompile>
-    <ClCompile Include="model\Chunk.cpp">
-      <Filter>源文件\model</Filter>
-    </ClCompile>
     <ClCompile Include="view\glad.c">
       <Filter>源文件\view</Filter>
     </ClCompile>
@@ -96,6 +93,9 @@
     <ClCompile Include="app.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="viewmodel\Chunk.cpp">
+      <Filter>源文件\viewmodel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="view\Camera.h">
@@ -128,9 +128,6 @@
     <ClInclude Include="model\Block.h">
       <Filter>头文件\model</Filter>
     </ClInclude>
-    <ClInclude Include="model\Chunk.h">
-      <Filter>头文件\model</Filter>
-    </ClInclude>
     <ClInclude Include="model\ItemStack.h">
       <Filter>头文件\model</Filter>
     </ClInclude>
@@ -151,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="app.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="viewmodel\Chunk.h">
+      <Filter>头文件\viewmodel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

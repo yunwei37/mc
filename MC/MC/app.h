@@ -5,7 +5,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include"view/Camera.h"
-#include"model/Chunk.h"
+#include"viewmodel/Chunk.h"
 #include"view/particleGenerator.h"
 #include"view/stb_image.h"
 #include"model/Block.h"
@@ -19,23 +19,30 @@
 #include "model/Player.h"
 #include "view/Text.h"
 
-
 class app
 {
 private:
-	Camera* myCamera;
-	Map* myMap;
-	operateBlock changeBlock;
-	Player *myPlayer;
-	int state;
+	static Camera* myCamera;
+	static Map* myMap;
+	static operateBlock changeBlock;
+	static Player* myPlayer;
+	static GLFWwindow* window;
+	static int state;
 
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-	void processInput(GLFWwindow* window);
-	void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
-	void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
-	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	// settings
+	static double deltaTime; // 当前帧与上一帧的时间差
+	static double lastFrame; // 上一帧的时间
+	static double lastX, lastY;
+	static bool firstMouse;
+
+	static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+	static void processInput(GLFWwindow* window);
+	static void mouse_move_callback(GLFWwindow* window, double xpos, double ypos);
+	static void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
+	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 public:
-	app();
+	static int createApp();
+	static void run();
 };
 
 #endif
