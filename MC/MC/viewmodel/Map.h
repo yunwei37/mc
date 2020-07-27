@@ -11,6 +11,7 @@
 #include "../view/Shader.h"
 #include "../model/PerlinNoise.h"
 #include "../model/plantGenerator.h"
+#include "../model/chunkGenerator.h"
 #include "../view/Camera.h"
 
 /*
@@ -44,9 +45,6 @@ private:
 	Shader* myShader;
 	Camera* myCamera;
 
-	const static int sandheight = 23;
-	const static int waterheight = 20;
-
 	int chunkSize;//amount of chunks in map
 
 	int currentChunkMinX;
@@ -57,13 +55,6 @@ private:
 	int startPosX;
 	int startPosY;
 
-	// 用来尝试地形生成的私有函数，后续进一步重构应该要拆除
-	// 可见方块判别算法
-	bool isVisible(int index, int x, int y, int z);
-
-	int generateHeight(double x, double y, double interval);
-	Block::blockType generateBlockType(int x, int y, int z, int h);
-	void generateBlock(int index);
 
 	// 坐标转换系列
 
@@ -80,6 +71,10 @@ public:
 	// 当摄像机改变位置或者放置砖块后调用
 	void updateMap();
 	void limitCamera();//控制摄像机不会穿透表层
+
+	// 加载纹理
+	static int loadTextures();
+	static std::vector<Texture> textures;
 private:
 	// 将mc世界坐标转换为chunk存储坐标，然后操作方块
 	// 操作方块的时候用
@@ -90,6 +85,9 @@ private:
 	// 通过摄像机和方块的交线判断删除方块；没参数
 	// 通过摄像机和方块的交线判断添加方块；没参数
 	// 或者可以合并到一起
+
+	const static float vertices[];
+	const static size_t vsize;
 };
 
 #endif 

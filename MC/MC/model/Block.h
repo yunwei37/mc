@@ -2,7 +2,6 @@
 #ifndef  BLOCK_H
 #define BLOCK_H
 #include <string>
-#include "../view/Texture.h"
 #include <glm/glm.hpp>
 class Block
 {
@@ -21,12 +20,6 @@ public:
 		Cactus = 9,//œ…»À’∆
 		Cloud = 10,//‘∆∂‰
 	};
-
-	static std::vector<Texture> textures;
-	const static float vertices[];
-	const static size_t vsize;
-
-	static int loadTextures();
 
 };
 

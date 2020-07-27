@@ -135,6 +135,7 @@
     <ClCompile Include="app.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model\Block.cpp" />
+    <ClCompile Include="model\chunkGenerator.cpp" />
     <ClCompile Include="model\ItemStack.cpp" />
     <ClCompile Include="model\PerlinNoise.cpp" />
     <ClCompile Include="model\plantGenerator.cpp" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="model\Block.h" />
+    <ClInclude Include="model\chunkGenerator.h" />
     <ClInclude Include="model\ItemStack.h" />
     <ClInclude Include="model\PerlinNoise.h" />
     <ClInclude Include="model\plantGenerator.h" />

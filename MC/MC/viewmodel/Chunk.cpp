@@ -1,4 +1,5 @@
 #include"Chunk.h"
+#include "map.h"
 
 Chunk::Chunk(int x, int y)
 {
@@ -20,7 +21,7 @@ void Chunk::renderChunk(glm::mat4 model, unsigned int VAO, Shader* myShader)
 					type = blocks[i][j][k];
 					if (type != lasttype) {
 						glActiveTexture(GL_TEXTURE0);
-						glBindTexture(Block::textures[type].Type, Block::textures[type].ID);
+						glBindTexture(Map::textures[type].Type, Map::textures[type].ID);
 						lasttype = type;
 					}
 					//激活纹理单元： 

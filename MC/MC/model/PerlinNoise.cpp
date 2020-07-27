@@ -100,7 +100,7 @@ double Cosine_Interpolate(double a, double b, double x)  // 余弦插值
 	return a * (1 - f) + b * f;
 }
 
-double InterpolatedNoise(float x, float y)   // 获取插值噪声
+double InterpolatedNoise(double x, double y)   // 获取插值噪声
 {
 	int integer_X = int(x);
 	float  fractional_X = x - integer_X;

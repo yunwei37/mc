@@ -81,7 +81,7 @@ void app::run()
 				glEnable(GL_DEPTH_TEST);//开启深度测试
 				glEnable(GL_CULL_FACE);//面剔除
 				myMap = new Map(myCamera);
-				Block::loadTextures();
+				Map::loadTextures();
 			}
 		}
 		else //start the game

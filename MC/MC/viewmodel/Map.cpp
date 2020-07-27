@@ -2,104 +2,6 @@
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 
-int Map::generateHeight(double x, double y, double interval)
-{
-	double small = PNoiseSmoth2D(x, y, 0.025, 4, interval) * 24 + 24;
-	double large = PNoiseSmoth2D(-x, -y, 0.025, 2, interval) / 2 + 1;
-	int h = (int)(small * large) + 2;
-	//std::cout << h <<std:: endl;
-	return h > waterheight ? h : waterheight;
-}
-
-Block::blockType Map::generateBlockType(int x, int y, int z, int h) {
-	if (z > h) { //当前方块位置高于随机生成的高度值时，当前方块类型为空 
-		return Block::Air;
-	}
-	if (h > sandheight) {
-		if (z == h) { //当前方块位置等于随机生成的高度值时，当前方块类型为草地 
-			return Block::Grass;
-		}
-		//当前方块位置小于随机生成的高度值 且 大于 genHeight - 5时，当前方块类型为泥土 
-		if (z < h && z > h - 5) {
-			return Block::Soil;
-		}
-		else return Block::Stone; //其他情况，当前方块类型为碎石
-	}
-	else if (h > waterheight) {
-		if (z <= h && z > h - 5) {
-			return Block::Sand;
-		}
-		else return Block::Stone;
-	}
-	else {
-		if (z <= h && z > h - 5) {
-			return Block::Water;
-		}
-		else return Block::Sand;
-	}
-}
-
-void Map::generateBlock(int m)
-{
-	//render a chunk
-	// 生成高度
-	for (int i = -1; i < Chunk::width + 1; ++i) {
-		double radio = 1.0;
-		for (int j = -1; j < Chunk::width + 1; ++j) {
-			int h = generateHeight(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 1.0 * radio / Chunk::width); //获取当前位置方块随机生成的高度值 
-			chunks[m]->visibleHeight[i + 1][j + 1] = h;//write down random visible height
-		}
-	}
-	// 生成基本方块类型
-	for (int i = 0; i < Chunk::width; ++i) {
-		for (int j = 0; j < Chunk::width; ++j) {
-			for (int k = 0; k < Chunk::height; ++k) {
-				chunks[m]->blocks[i][j][k] = generateBlockType(i, j, k, chunks[m]->visibleHeight[i + 1][j + 1]);
-			}
-		}
-	}
-	// 可见判别
-	for (int i = 0; i < Chunk::width; ++i) {
-		double radio = 3;
-		for (int j = 0; j < Chunk::width; ++j) {
-			for (int k = 0; k < Chunk::height; ++k) {
-				chunks[m]->isRender[i][j][k] = false;
-				if (k <= chunks[m]->visibleHeight[i + 1][j + 1]) {
-					chunks[m]->isRender[i][j][k] = isVisible(m, i, j, k);
-				}
-			}
-		}
-	}
-
-	// 生成云朵
-	for (int i = 0; i < Chunk::width; ++i) {
-		double radio = 3;
-		for (int j = 0; j < Chunk::width; ++j) {
-			if (PerlinNoise2D(chunks[m]->x * radio + i * radio / Chunk::width, chunks[m]->y * radio + j * radio / Chunk::width, 0.5, 1) > 0.2) {
-				chunks[m]->blocks[i][j][Chunk::height - 1] = Block::Cloud;
-				chunks[m]->isRender[i][j][Chunk::height - 1] = true;
-			}
-		}
-	}
-
-	// 生成花草树木
-	for (int i = 0; i < Chunk::width; ++i) {
-		for (int j = 0; j < Chunk::width; ++j) {
-			if (chunks[m]->visibleHeight[i + 1][j + 1] > sandheight) {
-				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.47) {
-					makePalmTree(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
-				}
-			}
-			else if (chunks[m]->visibleHeight[i + 1][j + 1] > waterheight) {
-				if (PerlinNoise2D(chunks[m]->x * Chunk::width + i, chunks[m]->y * Chunk::width + j, 2, 1) > 0.45) {
-					makeCactus(*chunks[m], i * j + m, i, j, chunks[m]->visibleHeight[i + 1][j + 1]);
-				}
-			}
-		}
-	}
-
-}
-
 int Map::getBlockIndex(int x, int y)
 {
 	x = x / Chunk::width;//chunk在map中的坐标
@@ -110,32 +12,6 @@ int Map::getBlockIndex(int x, int y)
 		}
 	}
 	return -1;
-}
-
-bool Map::isVisible(int m, int x, int y, int z)       //block在chunk中的坐标
-{	//flag==true, render; flag==false, not render
-	if (chunks[m]->blocks[x][y][z] == Block::Air) {
-		return false;
-	}
-	else {
-		bool flag = false;
-		if (z >= chunks[m]->visibleHeight[x + 1][y + 1]) {
-			flag = true;
-		}
-		if (z > chunks[m]->visibleHeight[x][y + 1]) {
-			flag = true;
-		}
-		if (z > chunks[m]->visibleHeight[x + 1][y]) {
-			flag = true;
-		}
-		if (z >= chunks[m]->visibleHeight[x + 2][y + 1]) {
-			flag = true;
-		}
-		if (z >= chunks[m]->visibleHeight[x + 1][y + 2]) {
-			flag = true;
-		}
-		return flag;
-	}
 }
 
 Map::Map(Camera* myCamera)
@@ -150,7 +26,7 @@ Map::Map(Camera* myCamera)
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, Block::vsize, Block::vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, Map::vsize, Map::vertices, GL_STATIC_DRAW);
 	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -172,7 +48,7 @@ Map::Map(Camera* myCamera)
 	for (int i = currentChunkMinX; i <= currentChunkMaxX; ++i) {
 		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
 			chunks.push_back(new Chunk(i, j));//render a chunk
-			generateBlock(chunkSize);
+			chunkGenerator::generateBlock(*chunks[chunkSize]);
 			chunkSize++;
 		}
 	}
@@ -234,7 +110,7 @@ void Map::updateMap()
 		currentChunkMinX++;
 		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
 			chunks.push_back(new Chunk(currentChunkMaxX + 1, j));//render a chunk
-			generateBlock(chunkSize);
+			chunkGenerator::generateBlock(*chunks[chunkSize]);
 			chunkSize++;
 		}
 		currentChunkMaxX++;
@@ -250,7 +126,7 @@ void Map::updateMap()
 		currentChunkMaxX--;
 		for (int j = currentChunkMinY; j <= currentChunkMaxY; ++j) {
 			chunks.push_back(new Chunk(currentChunkMinX - 1, j));//render a chunk
-			generateBlock(chunkSize);
+			chunkGenerator::generateBlock(*chunks[chunkSize]);
 			chunkSize++;
 		}
 		currentChunkMinX--;
@@ -409,4 +285,178 @@ void Map::limitCamera()
 		cameraPos[1] = 0;
 	else if (cameraPos[1] >= Chunk::width * sqrt(chunkSize))
 		cameraPos[1] = (int)(Chunk::width * sqrt(chunkSize) - 1);
+}
+
+const float Map::vertices[] = {
+-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+ 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+ 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+ 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+// Front face
+-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+ 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+ 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+ 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+// Left face
+-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+// Right face
+ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+ 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+ 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+ 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+ 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+// Bottom face
+-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+ 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+ 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+ 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+// Top face
+-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+ 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+ 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+-0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
+};
+
+const size_t Map::vsize = sizeof(Map::vertices);
+
+std::vector<Texture> Map::textures;
+
+int Map::loadTextures()
+{
+	std::vector<std::string> grass
+	{
+		"blocks/grass_side.png",
+		"blocks/grass.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png",
+		"blocks/grass_side.png"
+	};
+	Texture myTexGrass(grass);
+
+	std::vector<std::string> water
+	{
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png",
+		"blocks/water.png"
+	};
+	Texture myTexWater(water);
+
+	std::vector<std::string> dirt
+	{
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png",
+		"blocks/dirt.png"
+	};
+	Texture myTexDirt(dirt);
+
+	std::vector<std::string> sand
+	{
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png",
+		"blocks/sand.png"
+	};
+	Texture myTexSand(sand);
+
+	std::vector<std::string> stond
+	{
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png",
+		"blocks/stone.png"
+	};
+	Texture myTexStond(stond);
+
+	std::vector<std::string> stbrick
+	{
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png",
+		"blocks/stonebrick.png"
+	};
+	Texture myTexStb(stbrick);
+
+	std::vector<std::string> leaf
+	{
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png",
+		"blocks/leaves_oak.png"
+	};
+	Texture myTexleaf(leaf);
+
+	std::vector<std::string> log
+	{
+		"blocks/log_oak_top.png",
+		"blocks/log_oak_top.png",
+		"blocks/log_oak.png",
+		"blocks/log_oak.png",
+		"blocks/log_oak.png",
+		"blocks/log_oak.png"
+	};
+	Texture myTexlog(log);
+
+	std::vector<std::string> cactus
+	{
+		"blocks/cactus_top.png",
+		"blocks/cactus_top.png",
+		"blocks/cactus_side.png",
+		"blocks/cactus_side.png",
+		"blocks/cactus_side.png",
+		"blocks/cactus_side.png"
+	};
+	Texture myTexcac(cactus);
+
+	std::vector<std::string> cloud
+	{
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png",
+		"blocks/glass_white.png"
+	};
+	Texture myTexCloud(cloud);
+
+	Map::textures.push_back(myTexDirt); //0
+	Map::textures.push_back(myTexWater); //1
+	Map::textures.push_back(myTexDirt); //2
+	Map::textures.push_back(myTexStond); //3
+	Map::textures.push_back(myTexGrass); //4
+	Map::textures.push_back(myTexSand); //5
+	Map::textures.push_back(myTexStb); //6
+	Map::textures.push_back(myTexleaf); //7
+	Map::textures.push_back(myTexlog); //8
+	Map::textures.push_back(myTexcac); //9
+	Map::textures.push_back(myTexCloud); //10
+	return 0;
 }

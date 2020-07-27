@@ -93,6 +93,9 @@
     <ClCompile Include="viewmodel\Chunk.cpp">
       <Filter>源文件\viewmodel</Filter>
     </ClCompile>
+    <ClCompile Include="model\chunkGenerator.cpp">
+      <Filter>源文件\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="view\Camera.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="viewmodel\Chunk.h">
       <Filter>头文件\viewmodel</Filter>
+    </ClInclude>
+    <ClInclude Include="model\chunkGenerator.h">
+      <Filter>头文件\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

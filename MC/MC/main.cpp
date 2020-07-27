@@ -1,3 +1,4 @@
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
 
 #include "app.h"
 
