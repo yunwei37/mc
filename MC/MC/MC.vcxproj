@@ -145,7 +145,6 @@
     <ClCompile Include="viewmodel\Map.cpp" />
     <ClCompile Include="view\Camera.cpp" />
     <ClCompile Include="view\glad.c" />
-    <ClCompile Include="view\particleGenerator.cpp" />
     <ClCompile Include="view\resource_manager.cpp" />
     <ClCompile Include="view\Shader.cpp" />
     <ClCompile Include="view\stb_image.cpp" />
@@ -165,7 +164,6 @@
     <ClInclude Include="viewmodel\Chunk.h" />
     <ClInclude Include="viewmodel\Map.h" />
     <ClInclude Include="view\Camera.h" />
-    <ClInclude Include="view\particleGenerator.h" />
     <ClInclude Include="view\resource_manager.h" />
     <ClInclude Include="view\Shader.h" />
     <ClInclude Include="view\stb_image.h" />
