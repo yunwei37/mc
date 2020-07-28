@@ -54,9 +54,6 @@
     <ClCompile Include="viewmodel\Map.cpp">
       <Filter>源文件\viewmodel</Filter>
     </ClCompile>
-    <ClCompile Include="view\particleGenerator.cpp">
-      <Filter>源文件\view</Filter>
-    </ClCompile>
     <ClCompile Include="model\PerlinNoise.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
@@ -99,9 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="view\Camera.h">
-      <Filter>头文件\view</Filter>
-    </ClInclude>
-    <ClInclude Include="view\particleGenerator.h">
       <Filter>头文件\view</Filter>
     </ClInclude>
     <ClInclude Include="view\Shader.h">
