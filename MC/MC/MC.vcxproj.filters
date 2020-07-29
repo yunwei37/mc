@@ -90,10 +90,10 @@
     <ClCompile Include="model\chunkGenerator.cpp">
       <Filter>源文件\model</Filter>
     </ClCompile>
-    <ClCompile Include="viewmodel.cpp">
+    <ClCompile Include="viewmodel\viewmodel.cpp">
       <Filter>源文件\viewmodel</Filter>
     </ClCompile>
-    <ClCompile Include="app.cpp">
+    <ClCompile Include="app\app.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,10 +146,10 @@
     <ClInclude Include="model\Player.h">
       <Filter>头文件\model</Filter>
     </ClInclude>
-    <ClInclude Include="viewmodel.h">
+    <ClInclude Include="viewmodel\viewmodel.h">
       <Filter>头文件\viewmodel</Filter>
     </ClInclude>
-    <ClInclude Include="app.h">
+    <ClInclude Include="app\app.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

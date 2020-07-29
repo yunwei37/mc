@@ -4,19 +4,19 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include"view/Camera.h"
-#include"viewmodel/Chunk.h"
-#include"view/stb_image.h"
-#include"model/Block.h"
+#include"../view/Camera.h"
+#include"Chunk.h"
+#include"../view/stb_image.h"
+#include"../model/Block.h"
 #include<time.h>
 #include<vector>
 #include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "viewmodel/Map.h"
-#include "model/Player.h"
-#include "view/Text.h"
+#include "Map.h"
+#include "../model/Player.h"
+#include "../view/Text.h"
 
 class ViewModel
 {
