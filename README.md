@@ -21,6 +21,12 @@
 
 5、放置方块转换：“1”键换soil，“2”键换stone，“3”键换stone brick，“4”键换sand，“5”键换bark，“6”键换cactus
 
+### 验收测试
+
+1、源代码在MC\MC文件中，含各级目录树
+
+2、release测试版本可由release下载
+
 # 项目需求
 
 ### 基本目标
