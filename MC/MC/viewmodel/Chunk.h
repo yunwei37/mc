@@ -34,10 +34,6 @@ public:
 	int y;
 
 private:
-	//BlockType[,,] map; 
-	//Mesh chunkMesh; //存储着此Chunk内的所有Block信息 
-	//MeshRenderer meshRenderer; 
-	//MeshCollider meshCollider; 
-	//MeshFilter meshFilter; 
+
 };
 #endif 

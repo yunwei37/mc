@@ -103,7 +103,7 @@ double Cosine_Interpolate(double a, double b, double x)  // 余弦插值
 double InterpolatedNoise(double x, double y)   // 获取插值噪声
 {
 	int integer_X = int(x);
-	float  fractional_X = x - integer_X;
+	double  fractional_X = x - integer_X;
 	int integer_Y = int(y);
 	float fractional_Y = y - integer_Y;
 	double v1 = SmoothedNoise(integer_X, integer_Y);

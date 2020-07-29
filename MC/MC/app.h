@@ -6,7 +6,6 @@
 #include <GLFW/glfw3.h>
 #include"view/Camera.h"
 #include"viewmodel/Chunk.h"
-//#include"view/particleGenerator.h"
 #include"view/stb_image.h"
 #include"model/Block.h"
 #include<time.h>
@@ -19,7 +18,7 @@
 #include "model/Player.h"
 #include "view/Text.h"
 
-class app
+class App
 {
 private:
 	static Camera* myCamera;
@@ -41,8 +40,10 @@ private:
 	static void mouse_click_callback(GLFWwindow* window, int button, int action, int mods);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 public:
+	App();
+	~App();
 	static int createApp();
-	static void run();
+	static int run();
 };
 
 #endif

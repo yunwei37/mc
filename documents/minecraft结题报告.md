@@ -7,6 +7,8 @@
 
 ​		参考3D沙盒游戏minecraft（中文名：我的世界），做一个简易版minecraft。玩家根据第一视角可在生成的有限随机地图中随意移动，损毁方块或放置方块，搭建属于自己的方块世界。
 
+版本库：[https://github.com/yunwei37/mc/](https://github.com/yunwei37/mc/)
+
 ### 操作规则
 
 1、开启游戏：在游戏开始界面中按“Enter”键
@@ -18,8 +20,6 @@
 4、方块放置与损毁：鼠标右键仿放置方块，鼠标左键销毁方块
 
 5、放置方块转换：“1”键换soil，“2”键换stone，“3”键换stone brick，“4”键换sand，“5”键换bark，“6”键换cactus
-
-
 
 # 项目需求
 
@@ -65,13 +65,11 @@
 
 ### 小组分工
 
-周寒靖：view层、viewmodel层和文档管理
+周寒靖（id: diaoshaoyou）：view层、viewmodel层和文档管理
 
-郑昱笙：model层和持续集成部署
+郑昱笙（id：yunwei37）：model层和持续集成部署
 
-尹浩霖：view层、viewmodel层和app层
-
-
+尹浩霖（id：ycrisp）：view层、viewmodel层和app层
 
 # 项目成果
 

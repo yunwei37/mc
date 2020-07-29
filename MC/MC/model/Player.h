@@ -1,15 +1,14 @@
 #pragma once
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "../view/Camera.h"
 #include "Block.h"
 #include <vector>
 #include "ItemStack.h"
 
 class Player {
 public:
-	Player(Camera* myCamera);
-	void getPlacingPos(int worldPos[]);//get placing world position
+	Player();
+	//void getPlacingPos(int worldPos[]);//get placing world position
 
 //    void handleInput(const sf::Window& window, Keyboard& keyboard);
 //    void update(float dt, World& wolrd);
@@ -18,7 +17,7 @@ public:
 	//   void draw(RenderMaster& master);
 	   //ItemStack& getHeldItems();
 
-	Camera* myCamera;
+	//Camera* myCamera;
 	Block::blockType inHand;//block type in hand
 //    void jump();
 //    void keyboardInput(Keyboard& keyboard);

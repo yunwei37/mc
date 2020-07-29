@@ -4,23 +4,23 @@
 extern const unsigned int SCR_WIDTH = 800;
 extern const unsigned int SCR_HEIGHT = 600;
 
-double app::deltaTime = 0.0f; // 当前帧与上一帧的时间差
-double app::lastFrame = 0.0f; // 上一帧的时间
-double app::lastX = 400, app::lastY = 300;
-bool app::firstMouse = true;
-int app::state = 0;
+double App::deltaTime = 0.0f; // 当前帧与上一帧的时间差
+double App::lastFrame = 0.0f; // 上一帧的时间
+double App::lastX = 400, App::lastY = 300;
+bool App::firstMouse = true;
+int App::state = 0;
 
-Camera* app::myCamera = NULL;
-Map* app::myMap = NULL;
-operateBlock app::changeBlock;
-Player* app::myPlayer = NULL;
-GLFWwindow* app::window = NULL;
+Camera* App::myCamera = NULL;
+Map* App::myMap = NULL;
+operateBlock App::changeBlock;
+Player* App::myPlayer = NULL;
+GLFWwindow* App::window = NULL;
 
-int app::createApp()
+int App::createApp()
 {	
 	
 	myCamera = new Camera(glm::vec3(10.0f, 28.0f, 12.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
-	myPlayer = new Player(myCamera);
+	myPlayer = new Player();
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -36,10 +36,10 @@ int app::createApp()
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, &app::framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, &app::mouse_move_callback);
-	glfwSetScrollCallback(window, &app::scroll_callback);
-	glfwSetMouseButtonCallback(window, &app::mouse_click_callback);
+	glfwSetFramebufferSizeCallback(window, &App::framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, &App::mouse_move_callback);
+	glfwSetScrollCallback(window, &App::scroll_callback);
+	glfwSetMouseButtonCallback(window, &App::mouse_click_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -53,7 +53,7 @@ int app::createApp()
 	return 0;
 }
 
-void app::run()
+int App::run()
 {
 	state = 0;
 	while (!glfwWindowShouldClose(window))
@@ -104,12 +104,13 @@ void app::run()
 	delete myMap;
 
 	glfwTerminate();
+	return 0;
 }
 
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void app::processInput(GLFWwindow* window)
+void App::processInput(GLFWwindow* window)
 {
 	if (state == 0 && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{
@@ -172,11 +173,11 @@ void app::processInput(GLFWwindow* window)
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void app::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void App::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
-void app::mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
+void App::mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 {//screen origin(0,0): 左上角
 	if (firstMouse) {
 		lastX = xpos;
@@ -190,7 +191,7 @@ void app::mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 	myCamera->ProcessMouseMovement((float)xoffset, (float)yoffset, true);
 }
 
-void app::mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
+void App::mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
 	if (state == 1) {
 		//double cursor_x = 0, cursor_y = 0;
 		if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
@@ -198,7 +199,7 @@ void app::mouse_click_callback(GLFWwindow* window, int button, int action, int m
 			glfwGetCursorPos(window, &cursor_x, &cursor_y);
 			cout << cursor_x << "," << cursor_y << endl;*/
 			//place a block
-			myPlayer->getPlacingPos(changeBlock.mapCoord);//get placing world position
+			myCamera->getWorldPos(changeBlock.mapCoord);//get placing world position
 			changeBlock.type = myPlayer->inHand;
 		}
 		else if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -208,13 +209,24 @@ void app::mouse_click_callback(GLFWwindow* window, int button, int action, int m
 			cout << cursor_x << "," << cursor_y << endl;*/
 			//destroy a block:
 			changeBlock.type = Block::Air;
-			myPlayer->getPlacingPos(changeBlock.mapCoord);//get player's world position
+			myCamera->getWorldPos(changeBlock.mapCoord);//get player's world position
 		}
 	}
 }
 
-void app::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void App::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	myCamera->ProcessMouseScroll((float)yoffset);
+}
+
+App::App()
+{
+	if (App::createApp() == -1) {
+		exit(-1);
+	}
+}
+
+App::~App()
+{
 }
 

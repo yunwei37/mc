@@ -41,15 +41,9 @@ void Player::addItem(int itemindex)
 {
 	MyBag.add(itemindex, 1);
 }
-void Player::getPlacingPos(int worldPos[])
+
+
+Player::Player()
 {
-	myCamera->getWorldPos(worldPos);
-	//worldPos[0] = (int)((myCamera->Position + myCamera->Front).x / 1.0f);//ÏòÓÒ
-	//worldPos[1] = (int)((myCamera->Position + myCamera->Front).z / 1.0f);//height
-	//worldPos[2] = (int)((myCamera->Position + myCamera->Front).y / 1.0f);//ÏòÇ°
-}
-Player::Player(Camera* myCamera)
-{
-	this->myCamera = myCamera;
 	inHand = Block::Stone;//defalut
 }

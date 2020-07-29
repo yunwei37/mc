@@ -125,9 +125,6 @@
     <ClInclude Include="model\PerlinNoise.h">
       <Filter>头文件\model</Filter>
     </ClInclude>
-    <ClInclude Include="model\Player.h">
-      <Filter>头文件\model</Filter>
-    </ClInclude>
     <ClInclude Include="view\resource_manager.h">
       <Filter>头文件\view</Filter>
     </ClInclude>
@@ -144,6 +141,9 @@
       <Filter>头文件\viewmodel</Filter>
     </ClInclude>
     <ClInclude Include="model\chunkGenerator.h">
+      <Filter>头文件\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\Player.h">
       <Filter>头文件\model</Filter>
     </ClInclude>
   </ItemGroup>
