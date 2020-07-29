@@ -166,6 +166,10 @@ View---stb_image
 Viewmodel---Chunk
 Viewmodel---Map
 Viewmodel---viewmodel
+```
+
+```mermaid
+graph LR
 App---app
 ```
 
