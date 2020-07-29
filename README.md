@@ -80,7 +80,7 @@
 <table>
     <tr>
      <td><center>
-        <img src="results\preface.png" height='350'/>
+        <img src="documents\results\preface.png" height='350'/>
         </center>
         <center>
         图1 封面
@@ -94,13 +94,13 @@
 <table>
     <tr>
      <td><center>
-        <img src="results\3.png" height='250'/>
+        <img src="documents\results\3.png" height='250'/>
         </center>
         <center>
         图2 斜坡与植物群
         </center></td> 
         <td><center>
-        <img src="results\1.png" height='250'/>
+        <img src="documents\results\1.png" height='250'/>
         </center>
         <center>
         图3 森林与植物群
@@ -108,13 +108,13 @@
     </tr>
     <tr>
      <td><center>
-        <img src="results\0.png" height='250'/>
+        <img src="documents\results\0.png" height='250'/>
         </center>
         <center>
         图4 仰视云朵
         </center></td> 
         <td><center>
-        <img src="results\2.png" height='250'/>
+        <img src="documents\results\2.png" height='250'/>
         </center>
         <center>
         图5 海边风景
@@ -128,13 +128,13 @@
 <table>
     <tr>
      <td><center>
-        <img src="results\add.png" height='300'/>
+        <img src="documents\results\add.png" height='300'/>
         </center>
         <center>
         图6 放置不同类型的方块
         </center></td> 
         <td><center>
-        <img src="results\destroy.png" height='300'/>
+        <img src="documents\results\destroy.png" height='300'/>
         </center>
         <center>
         图7 销毁草地方块

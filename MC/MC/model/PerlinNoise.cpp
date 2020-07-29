@@ -105,7 +105,7 @@ double InterpolatedNoise(double x, double y)   // »ñÈ¡²åÖµÔëÉù
 	int integer_X = int(x);
 	double  fractional_X = x - integer_X;
 	int integer_Y = int(y);
-	float fractional_Y = y - integer_Y;
+	double fractional_Y = y - integer_Y;
 	double v1 = SmoothedNoise(integer_X, integer_Y);
 	double v2 = SmoothedNoise(integer_X + 1, integer_Y);
 	double v3 = SmoothedNoise(integer_X, integer_Y + 1);

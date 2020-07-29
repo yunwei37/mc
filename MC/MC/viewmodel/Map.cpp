@@ -252,8 +252,8 @@ Block::blockType Map::getBlockType(int x, int y, int z)
 	else {
 		y = y % Chunk::width;
 	}
-	assert(x < Chunk::width&& x >= 0);
-	assert(y < Chunk::width&& y >= 0);
+	//assert(x < Chunk::width&& x >= 0);
+	//assert(y < Chunk::width&& y >= 0);
 	return chunks[index]->blocks[x][y][z];
 }
 int Map::getBlockHeight(int x, int y)//get the highest height in thr position

@@ -1,22 +1,22 @@
 
-#include "app.h"
+#include "viewmodel.h"
 
 extern const unsigned int SCR_WIDTH = 800;
 extern const unsigned int SCR_HEIGHT = 600;
 
-double App::deltaTime = 0.0f; // 当前帧与上一帧的时间差
-double App::lastFrame = 0.0f; // 上一帧的时间
-double App::lastX = 400, App::lastY = 300;
-bool App::firstMouse = true;
-int App::state = 0;
+double ViewModel::deltaTime = 0.0f; // 当前帧与上一帧的时间差
+double ViewModel::lastFrame = 0.0f; // 上一帧的时间
+double ViewModel::lastX = 400, ViewModel::lastY = 300;
+bool ViewModel::firstMouse = true;
+int ViewModel::state = 0;
 
-Camera* App::myCamera = NULL;
-Map* App::myMap = NULL;
-operateBlock App::changeBlock;
-Player* App::myPlayer = NULL;
-GLFWwindow* App::window = NULL;
+Camera* ViewModel::myCamera = NULL;
+Map* ViewModel::myMap = NULL;
+operateBlock ViewModel::changeBlock;
+Player* ViewModel::myPlayer = NULL;
+GLFWwindow* ViewModel::window = NULL;
 
-int App::createApp()
+GLFWwindow* ViewModel::createViewModel()
 {	
 	
 	myCamera = new Camera(glm::vec3(10.0f, 28.0f, 12.0f)/*(3.0f, 48.0f, 25.0f)*/, glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
@@ -33,13 +33,9 @@ int App::createApp()
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return -1;
+		return NULL;
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, &App::framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, &App::mouse_move_callback);
-	glfwSetScrollCallback(window, &App::scroll_callback);
-	glfwSetMouseButtonCallback(window, &App::mouse_click_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -47,13 +43,13 @@ int App::createApp()
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		glfwTerminate();
-		return -1;
+		return NULL;
 	}
 
-	return 0;
+	return window;
 }
 
-int App::run()
+int ViewModel::run()
 {
 	state = 0;
 	while (!glfwWindowShouldClose(window))
@@ -110,7 +106,7 @@ int App::run()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void App::processInput(GLFWwindow* window)
+void ViewModel::processInput(GLFWwindow* window)
 {
 	if (state == 0 && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{
@@ -173,11 +169,11 @@ void App::processInput(GLFWwindow* window)
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void App::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void ViewModel::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
-void App::mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
+void ViewModel::mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 {//screen origin(0,0): 左上角
 	if (firstMouse) {
 		lastX = xpos;
@@ -191,7 +187,7 @@ void App::mouse_move_callback(GLFWwindow* window, double xpos, double ypos)
 	myCamera->ProcessMouseMovement((float)xoffset, (float)yoffset, true);
 }
 
-void App::mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
+void ViewModel::mouse_click_callback(GLFWwindow* window, int button, int action, int mods) {
 	if (state == 1) {
 		//double cursor_x = 0, cursor_y = 0;
 		if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {//press 
@@ -214,19 +210,8 @@ void App::mouse_click_callback(GLFWwindow* window, int button, int action, int m
 	}
 }
 
-void App::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+void ViewModel::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	myCamera->ProcessMouseScroll((float)yoffset);
-}
-
-App::App()
-{
-	if (App::createApp() == -1) {
-		exit(-1);
-	}
-}
-
-App::~App()
-{
 }
 
