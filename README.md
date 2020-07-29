@@ -1,111 +1,203 @@
-# our Craft 
+<center><font size='20' face='黑体'><strong>Minecraft组结题报告</strong></font></center> 
+<center><font size='4' face='黑体'>周寒靖、尹浩霖、郑昱笙</font></center>
 
-简易版 Minecraft 实现计划 - 浙江大学短学期C++工程实践课程项目 
+# 项目简介
 
-组员：
+### 项目描述
 
-- 周寒靖
-- 郑昱笙
-- 尹浩霖
+​		参考3D沙盒游戏minecraft（中文名：我的世界），做一个简易版minecraft。玩家根据第一视角可在生成的有限随机地图中随意移动，损毁方块或放置方块，搭建属于自己的方块世界。
 
-## 项目描述
+### 操作规则
 
-## 总体目标：
+1、开启游戏：在游戏开始界面中按“Enter”键
 
-本项目希望基于 openGL 实现一个 类似于 `MineCraft` 创造模式的沙盒游戏项目；
+2、位置移动：在当前视角方向下，“W”键向前、“S”键向后、“A”键向左，“D”键向右，“Q”键向上，“Z”键向下
 
-## 基本目标：
+3、第一视角移动：运用鼠标的移动可以改变玩家第一视角
 
-- 实现基本地形生成与存储；
-- 实现摄像机漫游；
-- 实现方块的放置与破坏；
-- 实现方块的切换功能
+4、方块放置与损毁：鼠标右键仿放置方块，鼠标左键销毁方块
 
-## 可选高级选项：
+5、放置方块转换：“1”键换soil，“2”键换stone，“3”键换stone brick，“4”键换sand，“5”键换bark，“6”键换cactus
 
-- 实现碰撞检测；
-- 实现可重入的地形存储系统；
-- 丰富的方块；
-- 背包系统；
-- 生命群系；
 
-## 迭代计划：
 
-开发日志可参考：
+# 项目需求
 
-[开发进度日志.md](开发进度日志.md)
+### 基本目标
 
-### 第一轮迭代计划：
+1、实现基本地形生成
 
-7.5 - 7.19
+2、实现摄像机漫游
 
-- 用时：四天
-- 实现基本地形生成；
-- 实现摄像机漫游；
+3、实现方块的放置和破坏
 
-### 第二轮迭代计划：未完成
+### 高级选项
 
-7.9- 7.16
+1、实现无限地形、可重入的地形存储系统
 
-- 预计用时：七天
-- 完善丰富的地形生成；包含植物群系、多种地形；
-- 实现基本的方块放置与破坏功能；
+2、丰富的方块类型
 
-## 开发工具与项目管理
+3、背包系统
 
-- 版本控制	Git, GitHub
-- 开发环境：visual studio 2019
-- 编程语言	C++ 17
-- 持续集成	Jenkins\
-- 交流协作	钉钉
-- 文档编辑	Markdown
 
-## 具体实现
 
-尝试采用MVVM结构进行开发；
+# 项目开发
 
-## 参考资料
+### 迭代计划
 
-### 原版
+|      | 第一轮迭代                   | 第二轮迭代                                                   | 第三轮迭代                     |
+| :--: | ---------------------------- | ------------------------------------------------------------ | ------------------------------ |
+| 用时 | 4天                          | 3天                                                          | 4天                            |
+| 成果 | 实现基本地形生成、摄像机漫游 | 扩增多种地形、增加植物群系、优化随机的地表高度（使其更符合自然地势） | 实现基本的的方块放置和破坏功能 |
 
-- github:
+### 开发技术和工具
 
-[https://github.com/Hopson97/MineCraft-One-Week-**Challenge**](https://github.com/Hopson97/MineCraft-One-Week-Challenge)
+|          |          工具           |
+| -------- | :---------------------: |
+| 编程语言 |          C++17          |
+| 开发环境 |   visual studio 2019    |
+| 开发系统 |         Windows         |
+| 版本控制 |       Git，Github       |
+| 持续集成 |         appveyor         |
+| 相关库   | openGL、glm、freetype等 |
+| 开发模式 |          MVVM           |
+| 交流协作 |           QQ            |
 
-- b站搬运视频（感觉不错：
+### 小组分工
 
-[https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1](https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1)
+周寒靖：view层、viewmodel层和文档管理
 
-可以参考一下他每次迭代的进度，开发过程；
+郑昱笙：model层和持续集成部署
 
-(感觉今天第一个周期可以先尝试把方块系统做出来，能生成很多个叠在一起方块那样？对应于视频两天的进度什么的...)
+尹浩霖：view层、viewmodel层和app层
 
-可以参考这个部分的OpenGL教程？（入门那一块的教程挺完整的，差不多就是显示方块加贴图的部分了）
 
-[https://learnopengl-cn.github.io/](https://learnopengl-cn.github.io/)
 
-### 极限编程方法论
+# 项目成果
 
-可以蛮看看？（虽然我也不太懂）
+### 游戏效果图
 
-### 技术选型
+1、封面
 
-（感觉可以不要现成的游戏引擎轮子，这样可以有理由说做的不完善也没关系）
+<table>
+    <tr>
+     <td><center>
+        <img src="results\preface.png" height='350'/>
+        </center>
+        <center>
+        图1 封面
+        </center></td> 
+    </tr>
+</table>
 
-openGL的窗口显示也可以采用QT相关；
 
-可能还需要一点数学和物理的相关库；
+2、不同地形各处风景
 
-### 参考资料：
+<table>
+    <tr>
+     <td><center>
+        <img src="results\3.png" height='250'/>
+        </center>
+        <center>
+        图2 斜坡与植物群
+        </center></td> 
+        <td><center>
+        <img src="results\1.png" height='250'/>
+        </center>
+        <center>
+        图3 森林与植物群
+        </center></td> 
+    </tr>
+    <tr>
+     <td><center>
+        <img src="results\0.png" height='250'/>
+        </center>
+        <center>
+        图4 仰视云朵
+        </center></td> 
+        <td><center>
+        <img src="results\2.png" height='250'/>
+        </center>
+        <center>
+        图5 海边风景
+        </center></td> 
+    </tr>
+</table>
 
-- 学长的图形学作业
 
-[https://github.com/Clapeysron/Mycraft](https://github.com/Clapeysron/Mycraft)
+3、放置与损毁方块
 
-- 一个用纯c写的，素材有很多可以拿过来现成的用
+<table>
+    <tr>
+     <td><center>
+        <img src="results\add.png" height='300'/>
+        </center>
+        <center>
+        图6 放置不同类型的方块
+        </center></td> 
+        <td><center>
+        <img src="results\destroy.png" height='300'/>
+        </center>
+        <center>
+        图7 销毁草地方块
+        </center></td> 
+    </tr>
+</table>
 
-[https://github.com/fogleman/Craft](https://github.com/fogleman/Craft)
 
-- 这里也有人写了
+### 代码框架
 
-[https://ryuzhihao123.blog.csdn.net/article/details/88079736](https://ryuzhihao123.blog.csdn.net/article/details/88079736)
+```mermaid
+graph LR
+Model---Block
+Model---chunkGenerator
+Model---plantGenerator
+Model---PerlinNoise
+Model---player
+Model---StructureBuilder
+View---Camera
+View---Shader
+View---Texture
+View---Text
+View---text_renderer
+View---resource_manager
+View---glad
+View---stb_image
+Viewmodel---Chunk
+Viewmodel---Map
+App---app
+```
+
+
+
+# 项目总结
+
+### 已实现的需求
+
+1、基本随机地形生成
+
+2、摄像机漫游
+
+3、方块的放置和破坏
+
+4、6种可放置的方块类型，且可相互更换
+
+5、开始界面
+
+### 优化空间探讨
+
+1、无限地形渲染。过大的地形会影响项目运行速度，所以需要即时渲染，即只渲染用户看得见的区域。当用户移动时，已变成不可见区域的渲染内存应当回收，用于渲染新生成的可见区域。这样才能不断生成地形即实现无限地形，又不导致运行速度过慢/内存崩溃。这一块内容涉及内存管理，还有待优化提高。
+
+2、背包系统。目前的项目中，玩家当前手持的方块类型由黑色的命令窗口输出，并未实现背包系统。背包系统要在当前界面中新增UI，需要更深层次的openGL图形学知识，所以暂未实现。
+
+3、本项目除了代码逻辑外，一个难点是有关openGL库的图形学知识。如果直接使用游戏引擎如unity3D，可以省去图形学的基础代码，专注于游戏逻辑本身，也许能实现地更好。
+
+
+
+# 参考资料
+
+1、[https://learnopengl-cn.github.io/](https://learnopengl-cn.github.io/)
+
+2、[https://github.com/Hopson97/MineCraft-One-Week-Challenge](https://github.com/Hopson97/MineCraft-One-Week-Challenge) 
+
+3、[https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1](https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1)

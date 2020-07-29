@@ -58,18 +58,18 @@
 | 开发环境 |   visual studio 2019    |
 | 开发系统 |         Windows         |
 | 版本控制 |       Git，Github       |
-| 持续集成 |         Jenkins         |
+| 持续集成 |         appveyor         |
 | 相关库   | openGL、glm、freetype等 |
 | 开发模式 |          MVVM           |
 | 交流协作 |           QQ            |
 
 ### 小组分工
 
-周寒靖：view层和文档管理
+周寒靖：view层、viewmodel层和文档管理
 
-郑昱笙：common层和APP层
+郑昱笙：model层和持续集成部署
 
-尹浩霖：viewmodel层和model层
+尹浩霖：view层、viewmodel层和app层
 
 
 
@@ -82,7 +82,7 @@
 <table>
     <tr>
      <td><center>
-        <img src="D:\visual studio\mc\documents\results\preface.png" height='350'/>
+        <img src="results\preface.png" height='350'/>
         </center>
         <center>
         图1 封面
@@ -96,13 +96,13 @@
 <table>
     <tr>
      <td><center>
-        <img src="D:\visual studio\mc\documents\results\3.png" height='250'/>
+        <img src="results\3.png" height='250'/>
         </center>
         <center>
         图2 斜坡与植物群
         </center></td> 
         <td><center>
-        <img src="D:\visual studio\mc\documents\results\1.png" height='250'/>
+        <img src="results\1.png" height='250'/>
         </center>
         <center>
         图3 森林与植物群
@@ -110,13 +110,13 @@
     </tr>
     <tr>
      <td><center>
-        <img src="D:\visual studio\mc\documents\results\0.png" height='250'/>
+        <img src="results\0.png" height='250'/>
         </center>
         <center>
         图4 仰视云朵
         </center></td> 
         <td><center>
-        <img src="D:\visual studio\mc\documents\results\2.png" height='250'/>
+        <img src="results\2.png" height='250'/>
         </center>
         <center>
         图5 海边风景
@@ -130,13 +130,13 @@
 <table>
     <tr>
      <td><center>
-        <img src="D:\visual studio\mc\documents\results\add.png" height='300'/>
+        <img src="results\add.png" height='300'/>
         </center>
         <center>
         图6 放置不同类型的方块
         </center></td> 
         <td><center>
-        <img src="D:\visual studio\mc\documents\results\destroy.png" height='300'/>
+        <img src="results\destroy.png" height='300'/>
         </center>
         <center>
         图7 销毁草地方块
@@ -196,8 +196,8 @@ App---app
 
 # 参考资料
 
-1、https://learnopengl-cn.github.io/
+1、[https://learnopengl-cn.github.io/](https://learnopengl-cn.github.io/)
 
 2、[https://github.com/Hopson97/MineCraft-One-Week-Challenge](https://github.com/Hopson97/MineCraft-One-Week-Challenge) 
 
-3、https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1
+3、[https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1](https://www.bilibili.com/video/BV1ux411H7ZE/?spm_id_from=333.788.videocard.1)
