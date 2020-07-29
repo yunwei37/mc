@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 #include"view/Camera.h"
 #include"viewmodel/Chunk.h"
-#include"view/particleGenerator.h"
+//#include"view/particleGenerator.h"
 #include"view/stb_image.h"
 #include"model/Block.h"
 #include<time.h>
